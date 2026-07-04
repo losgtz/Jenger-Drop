@@ -9,7 +9,18 @@ const QUEUE_PATH = path.join(process.cwd(), "order_queue.json");
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { items, name, location, phone, instructions, subtotal } = body ?? {};
+    const {
+      items,
+      name,
+      location,
+      phone,
+      instructions,
+      subtotal,
+      deliveryFee,
+      total,
+      paymentIntentId,
+      paymentStatus,
+    } = body ?? {};
 
     const order = {
       id: `order_${Date.now()}`,
@@ -19,6 +30,10 @@ export async function POST(request: Request) {
       phone: phone ?? "",
       instructions: instructions ?? "",
       subtotal: subtotal ?? 0,
+      deliveryFee: deliveryFee ?? 0,
+      total: total ?? subtotal ?? 0,
+      paymentIntentId: paymentIntentId ?? "",
+      paymentStatus: paymentStatus ?? "",
       items: Array.isArray(items) ? items : [],
     };
 

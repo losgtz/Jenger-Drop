@@ -6,6 +6,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
   LoaderCircle,
   Menu as MenuIcon,
   MessageCircle,
@@ -13,13 +14,16 @@ import {
   Phone,
   Plus,
   Search,
+  Send,
   ShoppingBag,
+  Sparkles,
   X,
 } from "lucide-react";
 
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
+  ExpressCheckoutElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -40,6 +44,7 @@ import {
   DROP_CATEGORIES,
   dropProducts,
   dropProductsByCategory,
+  RESALE_CATEGORY,
   resaleProducts,
   trendingProducts,
   type Product,
@@ -56,13 +61,25 @@ const stripePromise = loadStripe(
 );
 
 const CONTACT = {
-  phone: "+15550123456",
-  phoneDisplay: "(555) 012-3456",
+  phone: "3465257753",
+  phoneDisplay: "(346) 525-7753",
   instagram: "jengerluxurious.second.chance",
   instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
-  // The 2nd Chance resale storefront lives on a separate site.
+  // The full national catalog / resale storefront lives on a separate site.
   secondChanceUrl: "http://www.jengerluxurious.com",
 };
+
+/* -------------------------------------------------------------------------- */
+/*  Logistics: delivery fee & cart minimum                                    */
+/* -------------------------------------------------------------------------- */
+
+const DELIVERY_FEE = 4.99;
+const CART_MINIMUM = 15.0;
+
+/** Resale items are one-of-a-kind (qty locked to 1). */
+function isResale(product: Product): boolean {
+  return product.category === RESALE_CATEGORY;
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Synonym logic (mocked) — slang maps to real inventory terms               */
@@ -157,6 +174,12 @@ function searchProducts(raw: string, source: Product[]): Product[] {
   });
 }
 
+// Top-selling Jenger Drop items surfaced as the checkout cart bump.
+const UPSELL_IDS = ["item_045", "item_031", "item_043"];
+const upsellProducts: Product[] = UPSELL_IDS.map((id) =>
+  dropProducts.find((p) => p.id === id)
+).filter((p): p is Product => Boolean(p));
+
 /** Bottom-sheet styling shared by the drawer-style dialogs. */
 const sheetClass =
   "top-auto bottom-0 left-1/2 max-w-md -translate-x-1/2 translate-y-0 gap-0 rounded-b-none rounded-t-3xl p-0 sm:max-w-md";
@@ -212,6 +235,7 @@ export default function Home() {
   // Modals & drawers
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const [siteMenuOpen, setSiteMenuOpen] = React.useState(false);
   const [requestOpen, setRequestOpen] = React.useState(false);
   const [requestPrefill, setRequestPrefill] = React.useState("");
   const [checkoutOpen, setCheckoutOpen] = React.useState(false);
@@ -258,10 +282,13 @@ export default function Home() {
   };
 
   const addToCart = (product: Product, qty: number = 1) => {
-    const amount = Math.max(1, qty);
+    const resale = isResale(product);
+    const amount = resale ? 1 : Math.max(1, qty);
     setCart((prev) => {
       const found = prev.find((i) => i.product.id === product.id);
       if (found) {
+        // One-of-a-kind resale items can't exceed a single unit.
+        if (resale) return prev;
         return prev.map((i) =>
           i.product.id === product.id ? { ...i, qty: i.qty + amount } : i
         );
@@ -273,7 +300,12 @@ export default function Home() {
   const updateQty = (id: string, delta: number) => {
     setCart((prev) =>
       prev
-        .map((i) => (i.product.id === id ? { ...i, qty: i.qty + delta } : i))
+        .map((i) => {
+          if (i.product.id !== id) return i;
+          // Block incrementing resale items beyond 1.
+          if (delta > 0 && isResale(i.product)) return i;
+          return { ...i, qty: i.qty + delta };
+        })
         .filter((i) => i.qty > 0)
     );
   };
@@ -289,7 +321,7 @@ export default function Home() {
         cartCount={cartCount}
         activeTab={activeTab}
         onSelectTab={switchTab}
-        onOpenMenu={() => setMenuOpen(true)}
+        onOpenMenu={() => setSiteMenuOpen(true)}
         onOpenCart={() => setCheckoutOpen(true)}
       />
 
@@ -300,6 +332,8 @@ export default function Home() {
           onSearch={() => runSearch(query)}
           onSuggestion={runSearch}
         />
+
+        {!isDrop && <TryOnBanner />}
 
         {isDrop && (
           <CategoryLauncher active={activeCategory} onPick={pickCategory} />
@@ -350,6 +384,8 @@ export default function Home() {
         onAdd={addToCart}
       />
 
+      <SiteMenuDrawer open={siteMenuOpen} onOpenChange={setSiteMenuOpen} />
+
       <RequestItemModal
         open={requestOpen}
         onOpenChange={setRequestOpen}
@@ -375,6 +411,7 @@ export default function Home() {
         onOpenChange={setCheckoutOpen}
         cart={cart}
         updateQty={updateQty}
+        onAdd={addToCart}
         onDone={() => setCart([])}
       />
     </div>
@@ -911,16 +948,45 @@ function RequestItemModal({
   prefill: string;
 }) {
   const [submitted, setSubmitted] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
   const [itemName, setItemName] = React.useState(prefill);
   const [need, setNeed] = React.useState("tonight");
+  const [details, setDetails] = React.useState("");
+  const [contact, setContact] = React.useState("");
 
   React.useEffect(() => {
     if (open) {
       setItemName(prefill);
       setSubmitted(false);
+      setSending(false);
       setNeed("tonight");
+      setDetails("");
+      setContact("");
     }
   }, [open, prefill]);
+
+  const submitRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    try {
+      await fetch("/api/telegram-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "Item Request",
+          item: itemName,
+          need,
+          details,
+          contact,
+        }),
+      });
+    } catch (err) {
+      console.error("Item request failed to send:", err);
+    } finally {
+      setSending(false);
+      setSubmitted(true);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -952,13 +1018,7 @@ function RequestItemModal({
               </DialogDescription>
             </DialogHeader>
 
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                setSubmitted(true);
-              }}
-            >
+            <form className="flex flex-col gap-4" onSubmit={submitRequest}>
               <div className="space-y-1.5">
                 <Label htmlFor="req-item">Item name</Label>
                 <Input
@@ -1000,6 +1060,8 @@ function RequestItemModal({
                 <Label htmlFor="req-details">Details (optional)</Label>
                 <Input
                   id="req-details"
+                  value={details}
+                  onChange={(e) => setDetails(e.target.value)}
                   placeholder="Size, color, notes…"
                   className="h-11"
                 />
@@ -1009,6 +1071,8 @@ function RequestItemModal({
                 <Label htmlFor="req-contact">Phone or email</Label>
                 <Input
                   id="req-contact"
+                  value={contact}
+                  onChange={(e) => setContact(e.target.value)}
                   placeholder="So we can reach you"
                   className="h-11"
                   required
@@ -1018,9 +1082,16 @@ function RequestItemModal({
               <Button
                 type="submit"
                 size="lg"
+                disabled={sending}
                 className="haptic h-12 w-full rounded-xl text-sm font-semibold"
               >
-                Send request
+                {sending ? (
+                  <>
+                    <LoaderCircle className="animate-spin" /> Sending…
+                  </>
+                ) : (
+                  "Send request"
+                )}
               </Button>
             </form>
           </>
@@ -1047,6 +1118,7 @@ function ProductDetailModal({
 }) {
   const [index, setIndex] = React.useState(0);
   const [qty, setQty] = React.useState(1);
+  const resale = product ? isResale(product) : false;
   const gallery = React.useMemo(
     () => (product ? resolveGallery(product) : []),
     [product]
@@ -1144,33 +1216,42 @@ function ProductDetailModal({
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-sm font-medium">Quantity</span>
-                <div className="flex items-center gap-3">
-                  <Button
-                    size="icon-sm"
-                    variant="outline"
-                    className="haptic rounded-full"
-                    aria-label="Decrease quantity"
-                    disabled={qty <= 1}
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  >
-                    <Minus />
-                  </Button>
-                  <span className="w-6 text-center text-base font-semibold tabular-nums">
-                    {qty}
+              {resale ? (
+                <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/40 px-4 py-3 pt-1">
+                  <span className="text-sm font-medium">Quantity</span>
+                  <span className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
+                    One-of-a-kind • 1 only
                   </span>
-                  <Button
-                    size="icon-sm"
-                    variant="outline"
-                    className="haptic rounded-full"
-                    aria-label="Increase quantity"
-                    onClick={() => setQty((q) => q + 1)}
-                  >
-                    <Plus />
-                  </Button>
                 </div>
-              </div>
+              ) : (
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-sm font-medium">Quantity</span>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      size="icon-sm"
+                      variant="outline"
+                      className="haptic rounded-full"
+                      aria-label="Decrease quantity"
+                      disabled={qty <= 1}
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    >
+                      <Minus />
+                    </Button>
+                    <span className="w-6 text-center text-base font-semibold tabular-nums">
+                      {qty}
+                    </span>
+                    <Button
+                      size="icon-sm"
+                      variant="outline"
+                      className="haptic rounded-full"
+                      aria-label="Increase quantity"
+                      onClick={() => setQty((q) => q + 1)}
+                    >
+                      <Plus />
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-2.5">
                 <Button
@@ -1206,12 +1287,14 @@ function CheckoutDrawer({
   onOpenChange,
   cart,
   updateQty,
+  onAdd,
   onDone,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   cart: CartItem[];
   updateQty: (id: string, delta: number) => void;
+  onAdd: (p: Product, qty?: number) => void;
   onDone: () => void;
 }) {
   const [name, setName] = React.useState("");
@@ -1227,6 +1310,11 @@ function CheckoutDrawer({
   const [secretError, setSecretError] = React.useState<string | null>(null);
 
   const subtotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0);
+  const deliveryFee = cart.length > 0 ? DELIVERY_FEE : 0;
+  const total = subtotal + deliveryFee;
+  const belowMinimum = cart.length > 0 && subtotal < CART_MINIMUM;
+  const amountNeeded = Math.max(0, CART_MINIMUM - subtotal);
+  const hasResale = cart.some((i) => isResale(i.product));
 
   React.useEffect(() => {
     if (open) setSuccess(false);
@@ -1241,7 +1329,7 @@ function CheckoutDrawer({
       const res = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: subtotal }),
+        body: JSON.stringify({ amount: subtotal + DELIVERY_FEE }),
       });
       const data = await res.json();
       if (data?.clientSecret) {
@@ -1299,6 +1387,8 @@ function CheckoutDrawer({
           phone,
           instructions,
           subtotal,
+          deliveryFee,
+          total,
           paymentIntentId,
           paymentStatus: "paid",
         }),
@@ -1412,6 +1502,7 @@ function CheckoutDrawer({
                           variant="outline"
                           className="haptic rounded-full"
                           aria-label="Increase"
+                          disabled={isResale(i.product)}
                           onClick={() => updateQty(i.product.id, 1)}
                         >
                           <Plus />
@@ -1419,12 +1510,29 @@ function CheckoutDrawer({
                       </div>
                     </div>
                   ))}
-                  <div className="flex items-center justify-between border-t border-border pt-3 text-sm">
-                    <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-serif text-lg">{money(subtotal)}</span>
+                  <div className="space-y-1.5 border-t border-border pt-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="font-medium">{money(subtotal)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Delivery fee</span>
+                      <span className="font-medium">{money(deliveryFee)}</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-muted-foreground">Total</span>
+                      <span className="font-serif text-lg">{money(total)}</span>
+                    </div>
                   </div>
+                  {belowMinimum && (
+                    <div className="rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-center text-sm font-medium text-primary">
+                      Add {money(amountNeeded)} more to qualify for delivery.
+                    </div>
+                  )}
                 </div>
               )}
+
+              {hasResale && <TryOnBanner compact />}
 
               <div className="space-y-4">
                 <div className="space-y-1.5">
@@ -1499,10 +1607,13 @@ function CheckoutDrawer({
                   />
                 </div>
 
+                {/* Cart bump / up-sell */}
+                {cart.length > 0 && <CartUpsell cart={cart} onAdd={onAdd} />}
+
                 {/* Stripe card payment — a successful charge is required to order */}
                 {cart.length > 0 && (
                   <div className="space-y-2">
-                    <Label>Card details</Label>
+                    <Label>Payment</Label>
                     {secretError ? (
                       <button
                         type="button"
@@ -1514,7 +1625,7 @@ function CheckoutDrawer({
                     ) : !clientSecret || !stripeOptions ? (
                       <div className="flex items-center justify-center gap-2 rounded-xl border border-border py-6 text-sm text-muted-foreground">
                         <LoaderCircle className="size-4 animate-spin" /> Loading
-                        secure card form…
+                        secure payment…
                       </div>
                     ) : (
                       <Elements stripe={stripePromise} options={stripeOptions}>
@@ -1522,7 +1633,11 @@ function CheckoutDrawer({
                           name={name}
                           location={location}
                           phone={phone}
-                          subtotal={subtotal}
+                          total={total}
+                          blocked={belowMinimum}
+                          blockedMessage={`Add ${money(
+                            amountNeeded
+                          )} more to qualify for delivery.`}
                           onPaid={finalizeOrder}
                         />
                       </Elements>
@@ -1546,13 +1661,17 @@ function StripeCheckoutForm({
   name,
   location,
   phone,
-  subtotal,
+  total,
+  blocked,
+  blockedMessage,
   onPaid,
 }: {
   name: string;
   location: string;
   phone: string;
-  subtotal: number;
+  total: number;
+  blocked: boolean;
+  blockedMessage: string;
   onPaid: (paymentIntentId: string) => Promise<void> | void;
 }) {
   const stripe = useStripe();
@@ -1560,51 +1679,92 @@ function StripeCheckoutForm({
   const [paying, setPaying] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const handlePlaceOrder = async () => {
-    setError(null);
+  const requiredFilled = Boolean(
+    name.trim() && location.trim() && phone.trim()
+  );
+  // Wallets (Apple/Google Pay) only offered once the delivery details are set.
+  const canExpressPay = requiredFilled && !blocked;
 
-    if (!name.trim() || !location.trim() || !phone.trim()) {
-      setError("Add your name, delivery address, and phone number first.");
-      return;
-    }
+  const confirmPayment = async (): Promise<void> => {
     if (!stripe || !elements) {
       setError("Payment form is still loading — one moment.");
       return;
     }
+    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required",
+    });
+    if (confirmError) {
+      console.error("Stripe confirmPayment error:", confirmError);
+      setError(
+        confirmError.message ??
+          "Payment failed. Please check your details and try again."
+      );
+      return;
+    }
+    if (paymentIntent && paymentIntent.status === "succeeded") {
+      await onPaid(paymentIntent.id);
+      return;
+    }
+    console.error("Unexpected PaymentIntent status:", paymentIntent?.status);
+    setError("Payment didn't complete. Please try again.");
+  };
 
+  const guard = (): boolean => {
+    setError(null);
+    if (blocked) {
+      setError(blockedMessage);
+      return false;
+    }
+    if (!requiredFilled) {
+      setError("Add your name, delivery address, and phone number first.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCardPay = async () => {
+    if (!guard()) return;
     setPaying(true);
     try {
-      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        redirect: "if_required",
-      });
-
-      if (confirmError) {
-        console.error("Stripe confirmPayment error:", confirmError);
-        setError(
-          confirmError.message ??
-            "Payment failed. Please check your card details and try again."
-        );
-        setPaying(false);
-        return;
-      }
-
-      if (paymentIntent && paymentIntent.status === "succeeded") {
-        await onPaid(paymentIntent.id);
-      } else {
-        console.error("Unexpected PaymentIntent status:", paymentIntent?.status);
-        setError("Payment didn't complete. Please try again.");
-        setPaying(false);
-      }
+      await confirmPayment();
     } catch (err) {
       console.error("Payment confirmation threw:", err);
-      setError("Something went wrong processing your card. Please try again.");
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  const handleExpressConfirm = async () => {
+    if (!guard()) return;
+    setPaying(true);
+    try {
+      await confirmPayment();
+    } catch (err) {
+      console.error("Express payment threw:", err);
+      setError("Something went wrong. Please try again.");
+    } finally {
       setPaying(false);
     }
   };
 
   return (
     <div className="space-y-3">
+      {/* Apple Pay / Google Pay */}
+      {canExpressPay ? (
+        <ExpressCheckoutElement onConfirm={handleExpressConfirm} />
+      ) : (
+        <p className="rounded-lg border border-dashed border-border px-3 py-2 text-center text-xs text-muted-foreground">
+          Enter your name, address & phone to unlock Apple&nbsp;Pay / Google&nbsp;Pay.
+        </p>
+      )}
+
+      <div className="flex items-center gap-3 text-[11px] tracking-widest text-muted-foreground uppercase">
+        <span className="h-px flex-1 bg-border" /> or pay by card{" "}
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
       <div className="rounded-xl border border-border bg-card p-3">
         <PaymentElement options={{ layout: "tabs" }} />
       </div>
@@ -1614,19 +1774,272 @@ function StripeCheckoutForm({
       <Button
         type="button"
         size="lg"
-        onClick={handlePlaceOrder}
-        disabled={paying || !stripe || !elements}
+        onClick={handleCardPay}
+        disabled={paying || !stripe || !elements || blocked}
         className="haptic h-12 w-full rounded-xl text-base font-semibold"
       >
         {paying ? (
           <>
             <LoaderCircle className="animate-spin" /> Processing payment…
           </>
+        ) : blocked ? (
+          blockedMessage
         ) : (
-          `Pay ${money(subtotal)} & Place Order`
+          `Pay ${money(total)} & Place Order`
         )}
       </Button>
     </div>
+  );
+}
+
+/* ========================================================================== */
+/*  Try-On promo banner                                                        */
+/* ========================================================================== */
+
+function TryOnBanner({ compact = false }: { compact?: boolean }) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border border-primary/30 bg-primary/10",
+        compact ? "p-3" : "p-4"
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <Sparkles className="size-4" />
+        </span>
+        <div className="space-y-0.5">
+          <p className="font-serif text-base tracking-wide">Try before you buy!</p>
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            Add any 2nd Chance items to your cart, and try them on while we wait
+            during delivery. Don&apos;t like them? We&apos;ll refund them on the
+            spot.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ========================================================================== */
+/*  Checkout up-sell (cart bump)                                               */
+/* ========================================================================== */
+
+function CartUpsell({
+  cart,
+  onAdd,
+}: {
+  cart: CartItem[];
+  onAdd: (p: Product, qty?: number) => void;
+}) {
+  const inCart = new Set(cart.map((i) => i.product.id));
+  const items = upsellProducts.filter((p) => !inCart.has(p.id));
+  if (items.length === 0) return null;
+  return (
+    <div className="space-y-2">
+      <Label>You might also need:</Label>
+      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1">
+        {items.map((p) => (
+          <div
+            key={p.id}
+            className="flex w-32 shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card"
+          >
+            <div className="aspect-square bg-secondary">
+              <ProductImage
+                src={resolveImage(p)}
+                alt={p.name}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="flex flex-1 flex-col gap-1 p-2">
+              <p className="line-clamp-2 text-xs font-medium leading-tight">
+                {p.name}
+              </p>
+              <div className="mt-auto flex items-center justify-between">
+                <span className="text-xs font-semibold">{money(p.price)}</span>
+                <Button
+                  size="icon-xs"
+                  className="haptic rounded-full"
+                  aria-label={`Add ${p.name}`}
+                  onClick={() => onAdd(p, 1)}
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ========================================================================== */
+/*  Site menu drawer (hamburger): national catalog + suggest an item           */
+/* ========================================================================== */
+
+function SiteMenuDrawer({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [name, setName] = React.useState("");
+  const [contact, setContact] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [sending, setSending] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+
+  React.useEffect(() => {
+    if (open) {
+      setSent(false);
+      setSending(false);
+    }
+  }, [open]);
+
+  const submitSuggestion = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    try {
+      await fetch("/api/telegram-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "Contact / Suggestion",
+          name,
+          contact,
+          message,
+        }),
+      });
+    } catch (err) {
+      console.error("Suggestion failed to send:", err);
+    } finally {
+      setSending(false);
+      setSent(true);
+      setName("");
+      setContact("");
+      setMessage("");
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className={cn(sheetClass, "max-h-[92vh] overflow-hidden")}>
+        <DialogHeader className="border-b border-border px-5 py-4">
+          <DialogTitle className="font-serif text-2xl tracking-tight">Menu</DialogTitle>
+          <DialogDescription>Shop everything or send us a note.</DialogDescription>
+        </DialogHeader>
+
+        <div className="no-scrollbar flex-1 space-y-6 overflow-y-auto px-5 py-5">
+          <a
+            href={CONTACT.secondChanceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="haptic flex items-center justify-between rounded-2xl bg-primary px-5 py-4 text-primary-foreground"
+          >
+            <span className="flex flex-col">
+              <span className="font-serif text-lg leading-tight">
+                Shop Full National Catalog
+              </span>
+              <span className="text-xs opacity-80">www.jengerluxurious.com</span>
+            </span>
+            <ExternalLink className="size-5 shrink-0" />
+          </a>
+
+          <div className="space-y-3">
+            <div>
+              <h3 className="font-serif text-lg tracking-wide">
+                Contact us / Suggest an item
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Want us to stock something specific? Let us know.
+              </p>
+            </div>
+
+            {sent ? (
+              <div className="flex flex-col items-center gap-3 rounded-2xl border border-border py-8 text-center">
+                <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Check className="size-6" />
+                </span>
+                <p className="font-serif text-xl">Thanks — got it!</p>
+                <p className="text-sm text-muted-foreground">
+                  We&apos;ll be in touch soon.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={submitSuggestion} className="space-y-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="sm-name">Name</Label>
+                  <Input
+                    id="sm-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    className="h-11"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="sm-contact">Phone or email</Label>
+                  <Input
+                    id="sm-contact"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="So we can reach you"
+                    className="h-11"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="sm-message">Message</Label>
+                  <textarea
+                    id="sm-message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={3}
+                    placeholder="What should we stock? Any feedback?"
+                    className="w-full resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={sending}
+                  className="haptic h-12 w-full rounded-xl text-sm font-semibold"
+                >
+                  {sending ? (
+                    <>
+                      <LoaderCircle className="animate-spin" /> Sending…
+                    </>
+                  ) : (
+                    <>
+                      <Send className="size-4" /> Send
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+
+            <div className="flex items-center gap-2 pt-1">
+              <a
+                href={`tel:${CONTACT.phone}`}
+                className="haptic flex flex-1 items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium hover:text-foreground"
+              >
+                <Phone className="size-4" /> Call
+              </a>
+              <a
+                href={`sms:${CONTACT.phone}`}
+                className="haptic flex flex-1 items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium hover:text-foreground"
+              >
+                <MessageCircle className="size-4" /> Text
+              </a>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
