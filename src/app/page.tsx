@@ -58,8 +58,8 @@ const stripePromise = loadStripe(
 const CONTACT = {
   phone: "+15550123456",
   phoneDisplay: "(555) 012-3456",
-  instagram: "jengerluxurious",
-  instagramUrl: "https://instagram.com/jengerluxurious",
+  instagram: "jengerluxurious.second.chance",
+  instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
   // The 2nd Chance resale storefront lives on a separate site.
   secondChanceUrl: "http://www.jengerluxurious.com",
 };
