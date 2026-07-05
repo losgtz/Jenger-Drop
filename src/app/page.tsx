@@ -525,9 +525,9 @@ function Hero({
         <h1 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground">
           O sh!t!
           <br />
-          What do you need
+          We got you covered
           <br />
-          right now?
+          ASAP.
         </h1>
       </div>
 
@@ -542,7 +542,7 @@ function Hero({
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="O sh!t! What do you need right now?"
+          placeholder="O sh!t! We got you covered ASAP."
           className="h-10 border-0 bg-transparent px-1 text-base shadow-none ring-0 focus-visible:ring-0"
           aria-label="Search for an item"
         />
