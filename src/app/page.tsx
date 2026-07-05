@@ -144,13 +144,9 @@ const SLANG_SUGGESTIONS = [
 ];
 
 const CATEGORY_META: Record<string, { image: string; blurb: string }> = {
-  "Fashion Fix": {
+  "Fashion & Beauty Fix": {
     image: "/boob_tape---e15735e4-761e-4a45-9035-2c0848b33538.jpg",
     blurb: "Tape, pins & quick saves",
-  },
-  "Beauty Fix": {
-    image: "/lip_gloss---a662e684-d9fb-4c3f-9a9f-5a57d946c179.jpg",
-    blurb: "Lashes, gloss & glow",
   },
   "Game Day & Going Out": {
     image: "/clear_purse---9254c583-bd95-4c48-89d5-840f19894ece.jpg",
