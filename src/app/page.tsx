@@ -364,6 +364,7 @@ export default function Home() {
               onSelect={setSelectedProduct}
               onAdd={addToCart}
             />
+            <RequestBanner onRequest={() => openRequest("")} />
           </>
         )}
       </main>
@@ -770,6 +771,37 @@ function TheEdit({
 }
 
 /* ========================================================================== */
+/*  Bottom-of-feed "request a custom drop" banner                              */
+/* ========================================================================== */
+
+function RequestBanner({ onRequest }: { onRequest: () => void }) {
+  return (
+    <section>
+      <button
+        type="button"
+        onClick={onRequest}
+        className="haptic group flex w-full flex-col items-center gap-4 rounded-3xl border border-border bg-card px-6 py-10 text-center transition-colors hover:border-primary/40"
+      >
+        <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+          <Search className="size-6" />
+        </span>
+        <span className="space-y-1">
+          <span className="block font-serif text-2xl tracking-tight">
+            Don&apos;t see what you need?
+          </span>
+          <span className="block text-sm text-muted-foreground">
+            Suggest an item or request a custom drop — we&apos;ll hunt it down.
+          </span>
+        </span>
+        <span className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground">
+          Request it
+        </span>
+      </button>
+    </section>
+  );
+}
+
+/* ========================================================================== */
 /*  Search results + no-result fallback                                        */
 /* ========================================================================== */
 
@@ -894,12 +926,15 @@ function FullMenuDrawer({
             The full menu
           </DialogTitle>
           <DialogDescription>
-            Everything Jenger Drop can bring you tonight.
+            Everything Jenger Drop and 2nd Chance has to offer.
           </DialogDescription>
         </DialogHeader>
 
         <div className="no-scrollbar flex-1 space-y-8 overflow-y-auto px-5 py-5">
-          {dropProductsByCategory.map(({ category, items }) => {
+          {[
+            ...dropProductsByCategory,
+            { category: "2nd Chance Resale", items: resaleProducts }
+          ].map(({ category, items }) => {
             return (
               <div key={category} className="space-y-3">
                 <div className="flex items-center gap-2.5">
