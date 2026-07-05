@@ -381,14 +381,16 @@ export default function Home() {
           />
         ) : (
           <>
-            <TrendingCarousel
-              items={isDrop ? trendingProducts : resaleProducts.slice(0, 6)}
-              title={isDrop ? "Trending now" : "Fresh on 2nd Chance"}
-              onSelect={setSelectedProduct}
-              onAdd={addToCart}
-            />
+            {isDrop && (
+              <TrendingCarousel
+                items={trendingProducts}
+                title="Trending now"
+                onSelect={setSelectedProduct}
+                onAdd={addToCart}
+              />
+            )}
             <TheEdit
-              products={catalog}
+              products={isDrop ? catalog : resaleProducts}
               title={isDrop ? "The Edit" : "2nd Chance Resale"}
               onSelect={setSelectedProduct}
               onAdd={addToCart}
