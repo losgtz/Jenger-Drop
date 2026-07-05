@@ -20,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, type StripeElementsOptions } from "@stripe/stripe-js";
 import {
   Elements,
   ExpressCheckoutElement,
@@ -1305,10 +1305,6 @@ function CheckoutDrawer({
   const [locateError, setLocateError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState(false);
 
-  // Stripe payment intent state
-  const [clientSecret, setClientSecret] = React.useState<string | null>(null);
-  const [secretError, setSecretError] = React.useState<string | null>(null);
-
   const subtotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0);
   const deliveryFee = cart.length > 0 ? DELIVERY_FEE : 0;
   const tax = cart.length > 0 ? subtotal * 0.10 : 0;
@@ -1321,53 +1317,28 @@ function CheckoutDrawer({
     if (open) setSuccess(false);
   }, [open]);
 
-  // Create (or refresh) the PaymentIntent whenever the drawer opens with items.
-  const createIntent = React.useCallback(async () => {
-    if (cart.length === 0) return;
-    setSecretError(null);
-    setClientSecret(null);
-    try {
-      const res = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total }),
-      });
-      const data = await res.json();
-      if (data?.clientSecret) {
-        setClientSecret(data.clientSecret);
-      } else {
-        console.error("No clientSecret returned from server:", data);
-        setSecretError("Couldn't start the payment. Tap to retry.");
-      }
-    } catch (err) {
-      console.error("create-payment-intent request failed:", err);
-      setSecretError("Couldn't reach the payment server. Tap to retry.");
-    }
-  }, [cart.length, total]);
-
-  React.useEffect(() => {
-    if (open && !success && cart.length > 0) {
-      createIntent();
-    }
-  }, [open, success, cart.length, createIntent]);
-
-  const stripeOptions = React.useMemo(
-    () =>
-      clientSecret
-        ? {
-            clientSecret,
-            appearance: {
-              theme: "night" as const,
-              variables: {
-                colorPrimary: "#ef2b3d",
-                colorBackground: "#141414",
-                colorText: "#fafafa",
-                borderRadius: "10px",
-              },
-            },
-          }
-        : undefined,
-    [clientSecret]
+  // Deferred PaymentIntent flow: <Elements> mounts the card + wallet UI using
+  // only the publishable key, so the card field is ALWAYS visible immediately.
+  // The real PaymentIntent is created on the server at pay time inside
+  // StripeCheckoutForm (see runPayment there). This removes the previous
+  // dependency on a server round-trip before the form could render.
+  const amountInCents = Math.max(50, Math.round(total * 100));
+  const elementsOptions = React.useMemo<StripeElementsOptions>(
+    () => ({
+      mode: "payment",
+      amount: amountInCents,
+      currency: "usd",
+      appearance: {
+        theme: "night",
+        variables: {
+          colorPrimary: "#ef2b3d",
+          colorBackground: "#141414",
+          colorText: "#fafafa",
+          borderRadius: "10px",
+        },
+      },
+    }),
+    [amountInCents]
   );
 
   // Log the order once payment has succeeded, then show the confirmation.
@@ -1612,38 +1583,25 @@ function CheckoutDrawer({
                 {/* Cart bump / up-sell */}
                 {cart.length > 0 && <CartUpsell cart={cart} onAdd={onAdd} />}
 
-                {/* Stripe card payment — a successful charge is required to order */}
+                {/* Stripe payment — card field + Apple/Google Pay.
+                    Mounted immediately (deferred mode) so the card input is
+                    always visible; a successful charge is required to order. */}
                 {cart.length > 0 && (
                   <div className="space-y-2">
                     <Label>Payment</Label>
-                    {secretError ? (
-                      <button
-                        type="button"
-                        onClick={createIntent}
-                        className="haptic w-full rounded-xl border border-border py-4 text-sm text-primary"
-                      >
-                        {secretError}
-                      </button>
-                    ) : !clientSecret || !stripeOptions ? (
-                      <div className="flex items-center justify-center gap-2 rounded-xl border border-border py-6 text-sm text-muted-foreground">
-                        <LoaderCircle className="size-4 animate-spin" /> Loading
-                        secure payment…
-                      </div>
-                    ) : (
-                      <Elements stripe={stripePromise} options={stripeOptions}>
-                        <StripeCheckoutForm
-                          name={name}
-                          location={location}
-                          phone={phone}
-                          total={total}
-                          blocked={belowMinimum}
-                          blockedMessage={`Add ${money(
-                            amountNeeded
-                          )} more to qualify for delivery.`}
-                          onPaid={finalizeOrder}
-                        />
-                      </Elements>
-                    )}
+                    <Elements stripe={stripePromise} options={elementsOptions}>
+                      <StripeCheckoutForm
+                        name={name}
+                        location={location}
+                        phone={phone}
+                        total={total}
+                        blocked={belowMinimum}
+                        blockedMessage={`Add ${money(
+                          amountNeeded
+                        )} more to qualify for delivery.`}
+                        onPaid={finalizeOrder}
+                      />
+                    </Elements>
                   </div>
                 )}
               </div>
@@ -1679,41 +1637,22 @@ function StripeCheckoutForm({
   const stripe = useStripe();
   const elements = useElements();
   const [paying, setPaying] = React.useState(false);
+  const [ready, setReady] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const requiredFilled = Boolean(
     name.trim() && location.trim() && phone.trim()
   );
-  // Wallets (Apple/Google Pay) only offered once the delivery details are set.
-  const canExpressPay = requiredFilled && !blocked;
-
-  const confirmPayment = async (): Promise<void> => {
-    if (!stripe || !elements) {
-      setError("Payment form is still loading — one moment.");
-      return;
-    }
-    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      redirect: "if_required",
-    });
-    if (confirmError) {
-      console.error("Stripe confirmPayment error:", confirmError);
-      setError(
-        confirmError.message ??
-          "Payment failed. Please check your details and try again."
-      );
-      return;
-    }
-    if (paymentIntent && paymentIntent.status === "succeeded") {
-      await onPaid(paymentIntent.id);
-      return;
-    }
-    console.error("Unexpected PaymentIntent status:", paymentIntent?.status);
-    setError("Payment didn't complete. Please try again.");
-  };
+  // Wallets (Apple/Google Pay) only appear once the card form is mounted and
+  // the delivery details are filled in.
+  const canExpressPay = ready && requiredFilled && !blocked;
 
   const guard = (): boolean => {
     setError(null);
+    if (!stripe || !elements) {
+      setError("Payment form is still loading — one moment.");
+      return false;
+    }
     if (blocked) {
       setError(blockedMessage);
       return false;
@@ -1725,27 +1664,68 @@ function StripeCheckoutForm({
     return true;
   };
 
-  const handleCardPay = async () => {
-    if (!guard()) return;
-    setPaying(true);
-    try {
-      await confirmPayment();
-    } catch (err) {
-      console.error("Payment confirmation threw:", err);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setPaying(false);
+  // Deferred-intent flow shared by the card button and the wallet buttons:
+  //   1) validate the entered payment details,
+  //   2) create the PaymentIntent on the server,
+  //   3) confirm the payment.
+  const runPayment = async (): Promise<void> => {
+    if (!stripe || !elements) return;
+
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setError(submitError.message ?? "Please check your payment details.");
+      return;
     }
+
+    let clientSecret: string | null = null;
+    try {
+      const res = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: total }),
+      });
+      const data = await res.json();
+      clientSecret = data?.clientSecret ?? null;
+    } catch (err) {
+      console.error("create-payment-intent request failed:", err);
+    }
+    if (!clientSecret) {
+      setError(
+        "We couldn't reach the payment processor. Check your Stripe keys and try again."
+      );
+      return;
+    }
+
+    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      redirect: "if_required",
+      confirmParams: { return_url: window.location.href },
+    });
+    if (confirmError) {
+      console.error("Stripe confirmPayment error:", confirmError);
+      setError(
+        confirmError.message ??
+          "Payment failed. Please check your card details and try again."
+      );
+      return;
+    }
+    if (paymentIntent && paymentIntent.status === "succeeded") {
+      await onPaid(paymentIntent.id);
+      return;
+    }
+    console.error("Unexpected PaymentIntent status:", paymentIntent?.status);
+    setError("Payment didn't complete. Please try again.");
   };
 
-  const handleExpressConfirm = async () => {
+  const startPayment = async () => {
     if (!guard()) return;
     setPaying(true);
     try {
-      await confirmPayment();
+      await runPayment();
     } catch (err) {
-      console.error("Express payment threw:", err);
-      setError("Something went wrong. Please try again.");
+      console.error("Payment threw:", err);
+      setError("Something went wrong processing your payment. Please try again.");
     } finally {
       setPaying(false);
     }
@@ -1753,22 +1733,37 @@ function StripeCheckoutForm({
 
   return (
     <div className="space-y-3">
-      {/* Apple Pay / Google Pay */}
-      {canExpressPay ? (
-        <ExpressCheckoutElement onConfirm={handleExpressConfirm} />
-      ) : (
+      {/* Apple Pay / Google Pay (only rendered when a wallet is available) */}
+      {canExpressPay && <ExpressCheckoutElement onConfirm={startPayment} />}
+      {ready && !canExpressPay && (
         <p className="rounded-lg border border-dashed border-border px-3 py-2 text-center text-xs text-muted-foreground">
-          Enter your name, address & phone to unlock Apple&nbsp;Pay / Google&nbsp;Pay.
+          Enter your name, address & phone to unlock Apple&nbsp;Pay /
+          Google&nbsp;Pay.
         </p>
       )}
 
       <div className="flex items-center gap-3 text-[11px] tracking-widest text-muted-foreground uppercase">
-        <span className="h-px flex-1 bg-border" /> or pay by card{" "}
+        <span className="h-px flex-1 bg-border" /> pay by card{" "}
         <span className="h-px flex-1 bg-border" />
       </div>
 
       <div className="rounded-xl border border-border bg-card p-3">
-        <PaymentElement options={{ layout: "tabs" }} />
+        {!ready && (
+          <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
+            <LoaderCircle className="size-4 animate-spin" /> Loading secure card
+            form…
+          </div>
+        )}
+        <PaymentElement
+          options={{ layout: "tabs" }}
+          onReady={() => setReady(true)}
+          onLoadError={(event) => {
+            console.error("PaymentElement failed to load:", event);
+            setError(
+              "The card form failed to load. Please refresh and try again."
+            );
+          }}
+        />
       </div>
 
       {error && <p className="text-xs text-primary">{error}</p>}
@@ -1776,8 +1771,8 @@ function StripeCheckoutForm({
       <Button
         type="button"
         size="lg"
-        onClick={handleCardPay}
-        disabled={paying || !stripe || !elements || blocked}
+        onClick={startPayment}
+        disabled={paying || !ready || blocked}
         className="haptic h-12 w-full rounded-xl text-base font-semibold"
       >
         {paying ? (
