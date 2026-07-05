@@ -92,6 +92,16 @@ function isResale(product: Product): boolean {
   return product.category === RESALE_CATEGORY;
 }
 
+/** Units available for a product (treat missing stock as unlimited). */
+function stockOf(product: Product): number {
+  return product.stock ?? Number.POSITIVE_INFINITY;
+}
+
+/** Whether a product is out of inventory. */
+function isSoldOut(product: Product): boolean {
+  return stockOf(product) <= 0;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Synonym logic (mocked) — slang maps to real inventory terms               */
 /* -------------------------------------------------------------------------- */
@@ -293,18 +303,23 @@ export default function Home() {
   };
 
   const addToCart = (product: Product, qty: number = 1) => {
+    // Never add sold-out inventory.
+    if (isSoldOut(product)) return;
     const resale = isResale(product);
-    const amount = resale ? 1 : Math.max(1, qty);
+    // Resale is one-of-a-kind; otherwise cap at available stock.
+    const cap = resale ? 1 : stockOf(product);
+    const amount = Math.max(1, qty);
     setCart((prev) => {
       const found = prev.find((i) => i.product.id === product.id);
       if (found) {
-        // One-of-a-kind resale items can't exceed a single unit.
-        if (resale) return prev;
+        // Already at (or beyond) the stock limit — nothing to add.
+        if (found.qty >= cap) return prev;
+        const nextQty = Math.min(found.qty + amount, cap);
         return prev.map((i) =>
-          i.product.id === product.id ? { ...i, qty: i.qty + amount } : i
+          i.product.id === product.id ? { ...i, qty: nextQty } : i
         );
       }
-      return [...prev, { product, qty: amount }];
+      return [...prev, { product, qty: Math.min(amount, cap) }];
     });
   };
 
@@ -313,8 +328,11 @@ export default function Home() {
       prev
         .map((i) => {
           if (i.product.id !== id) return i;
-          // Block incrementing resale items beyond 1.
-          if (delta > 0 && isResale(i.product)) return i;
+          if (delta > 0) {
+            // Block incrementing resale beyond 1 or any item beyond its stock.
+            const cap = isResale(i.product) ? 1 : stockOf(i.product);
+            if (i.qty >= cap) return i;
+          }
           return { ...i, qty: i.qty + delta };
         })
         .filter((i) => i.qty > 0)
@@ -653,8 +671,14 @@ function ProductCard({
   onAdd: (p: Product) => void;
 }) {
   const [added, setAdded] = React.useState(false);
+  const soldOut = isSoldOut(product);
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
+    <div
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-opacity",
+        soldOut && "opacity-45 grayscale"
+      )}
+    >
       <button
         type="button"
         onClick={() => onSelect(product)}
@@ -664,9 +688,19 @@ function ProductCard({
         <ProductImage
           src={resolveImage(product)}
           alt={product.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className={cn(
+            "h-full w-full object-cover transition-transform duration-300",
+            !soldOut && "group-hover:scale-105"
+          )}
         />
-        {product.condition && (
+        {soldOut && (
+          <span className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="rounded-full bg-background/90 px-3 py-1 text-[10px] font-bold tracking-[0.16em] text-muted-foreground uppercase">
+              Sold Out
+            </span>
+          </span>
+        )}
+        {product.condition && !soldOut && (
           <span className="absolute top-2 left-2 rounded-full bg-background/85 px-2 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-foreground uppercase backdrop-blur-sm">
             {product.condition}
           </span>
@@ -676,7 +710,10 @@ function ProductCard({
         <button
           type="button"
           onClick={() => onSelect(product)}
-          className="text-left text-sm font-medium leading-snug line-clamp-2"
+          className={cn(
+            "text-left text-sm font-medium leading-snug line-clamp-2",
+            soldOut && "text-muted-foreground"
+          )}
         >
           {product.name}
         </button>
@@ -689,18 +726,29 @@ function ProductCard({
               </span>
             )}
           </span>
-          <Button
-            size="icon-sm"
-            className="haptic rounded-full"
-            aria-label={`Add ${product.name}`}
-            onClick={() => {
-              onAdd(product);
-              setAdded(true);
-              window.setTimeout(() => setAdded(false), 1200);
-            }}
-          >
-            {added ? <Check /> : <Plus />}
-          </Button>
+          {soldOut ? (
+            <Button
+              size="sm"
+              variant="outline"
+              disabled
+              className="h-8 shrink-0 cursor-not-allowed rounded-full px-3 text-[10px] font-semibold tracking-wide opacity-70"
+            >
+              Sold Out
+            </Button>
+          ) : (
+            <Button
+              size="icon-sm"
+              className="haptic rounded-full"
+              aria-label={`Add ${product.name}`}
+              onClick={() => {
+                onAdd(product);
+                setAdded(true);
+                window.setTimeout(() => setAdded(false), 1200);
+              }}
+            >
+              {added ? <Check /> : <Plus />}
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -1165,6 +1213,14 @@ function ProductDetailModal({
   const [index, setIndex] = React.useState(0);
   const [qty, setQty] = React.useState(1);
   const resale = product ? isResale(product) : false;
+  const soldOut = product ? isSoldOut(product) : false;
+  const maxQty = product
+    ? resale
+      ? 1
+      : Number.isFinite(stockOf(product))
+        ? stockOf(product)
+        : 99
+    : 1;
   const gallery = React.useMemo(
     () => (product ? resolveGallery(product) : []),
     [product]
@@ -1180,13 +1236,25 @@ function ProductDetailModal({
     <Dialog open={!!product} onOpenChange={onOpenChange}>
       <DialogContent className={cn(sheetClass, "max-h-[92vh] overflow-hidden")}>
         {product && (
-          <div className="no-scrollbar flex max-h-[92vh] flex-col overflow-y-auto">
+          <div
+            className={cn(
+              "no-scrollbar flex max-h-[92vh] flex-col overflow-y-auto",
+              soldOut && "opacity-50 grayscale"
+            )}
+          >
             <div className="relative aspect-square w-full shrink-0 bg-secondary">
               <ProductImage
                 src={gallery[index]}
                 alt={product.name}
                 className="h-full w-full object-cover"
               />
+              {soldOut && (
+                <span className="absolute inset-0 flex items-center justify-center bg-black/55">
+                  <span className="rounded-full bg-background px-5 py-2 text-sm font-bold tracking-[0.18em] text-muted-foreground uppercase">
+                    Sold Out
+                  </span>
+                </span>
+              )}
               {gallery.length > 1 && (
                 <>
                   <button
@@ -1262,7 +1330,11 @@ function ProductDetailModal({
                 </div>
               )}
 
-              {resale ? (
+              {soldOut ? (
+                <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-center text-sm font-medium text-muted-foreground">
+                  This item is currently sold out.
+                </div>
+              ) : resale ? (
                 <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/40 px-4 py-3 pt-1">
                   <span className="text-sm font-medium">Quantity</span>
                   <span className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
@@ -1291,7 +1363,8 @@ function ProductDetailModal({
                       variant="outline"
                       className="haptic rounded-full"
                       aria-label="Increase quantity"
-                      onClick={() => setQty((q) => q + 1)}
+                      disabled={qty >= maxQty}
+                      onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
                     >
                       <Plus />
                     </Button>
@@ -1300,21 +1373,33 @@ function ProductDetailModal({
               )}
 
               <div className="flex gap-2.5">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
-                  onClick={() => onAdd(product, qty)}
-                >
-                  Add to bag
-                </Button>
-                <Button
-                  size="lg"
-                  className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
-                  onClick={() => onBuy(product, qty)}
-                >
-                  Get it now
-                </Button>
+                {soldOut ? (
+                  <Button
+                    size="lg"
+                    disabled
+                    className="haptic h-12 w-full cursor-not-allowed rounded-xl text-sm font-semibold opacity-70"
+                  >
+                    Sold Out
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
+                      onClick={() => onAdd(product, qty)}
+                    >
+                      Add to bag
+                    </Button>
+                    <Button
+                      size="lg"
+                      className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
+                      onClick={() => onBuy(product, qty)}
+                    >
+                      Get it now
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

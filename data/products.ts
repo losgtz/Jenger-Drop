@@ -10,6 +10,8 @@ export type Product = {
   description: string;
   condition?: string;
   originalPrice?: number;
+  /** Units on hand. 0 = sold out. If omitted, a mock default is applied below. */
+  stock?: number;
 };
 
 /**
@@ -26,7 +28,7 @@ export const DROP_CATEGORIES = [
 
 export type DropCategory = (typeof DROP_CATEGORIES)[number];
 
-export const products: Product[] = [
+const rawProducts: Product[] = [
   // =========================================================
   //  JENGER DROP — EMERGENCY SUPPLIES (retail, immediate delivery)
   // =========================================================
@@ -628,6 +630,16 @@ export const products: Product[] = [
     condition: "EXCELLENT",
   },
 ];
+
+/**
+ * Mock inventory levels: resale items are one-of-a-kind (stock 1), emergency
+ * items are stocked deeper (stock 5). Any item can override this by setting an
+ * explicit `stock` above (including `stock: 0` to force "Sold Out").
+ */
+export const products: Product[] = rawProducts.map((p) => ({
+  ...p,
+  stock: p.stock ?? (p.category === "2nd Chance Resale" ? 1 : 5),
+}));
 
 /** Items shown on the Jenger Drop (emergency delivery) homepage. */
 export const dropProducts: Product[] = products.filter((p) =>
