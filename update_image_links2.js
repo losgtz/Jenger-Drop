@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const productsFile = '/Users/thegrower/.openclaw/workspace/Jengerluxurious/data/products.ts';
+const productsFile = '/Users/thegrower/Desktop/jenger_drop_app/data/products.ts';
 let content = fs.readFileSync(productsFile, 'utf8');
 
 const replacements = {
