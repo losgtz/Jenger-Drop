@@ -1812,8 +1812,8 @@ function TryOnBanner({ compact = false }: { compact?: boolean }) {
           <p className="font-serif text-base tracking-wide">Try before you buy!</p>
           <p className="text-xs leading-relaxed text-muted-foreground">
             Add any 2nd Chance items to your cart, and try them on while we wait
-            during delivery. Love it? Purchase it right there
-            at no extra charge.
+            during delivery. Love it? Purchase it right on the spot.
+
           </p>
         </div>
       </div>
