@@ -70,6 +70,17 @@ const CONTACT = {
 };
 
 /* -------------------------------------------------------------------------- */
+/*  API base URL                                                              */
+/* -------------------------------------------------------------------------- */
+
+// On the web this stays empty (relative /api/... calls hit the same Next server).
+// In the Capacitor/Android static build there is NO local server, so set
+// NEXT_PUBLIC_API_BASE_URL to your deployed backend (e.g. https://drop.vercel.app)
+// so the app can still reach the Stripe / checkout / Telegram routes.
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+const api = (path: string) => `${API_BASE}${path}`;
+
+/* -------------------------------------------------------------------------- */
 /*  Logistics: delivery fee & cart minimum                                    */
 /* -------------------------------------------------------------------------- */
 
@@ -223,7 +234,7 @@ type CartItem = { product: Product; qty: number };
 
 export default function Home() {
   // Top-level tab: emergency delivery vs. resale
-  const [activeTab, setActiveTab] = React.useState<"drop" | "resale">("drop");
+  const [activeTab, setActiveTab] = React.useState<"resale" | "drop">("resale");
   const isDrop = activeTab === "drop";
   const catalog = isDrop ? dropProducts : resaleProducts;
 
@@ -436,9 +447,9 @@ function Header({
   onOpenMenu: () => void;
   onOpenCart: () => void;
 }) {
-  const tabs: { id: "drop" | "resale"; label: string }[] = [
+  const tabs: { id: "resale" | "drop"; label: string }[] = [
+    { id: "resale", label: "2nd Chance Resale" },
     { id: "drop", label: "Jenger Drop" },
-    { id: "resale", label: "2nd Chance" },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
@@ -1004,7 +1015,7 @@ function RequestItemModal({
     e.preventDefault();
     setSending(true);
     try {
-      await fetch("/api/telegram-request", {
+      await fetch(api("/api/telegram-request"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1379,7 +1390,7 @@ function CheckoutDrawer({
   // Log the order once payment has succeeded, then show the confirmation.
   const finalizeOrder = async (paymentIntentId: string) => {
     try {
-      await fetch("/api/checkout", {
+      await fetch(api("/api/checkout"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1714,7 +1725,7 @@ function StripeCheckoutForm({
 
     let clientSecret: string | null = null;
     try {
-      const res = await fetch("/api/create-payment-intent", {
+      const res = await fetch(api("/api/create-payment-intent"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: total }),
@@ -1934,7 +1945,7 @@ function SiteMenuDrawer({
     e.preventDefault();
     setSending(true);
     try {
-      await fetch("/api/telegram-request", {
+      await fetch(api("/api/telegram-request"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
