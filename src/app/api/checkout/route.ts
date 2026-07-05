@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       phone: phone ?? "",
       instructions: instructions ?? "",
       subtotal: subtotal ?? 0,
+      tax: body.tax ?? 0,
       deliveryFee: deliveryFee ?? 0,
       total: total ?? subtotal ?? 0,
       paymentIntentId: paymentIntentId ?? "",

@@ -1311,7 +1311,8 @@ function CheckoutDrawer({
 
   const subtotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0);
   const deliveryFee = cart.length > 0 ? DELIVERY_FEE : 0;
-  const total = subtotal + deliveryFee;
+  const tax = cart.length > 0 ? subtotal * 0.10 : 0;
+  const total = subtotal + deliveryFee + tax;
   const belowMinimum = cart.length > 0 && subtotal < CART_MINIMUM;
   const amountNeeded = Math.max(0, CART_MINIMUM - subtotal);
   const hasResale = cart.some((i) => isResale(i.product));
@@ -1329,7 +1330,7 @@ function CheckoutDrawer({
       const res = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: subtotal + DELIVERY_FEE }),
+        body: JSON.stringify({ amount: total }),
       });
       const data = await res.json();
       if (data?.clientSecret) {
@@ -1342,7 +1343,7 @@ function CheckoutDrawer({
       console.error("create-payment-intent request failed:", err);
       setSecretError("Couldn't reach the payment server. Tap to retry.");
     }
-  }, [cart.length, subtotal]);
+  }, [cart.length, total]);
 
   React.useEffect(() => {
     if (open && !success && cart.length > 0) {
@@ -1386,7 +1387,8 @@ function CheckoutDrawer({
           location,
           phone,
           instructions,
-          subtotal,
+          tax,
+      subtotal,
           deliveryFee,
           total,
           paymentIntentId,
