@@ -20,4 +20,10 @@ Condition codes: `nwt` → NEW WITH TAGS, `ug` → USED — GOOD, `uln` → USED
 
 Earlier local/demo SKUs stay in `demoResaleProducts` and are not shoppable.
 
-All five saved batches are in the shop. Do not invent photos or prices.
+The shop currently holds these five saved batches (500 listings). Do not invent photos or prices.
+
+## Inventory rule
+
+- Do **not** import more Poshmark rows on this foundation pass.
+- Grow toward **1000** only via later CoS-fed batches (same mapper).
+- After 1000, freeze the catalog until Carlos green-lights more.

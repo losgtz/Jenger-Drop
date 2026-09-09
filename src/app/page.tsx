@@ -260,6 +260,8 @@ export default function Home() {
           onSuggestion={runSearch}
         />
 
+        <TrustStrip />
+
         <PoshmarkBanner />
 
         {isSearching ? (
@@ -282,8 +284,8 @@ export default function Home() {
             <RequestBanner onRequest={() => openRequest("")} />
           </>
         )}
-        <SiteFooter />
       </main>
+      <SiteFooter />
 
       <ContactBar
         onOpenMenu={() => setMenuOpen(true)}
@@ -441,6 +443,25 @@ function Hero({
         ))}
       </div>
     </section>
+  );
+}
+
+function TrustStrip() {
+  return (
+    <nav
+      aria-label="About, shipping, and returns"
+      className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium"
+    >
+      {TRUST_PAGES.map((page) => (
+        <Link
+          key={page.href}
+          href={page.href}
+          className="text-primary underline-offset-4 hover:underline"
+        >
+          {page.label}
+        </Link>
+      ))}
+    </nav>
   );
 }
 
