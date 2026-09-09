@@ -2,7 +2,7 @@
 
 Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
 
-- Closet on this site: Poshmark batches 1–3/5 in `data/poshmark-import.json` (300 listings from `@jengerluxuri0us`)
+- Closet on this site: Poshmark batches 1–4/5 in `data/poshmark-import.json` (400 listings from `@jengerluxuri0us`)
 - Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
 - Live Square storefront: [jengerluxurious.com](https://www.jengerluxurious.com)
 
