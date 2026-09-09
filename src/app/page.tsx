@@ -132,7 +132,7 @@ function searchProducts(raw: string, source: Product[]): Product[] {
   const mapped = SYNONYMS[q] ?? q;
   const terms = Array.from(new Set([q, mapped]));
   return source.filter((p) => {
-    const hay = `${p.name} ${p.category} ${p.description} ${p.condition ?? ""}`.toLowerCase();
+    const hay = `${p.name} ${p.category} ${p.description} ${p.condition ?? ""} ${p.brand ?? ""}`.toLowerCase();
     return terms.some((t) => hay.includes(t));
   });
 }
@@ -1055,6 +1055,11 @@ function ProductDetailModal({
                 <DialogDescription className="sr-only">
                   Product details for {product.name}
                 </DialogDescription>
+                {product.brand && (
+                  <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+                    {product.brand}
+                  </p>
+                )}
                 <div className="flex items-center gap-2">
                   <span className="font-serif text-xl">{money(product.price)}</span>
                   {product.originalPrice && (
@@ -1068,6 +1073,17 @@ function ProductDetailModal({
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {product.description}
               </p>
+
+              {product.listingUrl && (
+                <a
+                  href={product.listingUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="haptic inline-flex items-center gap-1.5 text-sm font-medium text-primary"
+                >
+                  View on Poshmark <ExternalLink className="size-3.5" />
+                </a>
+              )}
 
               {product.sizes?.length > 0 && (
                 <div className="flex flex-wrap gap-2">

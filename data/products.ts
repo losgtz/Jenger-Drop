@@ -1,3 +1,5 @@
+import poshmarkImport from "./poshmark-import.json";
+
 export type Product = {
   id: string;
   name: string;
@@ -10,6 +12,9 @@ export type Product = {
   description: string;
   condition?: string;
   originalPrice?: number;
+  brand?: string;
+  listingUrl?: string;
+  poshmarkId?: string;
   /** Units on hand. 0 = sold out. If omitted, a mock default is applied below. */
   stock?: number;
 };
@@ -438,15 +443,37 @@ const rawProducts: Product[] = [
 ];
 
 /**
- * Resale pieces are one-of-a-kind (stock 1) unless an item sets `stock` explicitly
- * (`stock: 0` forces Sold Out).
+ * Earlier local/demo closet rows. Demoted — the shoppable grid uses the
+ * Poshmark batch instead. Kept so photos already in /public are not lost.
  */
-export const products: Product[] = rawProducts.map((p) => ({
+export const demoResaleProducts: Product[] = rawProducts.map((p) => ({
   ...p,
   stock: p.stock ?? 1,
 }));
 
-/** Shoppable closet — 2nd Chance Resale only. */
-export const resaleProducts: Product[] = products.filter(
-  (p) => p.category === RESALE_CATEGORY
+function fromPoshmarkListing(raw: (typeof poshmarkImport.listings)[number]): Product {
+  return {
+    id: raw.id,
+    name: raw.name,
+    price: raw.price,
+    image: raw.image,
+    images: raw.images,
+    category: raw.category,
+    sizes: raw.sizes,
+    description: raw.description,
+    condition: raw.condition,
+    originalPrice: raw.originalPrice,
+    brand: raw.brand,
+    listingUrl: raw.listingUrl,
+    poshmarkId: raw.poshmarkId,
+    stock: raw.stock ?? 1,
+  };
+}
+
+/** Live closet — Poshmark batch 1/5 (@jengerluxuri0us, items 1–100). */
+export const resaleProducts: Product[] = poshmarkImport.listings.map(
+  fromPoshmarkListing
 );
+
+/** Shoppable catalog = Poshmark import (demo SKUs are not included). */
+export const products: Product[] = resaleProducts;
