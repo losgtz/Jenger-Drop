@@ -79,10 +79,36 @@ def extract_gallery(html: str) -> list[str]:
     return urls
 
 
-def fetch(url: str) -> str:
+def fetch(url: str, retries: int = 4) -> str:
     req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "text/html"})
-    with urllib.request.urlopen(req, timeout=25) as resp:
-        return resp.read().decode("utf-8", errors="replace")
+    delay = 2.0
+    last_exc: Exception | None = None
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=25) as resp:
+                return resp.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            last_exc = exc
+            if exc.code not in {429, 503, 502} or attempt == retries - 1:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 2, 30)
+        except (urllib.error.URLError, TimeoutError) as exc:
+            last_exc = exc
+            if attempt == retries - 1:
+                raise
+            time.sleep(delay)
+            delay = min(delay * 2, 30)
+    raise last_exc or RuntimeError("fetch failed")
+
+
+def save_catalog(path: Path, payload: dict) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    tmp.replace(path)
 
 
 def merge_images(existing_cover: str, scraped: list[str]) -> list[str]:
@@ -98,17 +124,39 @@ def main() -> None:
     parser.add_argument("catalog", type=Path)
     parser.add_argument("--limit", type=int, default=0, help="0 = all listings")
     parser.add_argument("--offset", type=int, default=0)
-    parser.add_argument("--sleep", type=float, default=0.45)
+    parser.add_argument("--sleep", type=float, default=0.6)
+    parser.add_argument(
+        "--checkpoint",
+        type=int,
+        default=10,
+        help="Write catalog after this many successful updates (resume-safe)",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-fetch listings that already have more than one image",
+    )
     args = parser.parse_args()
 
     payload = json.loads(args.catalog.read_text(encoding="utf-8"))
     listings = payload["listings"]
     end = len(listings) if args.limit <= 0 else min(len(listings), args.offset + args.limit)
-    targets = listings[args.offset : end]
+    slice_ = listings[args.offset : end]
+    targets = [
+        listing
+        for listing in slice_
+        if args.force or len(listing.get("images") or []) <= 1
+    ]
+    skipped_done = len(slice_) - len(targets)
 
     updated = 0
-    unchanged = 0
     failed: list[str] = []
+    since_checkpoint = 0
+
+    print(
+        f"scan={len(slice_)} todo={len(targets)} already_multi={skipped_done}",
+        flush=True,
+    )
 
     for i, listing in enumerate(targets, start=1):
         url = listing.get("listingUrl") or ""
@@ -123,24 +171,34 @@ def main() -> None:
             if images and not listing.get("image"):
                 listing["image"] = images[0]
             updated += 1
-            print(f"{listing['id']}: {len(images)} photos")
-        except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError) as exc:
+            since_checkpoint += 1
+            print(f"{i}/{len(targets)} {listing['id']}: {len(images)} photos", flush=True)
+        except (
+            urllib.error.HTTPError,
+            urllib.error.URLError,
+            TimeoutError,
+            ValueError,
+            json.JSONDecodeError,
+        ) as exc:
             failed.append(f"{listing.get('id')}: {exc}")
-            print(f"{listing.get('id')}: FAIL {exc}", file=sys.stderr)
-            unchanged += 1
+            print(f"{i}/{len(targets)} {listing.get('id')}: FAIL {exc}", file=sys.stderr, flush=True)
+        if since_checkpoint >= args.checkpoint:
+            save_catalog(args.catalog, payload)
+            multi = sum(1 for row in listings if len(row.get("images") or []) > 1)
+            print(f"checkpoint: multi={multi}/{len(listings)} updated={updated}", flush=True)
+            since_checkpoint = 0
         if i < len(targets) and args.sleep:
             time.sleep(args.sleep)
 
-    args.catalog.write_text(
-        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+    save_catalog(args.catalog, payload)
+    multi = sum(1 for row in listings if len(row.get("images") or []) > 1)
     print(
-        f"Wrote {args.catalog}: updated={updated} unchanged={unchanged} "
-        f"failed={len(failed)} scanned={len(targets)}"
+        f"Wrote {args.catalog}: updated={updated} skipped_done={skipped_done} "
+        f"failed={len(failed)} multi={multi}/{len(listings)}",
+        flush=True,
     )
     if failed:
-        print("failures:", *failed[:20], sep="\n  ")
+        print("failures:", *failed[:40], sep="\n  ")
 
 
 if __name__ == "__main__":
