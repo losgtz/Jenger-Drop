@@ -84,7 +84,10 @@ function ProductJsonLd({
     "@type": "Product",
     name: product.name,
     description: product.description,
-    image: [absoluteImage(product.image)],
+    image: (product.images && product.images.length > 0
+      ? product.images
+      : [product.image]
+    ).map(absoluteImage),
     sku: product.id,
     ...(product.brand
       ? { brand: { "@type": "Brand", name: product.brand } }

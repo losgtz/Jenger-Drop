@@ -17,6 +17,14 @@ Live closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
 
 `scripts/map-poshmark-psv.py` maps one or more PSV files to `poshmark-import.json`. The shop loads those rows as the primary `resaleProducts` catalog. Remote Cloudfront `imageUrl` values are used as-is (`<img>`; falls back to `/placeholder.svg` on error).
 
+The PSV only stores the closet **cover** (`image` + a one-item `images` array). Extra photos come from each live `listingUrl` via `scripts/backfill-poshmark-images.py` (`cover_shot.path_large` + `pictures[].path_large`). Resume-safe: skips listings that already have `images.length > 1`, checkpoints every 10 updates.
+
+```bash
+python3 scripts/backfill-poshmark-images.py data/poshmark-import.json
+```
+
+Current closet: **934 / 955** listings have more than one photo (21 are cover-only on Poshmark). Do not invent URLs. Re-running the PSV mapper resets galleries to one cover — backfill after a remap.
+
 ```bash
 python3 scripts/map-poshmark-psv.py data/poshmark-batch-{1..10}.psv data/poshmark-import.json
 ```
