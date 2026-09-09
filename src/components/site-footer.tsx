@@ -8,7 +8,7 @@ export function SiteFooter() {
         Jengerluxurious
       </p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Houston-based luxury resale · 2nd Chance Resale
+        2nd Chance Resale · one-of-a-kind pre-loved clothing
       </p>
       <nav
         aria-label="Trust and policies"
@@ -40,14 +40,6 @@ export function SiteFooter() {
           className="text-foreground underline-offset-4 hover:underline"
         >
           Instagram @{CONTACT.instagram}
-        </a>
-        <a
-          href={CONTACT.poshmarkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-muted-foreground underline-offset-4 hover:underline"
-        >
-          Poshmark @{CONTACT.poshmarkHandle}
         </a>
       </div>
     </footer>

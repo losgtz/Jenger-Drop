@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       total,
       paymentProvider,
       paymentStatus,
-      squareCheckoutUrl,
+      stripeCheckoutUrl,
     } = body ?? {};
 
     const order = {
@@ -33,9 +33,9 @@ export async function POST(request: Request) {
       tax: body.tax ?? 0,
       shippingFee: shippingFee ?? 0,
       total: total ?? subtotal ?? 0,
-      paymentProvider: paymentProvider ?? "square",
+      paymentProvider: paymentProvider ?? "stripe",
       paymentStatus: paymentStatus ?? "",
-      squareCheckoutUrl: squareCheckoutUrl ?? "",
+      stripeCheckoutUrl: stripeCheckoutUrl ?? "",
       items: Array.isArray(items) ? items : [],
     };
 

@@ -5,8 +5,15 @@ import { TrustPageShell } from "@/components/trust-page-shell";
 export const metadata: Metadata = {
   title: "Returns | 2nd Chance Resale",
   description:
-    "One-of-a-kind resale from Jengerluxurious. Contact us if a piece arrives not as described.",
+    "Returns on 2nd Chance Resale: contact us if a piece arrives damaged or not as described.",
   alternates: { canonical: "/returns" },
+  openGraph: {
+    title: "Returns | 2nd Chance Resale",
+    description:
+      "Returns on 2nd Chance Resale: contact us if a piece arrives damaged or not as described.",
+    url: "/returns",
+    type: "website",
+  },
 };
 
 export default function ReturnsPage() {

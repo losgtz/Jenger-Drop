@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 1,
     },
-    ...(["/about", "/shipping", "/returns"] as const).map((path) => ({
+    ...(["/about", "/returns"] as const).map((path) => ({
       url: `${SITE_URL}${path}`,
       lastModified: now,
       changeFrequency: "monthly" as const,
