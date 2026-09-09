@@ -2,7 +2,7 @@
 
 Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
 
-- Closet on this site: Poshmark batches 1–6/10 in `data/poshmark-import.json` (600 listings from `@jengerluxuri0us`)
+- Closet on this site: Poshmark batches 1–10/10 in `data/poshmark-import.json` (955 listings from `@jengerluxuri0us`)
 - Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
 - Live Square storefront: [jengerluxurious.com](https://www.jengerluxurious.com)
 
@@ -50,7 +50,7 @@ US domestic only. Rate lives in `data/shipping.ts` (`SHIPPING.flatRateUsd = 6.49
 
 ## Poshmark import
 
-See `data/POSHMARK.md`. The live closet is batches 1–6 of 10 on this PR (**600** listings). Remaining CoS-fed batches (7–10) may grow the catalog toward **1000** (closet ~955 available — no invented extras), then freeze until Carlos green-lights more. Do not invent photos or prices.
+See `data/POSHMARK.md`. The live closet is batches 1–10 of 10 on this PR (**955** listings). Inventory is **FROZEN** until Carlos green-lights more. Do not invent photos or prices.
 
 ## Learn More
 
