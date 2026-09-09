@@ -1,10 +1,10 @@
 /**
  * US domestic shipping defaults for 2nd Chance Resale.
  *
- * Carlos confirmed: match current Poshmark buyer shipping (not the earlier
- * $8.95 / free-over-$75 placeholders). $6.49 flat, US domestic, packages
- * up to 5 lb. Heavy/oversize upgrades are out of scope. Change these
- * constants in one place — do not invent international rates.
+ * Mirrors Poshmark’s 2026 flat buyer rate: $6.49 per order for packages
+ * up to 5 lb. Heavy/oversize tiers later — Poshmark adds seller-paid
+ * upgrades above 5 lb (out of scope). Change `flatRateUsd` in this file
+ * only. Do not invent international rates.
  */
 export const SHIPPING = {
   region: "US_DOMESTIC",

@@ -43,7 +43,7 @@ Stripe is parked: `/api/create-payment-intent` returns `410` and is not used by 
 
 ## Shipping
 
-US domestic only. Rate lives in `data/shipping.ts` (`SHIPPING.flatRateUsd = 6.49`) and is shown as a separate checkout line before pay. It mirrors Poshmark’s current standard buyer shipping for packages up to 5 lb. Heavy/oversize tiers are out of scope.
+US domestic only. Rate lives in `data/shipping.ts` (`SHIPPING.flatRateUsd = 6.49`) and is shown as a separate checkout line before pay. Mirrors Poshmark’s 2026 flat buyer rate for packages up to 5 lb. Heavy/oversize (seller-paid upgrades above 5 lb) is out of scope.
 
 ## Poshmark import (later)
 
