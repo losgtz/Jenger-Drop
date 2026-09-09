@@ -16,18 +16,8 @@ import {
   Search,
   Send,
   ShoppingBag,
-  Sparkles,
   X,
 } from "lucide-react";
-
-import { loadStripe, type StripeElementsOptions } from "@stripe/stripe-js";
-import {
-  Elements,
-  ExpressCheckoutElement,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,12 +31,12 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
-  DROP_CATEGORIES,
-  dropProducts,
-  dropProductsByCategory,
+  hasSquareCheckoutLink,
+  SQUARE,
+} from "@/lib/square";
+import {
   RESALE_CATEGORY,
   resaleProducts,
-  trendingProducts,
   type Product,
 } from "../../data/products";
 
@@ -54,19 +44,14 @@ import {
 /*  Brand + contact config                                                    */
 /* -------------------------------------------------------------------------- */
 
-// Stripe publishable key (falls back to Stripe's public sample test key).
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ??
-    "pk_test_TYooMQauvdEDq54NiTphI7jx"
-);
-
 const CONTACT = {
   phone: "3465257753",
   phoneDisplay: "(346) 525-7753",
   instagram: "jengerluxurious.second.chance",
   instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
-  // The full national catalog / resale storefront lives on a separate site.
-  secondChanceUrl: "http://www.jengerluxurious.com",
+  storeUrl: "http://www.jengerluxurious.com",
+  poshmarkHandle: "jengerluxuri0us",
+  poshmarkUrl: "https://poshmark.com/closet/jengerluxuri0us",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -75,17 +60,9 @@ const CONTACT = {
 
 // On the web this stays empty (relative /api/... calls hit the same Next server).
 // In the Capacitor/Android static build there is NO local server, so set
-// NEXT_PUBLIC_API_BASE_URL to your deployed backend (e.g. https://drop.vercel.app)
-// so the app can still reach the Stripe / checkout / Telegram routes.
+// NEXT_PUBLIC_API_BASE_URL to your deployed backend.
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 const api = (path: string) => `${API_BASE}${path}`;
-
-/* -------------------------------------------------------------------------- */
-/*  Logistics: delivery fee & cart minimum                                    */
-/* -------------------------------------------------------------------------- */
-
-const DELIVERY_FEE = 4.99;
-const CART_MINIMUM = 15.0;
 
 /** Resale items are one-of-a-kind (qty locked to 1). */
 function isResale(product: Product): boolean {
@@ -102,61 +79,32 @@ function isSoldOut(product: Product): boolean {
   return stockOf(product) <= 0;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Synonym logic (mocked) — slang maps to real inventory terms               */
-/* -------------------------------------------------------------------------- */
-
 const SYNONYMS: Record<string, string> = {
-  "boob tape": "fashion tape",
-  "double sided tape": "fashion tape",
-  "double-sided tape": "fashion tape",
-  "titty tape": "fashion tape",
-  "clear purse": "clear stadium",
-  "clear bag": "clear stadium",
-  "stadium bag": "clear stadium",
-  "phone cord": "charger",
-  "phone charger": "charger",
-  "phone died": "charger",
-  charger: "charger",
-  "nipple covers": "pasties",
-  "nip covers": "pasties",
-  "red top": "red game day top",
-  hangover: "electrolyte",
-  "hangover kit": "electrolyte",
-  advil: "pain reliever",
-  tylenol: "pain reliever",
-  ibuprofen: "pain reliever",
-  midol: "pain reliever",
-  tampon: "tampons",
-  period: "tampons",
-  chapstick: "lip balm",
-  gloss: "lip gloss",
-  eyelashes: "lashes",
-  spf: "sunscreen",
+  dress: "dress",
+  dresses: "dress",
+  vintage: "vintage",
+  sequin: "sequin",
+  bikini: "bikini",
+  swim: "bikini",
+  swimsuit: "bikini",
+  "game day": "game-day",
+  gameday: "game-day",
+  crop: "crop",
+  blazer: "blazer",
+  jacket: "jacket",
+  bag: "bag",
+  purse: "bag",
+  coach: "coach",
 };
 
-const SLANG_SUGGESTIONS = [
-  "fashion tape",
-  "clear purse",
-  "phone died",
-  "hangover kit",
-  "nipple covers",
+const CLOSET_SUGGESTIONS = [
+  "vintage",
+  "dress",
+  "game day",
+  "bikini",
+  "sequin",
+  "coach",
 ];
-
-const CATEGORY_META: Record<string, { image: string; blurb: string }> = {
-  "Fashion & Beauty Fix": {
-    image: "/boob_tape---e15735e4-761e-4a45-9035-2c0848b33538.jpg",
-    blurb: "Tape, pins & quick saves",
-  },
-  "Game Day & Going Out": {
-    image: "/clear_purse---9254c583-bd95-4c48-89d5-840f19894ece.jpg",
-    blurb: "Clear bags & hydration",
-  },
-  Essentials: {
-    image: "/phone_charger---51e11673-53f6-4e3d-9938-feb9e8325f41.jpg",
-    blurb: "Chargers, meds & more",
-  },
-};
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -164,16 +112,10 @@ const CATEGORY_META: Record<string, { image: string; blurb: string }> = {
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
-/* -------------------------------------------------------------------------- */
-/*  Images — load the paths straight from products.ts                          */
-/* -------------------------------------------------------------------------- */
-
-/** The product's own image path from the data file. */
 function resolveImage(product: Product): string {
   return product.image;
 }
 
-/** The product's own gallery from the data file (falls back to its single image). */
 function resolveGallery(product: Product): string[] {
   return product.images && product.images.length > 0
     ? product.images
@@ -186,16 +128,10 @@ function searchProducts(raw: string, source: Product[]): Product[] {
   const mapped = SYNONYMS[q] ?? q;
   const terms = Array.from(new Set([q, mapped]));
   return source.filter((p) => {
-    const hay = `${p.name} ${p.category} ${p.description}`.toLowerCase();
+    const hay = `${p.name} ${p.category} ${p.description} ${p.condition ?? ""}`.toLowerCase();
     return terms.some((t) => hay.includes(t));
   });
 }
-
-// Top-selling Jenger Drop items surfaced as the checkout cart bump.
-const UPSELL_IDS = ["item_045", "item_031", "item_043"];
-const upsellProducts: Product[] = UPSELL_IDS.map((id) =>
-  dropProducts.find((p) => p.id === id)
-).filter((p): p is Product => Boolean(p));
 
 /** Bottom-sheet styling shared by the drawer-style dialogs. */
 const sheetClass =
@@ -239,17 +175,11 @@ type CartItem = { product: Product; qty: number };
 /* ========================================================================== */
 
 export default function Home() {
-  // Top-level tab: emergency delivery vs. resale
-  const [activeTab, setActiveTab] = React.useState<"resale" | "drop">("resale");
-  const isDrop = activeTab === "drop";
-  const catalog = isDrop ? dropProducts : resaleProducts;
+  const catalog = resaleProducts;
 
-  // Search / browse state
   const [query, setQuery] = React.useState("");
   const [activeQuery, setActiveQuery] = React.useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = React.useState<string | null>(null);
 
-  // Modals & drawers
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [siteMenuOpen, setSiteMenuOpen] = React.useState(false);
@@ -257,58 +187,34 @@ export default function Home() {
   const [requestPrefill, setRequestPrefill] = React.useState("");
   const [checkoutOpen, setCheckoutOpen] = React.useState(false);
 
-  // Cart
   const [cart, setCart] = React.useState<CartItem[]>([]);
   const cartCount = cart.reduce((n, i) => n + i.qty, 0);
 
-  const isSearching = activeQuery !== null || activeCategory !== null;
+  const isSearching = activeQuery !== null;
 
   const results = React.useMemo<Product[]>(() => {
-    if (activeCategory) {
-      return catalog.filter((p) => p.category === activeCategory);
-    }
     if (activeQuery !== null) return searchProducts(activeQuery, catalog);
     return [];
-  }, [activeQuery, activeCategory, catalog]);
+  }, [activeQuery, catalog]);
 
   const runSearch = (term: string) => {
     setQuery(term);
     setActiveQuery(term);
-    setActiveCategory(null);
-  };
-
-  const pickCategory = (cat: string) => {
-    // toggle off if the same pill is tapped again
-    setActiveCategory((prev) => (prev === cat ? null : cat));
-    setActiveQuery(null);
-    setQuery("");
   };
 
   const clearSearch = () => {
     setActiveQuery(null);
-    setActiveCategory(null);
-    setQuery("");
-  };
-
-  const switchTab = (tab: "drop" | "resale") => {
-    setActiveTab(tab);
-    // Reset any active search/category so the grid shows the new tab's catalog.
-    setActiveQuery(null);
-    setActiveCategory(null);
     setQuery("");
   };
 
   const addToCart = (product: Product, qty: number = 1) => {
-    // Never add sold-out inventory.
     if (isSoldOut(product)) return;
     const resale = isResale(product);
-    // Resale is one-of-a-kind; otherwise cap at available stock.
     const cap = resale ? 1 : stockOf(product);
     const amount = Math.max(1, qty);
     setCart((prev) => {
       const found = prev.find((i) => i.product.id === product.id);
       if (found) {
-        // Already at (or beyond) the stock limit — nothing to add.
         if (found.qty >= cap) return prev;
         const nextQty = Math.min(found.qty + amount, cap);
         return prev.map((i) =>
@@ -325,7 +231,6 @@ export default function Home() {
         .map((i) => {
           if (i.product.id !== id) return i;
           if (delta > 0) {
-            // Block incrementing resale beyond 1 or any item beyond its stock.
             const cap = isResale(i.product) ? 1 : stockOf(i.product);
             if (i.qty >= cap) return i;
           }
@@ -344,8 +249,6 @@ export default function Home() {
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-28">
       <Header
         cartCount={cartCount}
-        activeTab={activeTab}
-        onSelectTab={switchTab}
         onOpenMenu={() => setSiteMenuOpen(true)}
         onOpenCart={() => setCheckoutOpen(true)}
       />
@@ -358,15 +261,11 @@ export default function Home() {
           onSuggestion={runSearch}
         />
 
-        {!isDrop && <TryOnBanner />}
-
-        {isDrop && (
-          <CategoryLauncher active={activeCategory} onPick={pickCategory} />
-        )}
+        <PoshmarkBanner />
 
         {isSearching ? (
           <SearchResults
-            title={activeCategory ? activeCategory : `Results for “${activeQuery}”`}
+            title={`Results for “${activeQuery}”`}
             results={results}
             onClear={clearSearch}
             onSelect={setSelectedProduct}
@@ -377,17 +276,9 @@ export default function Home() {
           />
         ) : (
           <>
-            {isDrop && (
-              <TrendingCarousel
-                items={trendingProducts}
-                title="Trending now"
-                onSelect={setSelectedProduct}
-                onAdd={addToCart}
-              />
-            )}
             <TheEdit
-              products={isDrop ? catalog : resaleProducts}
-              title={isDrop ? "The Edit" : "2nd Chance Resale"}
+              products={catalog}
+              title="2nd Chance Resale"
               onSelect={setSelectedProduct}
               onAdd={addToCart}
             />
@@ -401,7 +292,6 @@ export default function Home() {
         failedQuery={activeQuery ?? ""}
       />
 
-      {/* --- Drawers & modals --- */}
       <FullMenuDrawer
         open={menuOpen}
         onOpenChange={setMenuOpen}
@@ -439,7 +329,6 @@ export default function Home() {
         onOpenChange={setCheckoutOpen}
         cart={cart}
         updateQty={updateQty}
-        onAdd={addToCart}
         onDone={() => setCart([])}
       />
     </div>
@@ -447,26 +336,18 @@ export default function Home() {
 }
 
 /* ========================================================================== */
-/*  Header + tabs                                                              */
+/*  Header                                                                     */
 /* ========================================================================== */
 
 function Header({
   cartCount,
-  activeTab,
-  onSelectTab,
   onOpenMenu,
   onOpenCart,
 }: {
   cartCount: number;
-  activeTab: "drop" | "resale";
-  onSelectTab: (tab: "drop" | "resale") => void;
   onOpenMenu: () => void;
   onOpenCart: () => void;
 }) {
-  const tabs: { id: "resale" | "drop"; label: string }[] = [
-    { id: "resale", label: "2nd Chance Resale" },
-    { id: "drop", label: "Jenger Drop" },
-  ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="flex items-center justify-between px-5 pt-4">
@@ -500,29 +381,11 @@ function Header({
         </div>
       </div>
 
-      {/* Tabs toggle the product grid between Emergency Drop & 2nd Chance Resale */}
-      <nav className="flex items-center gap-6 px-5 pt-3">
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => onSelectTab(tab.id)}
-              className={cn(
-                "haptic relative pb-2.5 text-base font-semibold transition-colors",
-                isActive
-                  ? "text-foreground"
-                  : "font-medium text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {tab.label}
-              {isActive && (
-                <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary" />
-              )}
-            </button>
-          );
-        })}
+      <nav className="px-5 pt-3" aria-label="Storefront">
+        <p className="relative pb-2.5 text-base font-semibold text-foreground">
+          2nd Chance Resale
+          <span className="absolute inset-x-0 bottom-0 h-0.5 w-36 rounded-full bg-primary" />
+        </p>
       </nav>
     </header>
   );
@@ -547,15 +410,17 @@ function Hero({
     <section className="flex flex-col gap-5">
       <div className="space-y-2">
         <p className="text-xs font-medium tracking-[0.22em] text-primary uppercase">
-          Emergency drop • delivered fast
+          Jengerluxurious · 2nd Chance Resale
         </p>
         <h1 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground">
-          O sh!t!
+          One-of-a-kind
           <br />
-          We got you covered
-          <br />
-          ASAP.
+          closet finds.
         </h1>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Pre-loved pieces from the Jengerluxurious closet. Condition and
+          original price show when we have them.
+        </p>
       </div>
 
       <form
@@ -569,9 +434,9 @@ function Hero({
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="O sh!t! We got you covered ASAP."
+          placeholder="Search the closet"
           className="h-10 border-0 bg-transparent px-1 text-base shadow-none ring-0 focus-visible:ring-0"
-          aria-label="Search for an item"
+          aria-label="Search the closet"
         />
         <Button
           type="submit"
@@ -583,7 +448,7 @@ function Hero({
       </form>
 
       <div className="flex flex-wrap gap-2">
-        {SLANG_SUGGESTIONS.map((s) => (
+        {CLOSET_SUGGESTIONS.map((s) => (
           <button
             key={s}
             type="button"
@@ -598,60 +463,24 @@ function Hero({
   );
 }
 
-/* ========================================================================== */
-/*  Category launcher                                                          */
-/* ========================================================================== */
-
-function CategoryLauncher({
-  active,
-  onPick,
-}: {
-  active: string | null;
-  onPick: (cat: string) => void;
-}) {
+function PoshmarkBanner() {
   return (
-    <section className="space-y-3">
-      <h2 className="font-serif text-xl tracking-wide">Shop by moment</h2>
-      <div className="grid grid-cols-2 gap-3">
-        {DROP_CATEGORIES.map((cat) => {
-          const meta = CATEGORY_META[cat];
-          const isActive = active === cat;
-          return (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => onPick(cat)}
-              className={cn(
-                "haptic group relative flex h-32 flex-col justify-end overflow-hidden rounded-2xl border text-left transition-all",
-                isActive
-                  ? "border-primary ring-2 ring-primary/60"
-                  : "border-border/60 hover:border-primary/40"
-              )}
-            >
-              {/* Photo thumbnail */}
-              <ProductImage
-                src={meta?.image ?? "/placeholder.svg"}
-                alt={cat}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              {/* Luxe gradient scrim for legibility */}
-              <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/5" />
-              {isActive && (
-                <span className="absolute top-2 right-2 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <Check className="size-3" />
-                </span>
-              )}
-              <span className="relative z-10 flex flex-col gap-0.5 p-3.5">
-                <span className="font-serif text-base leading-tight tracking-wide text-white">
-                  {cat}
-                </span>
-                <span className="text-[11px] text-white/70">{meta?.blurb}</span>
-              </span>
-            </button>
-          );
-        })}
-      </div>
-    </section>
+    <a
+      href={CONTACT.poshmarkUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="haptic flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3"
+    >
+      <span className="space-y-0.5">
+        <span className="block text-xs font-semibold tracking-[0.16em] text-primary uppercase">
+          Also on Poshmark
+        </span>
+        <span className="block text-sm text-muted-foreground">
+          Closet @{CONTACT.poshmarkHandle}
+        </span>
+      </span>
+      <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
+    </a>
   );
 }
 
@@ -771,43 +600,6 @@ function ProductGrid({
   );
 }
 
-/* ========================================================================== */
-/*  Trending carousel                                                          */
-/* ========================================================================== */
-
-function TrendingCarousel({
-  items,
-  title,
-  onSelect,
-  onAdd,
-}: {
-  items: Product[];
-  title: string;
-  onSelect: (p: Product) => void;
-  onAdd: (p: Product) => void;
-}) {
-  if (items.length === 0) return null;
-  return (
-    <section className="space-y-3">
-      <div className="flex items-baseline justify-between">
-        <h2 className="font-serif text-xl tracking-wide">{title}</h2>
-        <span className="text-xs text-muted-foreground">Grabbed most tonight</span>
-      </div>
-      <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-1">
-        {items.map((p) => (
-          <div key={p.id} className="w-36 shrink-0 snap-start">
-            <ProductCard product={p} onSelect={onSelect} onAdd={onAdd} />
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* ========================================================================== */
-/*  The Edit (full grid)                                                       */
-/* ========================================================================== */
-
 function TheEdit({
   products: items,
   title,
@@ -827,10 +619,6 @@ function TheEdit({
   );
 }
 
-/* ========================================================================== */
-/*  Bottom-of-feed "request a custom drop" banner                              */
-/* ========================================================================== */
-
 function RequestBanner({ onRequest }: { onRequest: () => void }) {
   return (
     <section>
@@ -844,10 +632,10 @@ function RequestBanner({ onRequest }: { onRequest: () => void }) {
         </span>
         <span className="space-y-1">
           <span className="block font-serif text-2xl tracking-tight">
-            Don&apos;t see what you need?
+            Don&apos;t see that piece?
           </span>
           <span className="block text-sm text-muted-foreground">
-            Suggest an item or request a custom drop — we&apos;ll hunt it down.
+            Request a closet find — we&apos;ll look for it.
           </span>
         </span>
         <span className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground">
@@ -857,10 +645,6 @@ function RequestBanner({ onRequest }: { onRequest: () => void }) {
     </section>
   );
 }
-
-/* ========================================================================== */
-/*  Search results + no-result fallback                                        */
-/* ========================================================================== */
 
 function SearchResults({
   title,
@@ -918,7 +702,7 @@ function NoResultFallback({
   onOpenMenu: () => void;
 }) {
   const smsHref = `sms:${CONTACT.phone}?&body=${encodeURIComponent(
-    `Hi Jenger Drop! I need: ${failedQuery}`
+    `Hi Jengerluxurious! Looking for: ${failedQuery}`
   )}`;
   return (
     <div className="flex flex-col items-center gap-5 rounded-3xl border border-border bg-card px-6 py-10 text-center">
@@ -930,7 +714,7 @@ function NoResultFallback({
           We don&apos;t have that yet.
         </h3>
         <p className="text-sm text-muted-foreground">
-          But we can probably still get it to you. Tell us what you need.
+          Tell us what you&apos;re hunting — we&apos;ll check the closet.
         </p>
       </div>
       <div className="flex w-full flex-col gap-2.5">
@@ -947,7 +731,7 @@ function NoResultFallback({
           className="haptic h-12 w-full rounded-xl text-sm font-semibold"
           onClick={onOpenMenu}
         >
-          Open full menu
+          Browse the closet
         </Button>
         <a
           href={smsHref}
@@ -959,10 +743,6 @@ function NoResultFallback({
     </div>
   );
 }
-
-/* ========================================================================== */
-/*  Full Menu drawer (grouped by category)                                     */
-/* ========================================================================== */
 
 function FullMenuDrawer({
   open,
@@ -980,55 +760,39 @@ function FullMenuDrawer({
       <DialogContent className={cn(sheetClass, "h-[88vh]")}>
         <DialogHeader className="border-b border-border px-5 py-4">
           <DialogTitle className="font-serif text-2xl tracking-tight">
-            The full menu
+            The closet
           </DialogTitle>
           <DialogDescription>
-            Everything Jenger Drop and 2nd Chance has to offer.
+            Everything in 2nd Chance Resale right now.
           </DialogDescription>
         </DialogHeader>
 
         <div className="no-scrollbar flex-1 space-y-8 overflow-y-auto px-5 py-5">
-          {[
-            ...dropProductsByCategory,
-            { category: "2nd Chance Resale", items: resaleProducts }
-          ].map(({ category, items }) => {
-            return (
-              <div key={category} className="space-y-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="size-8 shrink-0 overflow-hidden rounded-full ring-1 ring-border">
-                    <ProductImage
-                      src={CATEGORY_META[category]?.image ?? "/placeholder.svg"}
-                      alt={category}
-                      className="h-full w-full object-cover"
-                    />
-                  </span>
-                  <h3 className="font-serif text-lg tracking-wide">{category}</h3>
-                  <span className="text-xs text-muted-foreground">
-                    {items.length}
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {items.map((p) => (
-                    <ProductCard
-                      key={p.id}
-                      product={p}
-                      onSelect={onSelect}
-                      onAdd={onAdd}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2.5">
+              <h3 className="font-serif text-lg tracking-wide">
+                2nd Chance Resale
+              </h3>
+              <span className="text-xs text-muted-foreground">
+                {resaleProducts.length}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {resaleProducts.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  product={p}
+                  onSelect={onSelect}
+                  onAdd={onAdd}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-
-/* ========================================================================== */
-/*  Request Item modal                                                         */
-/* ========================================================================== */
 
 function RequestItemModal({
   open,
@@ -1042,7 +806,7 @@ function RequestItemModal({
   const [submitted, setSubmitted] = React.useState(false);
   const [sending, setSending] = React.useState(false);
   const [itemName, setItemName] = React.useState(prefill);
-  const [need, setNeed] = React.useState("tonight");
+  const [need, setNeed] = React.useState("this-week");
   const [details, setDetails] = React.useState("");
   const [contact, setContact] = React.useState("");
 
@@ -1051,7 +815,7 @@ function RequestItemModal({
       setItemName(prefill);
       setSubmitted(false);
       setSending(false);
-      setNeed("tonight");
+      setNeed("this-week");
       setDetails("");
       setContact("");
     }
@@ -1065,7 +829,7 @@ function RequestItemModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "Item Request",
+          type: "Closet Request",
           item: itemName,
           need,
           details,
@@ -1090,7 +854,7 @@ function RequestItemModal({
             </span>
             <DialogTitle className="font-serif text-2xl">Request sent</DialogTitle>
             <DialogDescription>
-              We&apos;ll text you the moment we can source it.
+              We&apos;ll text you if we can source it.
             </DialogDescription>
             <Button
               className="haptic mt-2 h-11 w-full rounded-xl"
@@ -1103,10 +867,10 @@ function RequestItemModal({
           <>
             <DialogHeader>
               <DialogTitle className="font-serif text-2xl tracking-tight">
-                Request this item
+                Request this piece
               </DialogTitle>
               <DialogDescription>
-                Can&apos;t find it? We&apos;ll hunt it down for you.
+                Can&apos;t find it in the closet? We&apos;ll look.
               </DialogDescription>
             </DialogHeader>
 
@@ -1127,8 +891,8 @@ function RequestItemModal({
                 <Label>Need it by</Label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
-                    { v: "tonight", l: "Tonight" },
                     { v: "this-week", l: "This week" },
+                    { v: "this-month", l: "This month" },
                     { v: "exploring", l: "Just exploring" },
                   ].map((opt) => (
                     <button
@@ -1193,10 +957,6 @@ function RequestItemModal({
   );
 }
 
-/* ========================================================================== */
-/*  Product detail modal with image gallery                                    */
-/* ========================================================================== */
-
 function ProductDetailModal({
   product,
   onOpenChange,
@@ -1209,25 +969,15 @@ function ProductDetailModal({
   onBuy: (p: Product, qty: number) => void;
 }) {
   const [index, setIndex] = React.useState(0);
-  const [qty, setQty] = React.useState(1);
-  const resale = product ? isResale(product) : false;
+  const qty = 1;
   const soldOut = product ? isSoldOut(product) : false;
-  const maxQty = product
-    ? resale
-      ? 1
-      : Number.isFinite(stockOf(product))
-        ? stockOf(product)
-        : 99
-    : 1;
   const gallery = React.useMemo(
     () => (product ? resolveGallery(product) : []),
     [product]
   );
 
-  // Reset the gallery + quantity whenever a different product opens.
   React.useEffect(() => {
     setIndex(0);
-    setQty(1);
   }, [product]);
 
   return (
@@ -1332,41 +1082,12 @@ function ProductDetailModal({
                 <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-center text-sm font-medium text-muted-foreground">
                   This item is currently sold out.
                 </div>
-              ) : resale ? (
-                <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/40 px-4 py-3 pt-1">
+              ) : (
+                <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/40 px-4 py-3">
                   <span className="text-sm font-medium">Quantity</span>
                   <span className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
-                    One-of-a-kind • 1 only
+                    One-of-a-kind · 1 only
                   </span>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-sm font-medium">Quantity</span>
-                  <div className="flex items-center gap-3">
-                    <Button
-                      size="icon-sm"
-                      variant="outline"
-                      className="haptic rounded-full"
-                      aria-label="Decrease quantity"
-                      disabled={qty <= 1}
-                      onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    >
-                      <Minus />
-                    </Button>
-                    <span className="w-6 text-center text-base font-semibold tabular-nums">
-                      {qty}
-                    </span>
-                    <Button
-                      size="icon-sm"
-                      variant="outline"
-                      className="haptic rounded-full"
-                      aria-label="Increase quantity"
-                      disabled={qty >= maxQty}
-                      onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
-                    >
-                      <Plus />
-                    </Button>
-                  </div>
                 </div>
               )}
 
@@ -1407,126 +1128,102 @@ function ProductDetailModal({
   );
 }
 
-/* ========================================================================== */
-/*  Checkout drawer (frictionless MVP: location + phone -> Place Order)        */
-/* ========================================================================== */
-
 function CheckoutDrawer({
   open,
   onOpenChange,
   cart,
   updateQty,
-  onAdd,
   onDone,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   cart: CartItem[];
   updateQty: (id: string, delta: number) => void;
-  onAdd: (p: Product, qty?: number) => void;
   onDone: () => void;
 }) {
   const [name, setName] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [instructions, setInstructions] = React.useState("");
-  const [locating, setLocating] = React.useState(false);
-  const [locateError, setLocateError] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const subtotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0);
-  const deliveryFee = cart.length > 0 ? DELIVERY_FEE : 0;
-  const tax = cart.length > 0 ? subtotal * 0.10 : 0;
-  const total = subtotal + deliveryFee + tax;
-  const belowMinimum = cart.length > 0 && subtotal < CART_MINIMUM;
-  const amountNeeded = Math.max(0, CART_MINIMUM - subtotal);
-  const hasResale = cart.some((i) => isResale(i.product));
+  const shippingFee = 0;
+  const tax = 0;
+  const total = subtotal + shippingFee + tax;
+  const squareReady = hasSquareCheckoutLink();
 
   React.useEffect(() => {
-    if (open) setSuccess(false);
+    if (open) {
+      setSuccess(false);
+      setError(null);
+    }
   }, [open]);
 
-  // Deferred PaymentIntent flow: <Elements> mounts the card + wallet UI using
-  // only the publishable key, so the card field is ALWAYS visible immediately.
-  // The real PaymentIntent is created on the server at pay time inside
-  // StripeCheckoutForm (see runPayment there). This removes the previous
-  // dependency on a server round-trip before the form could render.
-  const amountInCents = Math.max(50, Math.round(total * 100));
-  const elementsOptions = React.useMemo<StripeElementsOptions>(
-    () => ({
-      mode: "payment",
-      amount: amountInCents,
-      currency: "usd",
-      appearance: {
-        theme: "night",
-        variables: {
-          colorPrimary: "#ef2b3d",
-          colorBackground: "#141414",
-          colorText: "#fafafa",
-          borderRadius: "10px",
-        },
-      },
-    }),
-    [amountInCents]
-  );
-
-  // Log the order once payment has succeeded, then show the confirmation.
-  const finalizeOrder = async (paymentIntentId: string) => {
-    try {
-      await fetch(api("/api/checkout"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: cart.map((i) => ({
-            id: i.product.id,
-            name: i.product.name,
-            price: i.product.price,
-            qty: i.qty,
-          })),
-          name,
-          location,
-          phone,
-          instructions,
-          tax,
-      subtotal,
-          deliveryFee,
-          total,
-          paymentIntentId,
-          paymentStatus: "paid",
-        }),
-      });
-    } catch (err) {
-      console.error("Order logging failed:", err);
-    }
-    setSuccess(true);
-    onDone();
+  const finalizeOrder = async (paymentStatus: string) => {
+    await fetch(api("/api/checkout"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: cart.map((i) => ({
+          id: i.product.id,
+          name: i.product.name,
+          price: i.product.price,
+          qty: i.qty,
+        })),
+        name,
+        location,
+        phone,
+        instructions,
+        tax,
+        subtotal,
+        shippingFee,
+        total,
+        paymentProvider: "square",
+        paymentStatus,
+        squareCheckoutUrl: SQUARE.checkoutUrl || "",
+      }),
+    });
   };
 
-  const locateMe = () => {
-    setLocateError(null);
-    if (!("geolocation" in navigator)) {
-      setLocateError("Location isn't available on this device — type it below.");
+  const startSquareCheckout = async () => {
+    setError(null);
+    if (!name.trim() || !location.trim() || !phone.trim()) {
+      setError("Add your name, shipping address, and phone number first.");
       return;
     }
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLocation(
-          `📍 https://maps.google.com/?q=${latitude.toFixed(6)},${longitude.toFixed(6)}`
-        );
-        setLocating(false);
-      },
-      (error) => {
-        // Deep-debug logging for geolocation failures
-        console.error("Geolocation error:", error.code, error.message);
-        setLocating(false);
-        setLocateError(
-          "Couldn't grab your location — no worries, just type your address."
-        );
-      },
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 0 }
-    );
+    if (cart.length === 0) {
+      setError("Your bag is empty.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const squareRes = await fetch(api("/api/square-checkout"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: total }),
+      });
+      const squareData = await squareRes.json().catch(() => ({}));
+
+      await finalizeOrder(
+        squareReady ? "square_link_opened" : "square_unconfigured"
+      );
+
+      if (squareData?.checkoutUrl) {
+        window.open(squareData.checkoutUrl, "_blank", "noopener,noreferrer");
+      }
+
+      setSuccess(true);
+      onDone();
+    } catch (err) {
+      console.error("Square checkout failed:", err);
+      setError("We couldn't start Square checkout. Please try again or text us.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -1538,16 +1235,18 @@ function CheckoutDrawer({
               <Check className="size-8" />
             </span>
             <DialogTitle className="font-serif text-3xl tracking-tight">
-              Order Received
+              {squareReady ? "Continue in Square" : "Request received"}
             </DialogTitle>
             <DialogDescription className="max-w-xs text-base">
-              We&apos;re on the way. Keep an eye on your texts.
+              {squareReady
+                ? "We logged your bag. Finish payment in the Square checkout tab."
+                : "We logged your bag. Square checkout isn't configured on this deploy — we'll text you a payment link."}
             </DialogDescription>
             <Button
               className="haptic mt-2 h-12 w-full rounded-xl text-sm font-semibold"
               onClick={() => onOpenChange(false)}
             >
-              Back to Jenger Drop
+              Back to the closet
             </Button>
           </div>
         ) : (
@@ -1557,15 +1256,14 @@ function CheckoutDrawer({
                 Checkout
               </DialogTitle>
               <DialogDescription>
-                Tell us where you are — we&apos;ll handle the rest.
+                Pay with Square — same processor as jengerluxurious.com.
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-5 px-5 py-5">
-              {/* Cart review */}
               {cart.length === 0 ? (
                 <p className="rounded-xl bg-secondary px-4 py-6 text-center text-sm text-muted-foreground">
-                  Your bag is empty. Add something from the drop first.
+                  Your bag is empty. Add a closet piece first.
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -1584,6 +1282,11 @@ function CheckoutDrawer({
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {money(i.product.price)}
+                          {i.product.originalPrice ? (
+                            <span className="ml-1.5 line-through">
+                              {money(i.product.originalPrice)}
+                            </span>
+                          ) : null}
                         </p>
                       </div>
                       <div className="flex items-center gap-1.5">
@@ -1617,24 +1320,13 @@ function CheckoutDrawer({
                       <span className="text-muted-foreground">Subtotal</span>
                       <span className="font-medium">{money(subtotal)}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-muted-foreground">Delivery fee</span>
-                      <span className="font-medium">{money(deliveryFee)}</span>
-                    </div>
                     <div className="flex items-center justify-between pt-1">
                       <span className="text-muted-foreground">Total</span>
                       <span className="font-serif text-lg">{money(total)}</span>
                     </div>
                   </div>
-                  {belowMinimum && (
-                    <div className="rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-center text-sm font-medium text-primary">
-                      Add {money(amountNeeded)} more to qualify for delivery.
-                    </div>
-                  )}
                 </div>
               )}
-
-              {hasResale && <TryOnBanner compact />}
 
               <div className="space-y-4">
                 <div className="space-y-1.5">
@@ -1643,40 +1335,22 @@ function CheckoutDrawer({
                     id="co-name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Who's this delivery for?"
+                    placeholder="Who should we ship to?"
                     className="h-11"
                     required
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="co-location">Delivery location</Label>
-                    <button
-                      type="button"
-                      onClick={locateMe}
-                      disabled={locating}
-                      className="haptic inline-flex items-center gap-1 text-xs font-semibold text-primary disabled:opacity-60"
-                    >
-                      {locating ? (
-                        <LoaderCircle className="size-3.5 animate-spin" />
-                      ) : (
-                        <span>📍</span>
-                      )}
-                      Locate me
-                    </button>
-                  </div>
+                  <Label htmlFor="co-location">Shipping address</Label>
                   <Input
                     id="co-location"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Dorm, building, or address"
+                    placeholder="Street, city, state, ZIP"
                     className="h-11"
                     required
                   />
-                  {locateError && (
-                    <p className="text-xs text-primary">{locateError}</p>
-                  )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -1686,7 +1360,7 @@ function CheckoutDrawer({
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="So we can text you when we arrive"
+                    placeholder="So we can text about your order"
                     className="h-11"
                     required
                   />
@@ -1694,7 +1368,7 @@ function CheckoutDrawer({
 
                 <div className="space-y-1.5">
                   <Label htmlFor="co-instructions">
-                    Delivery instructions / Unit #{" "}
+                    Notes{" "}
                     <span className="font-normal text-muted-foreground">
                       (optional)
                     </span>
@@ -1704,34 +1378,18 @@ function CheckoutDrawer({
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
                     rows={3}
-                    placeholder="Apt/unit #, gate code, where to meet you…"
+                    placeholder="Fit questions, gift note, pickup vs ship…"
                     className="w-full resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                   />
                 </div>
 
-                {/* Cart bump / up-sell */}
-                {cart.length > 0 && <CartUpsell cart={cart} onAdd={onAdd} />}
-
-                {/* Stripe payment — card field + Apple/Google Pay.
-                    Mounted immediately (deferred mode) so the card input is
-                    always visible; a successful charge is required to order. */}
                 {cart.length > 0 && (
-                  <div className="space-y-2">
-                    <Label>Payment</Label>
-                    <Elements stripe={stripePromise} options={elementsOptions}>
-                      <StripeCheckoutForm
-                        name={name}
-                        location={location}
-                        phone={phone}
-                        total={total}
-                        blocked={belowMinimum}
-                        blockedMessage={`Add ${money(
-                          amountNeeded
-                        )} more to qualify for delivery.`}
-                        onPaid={finalizeOrder}
-                      />
-                    </Elements>
-                  </div>
+                  <SquareCheckoutPanel
+                    total={total}
+                    submitting={submitting}
+                    error={error}
+                    onPay={startSquareCheckout}
+                  />
                 )}
               </div>
             </div>
@@ -1742,267 +1400,50 @@ function CheckoutDrawer({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Stripe payment form (rendered inside <Elements>)                           */
-/* -------------------------------------------------------------------------- */
-
-function StripeCheckoutForm({
-  name,
-  location,
-  phone,
+function SquareCheckoutPanel({
   total,
-  blocked,
-  blockedMessage,
-  onPaid,
+  submitting,
+  error,
+  onPay,
 }: {
-  name: string;
-  location: string;
-  phone: string;
   total: number;
-  blocked: boolean;
-  blockedMessage: string;
-  onPaid: (paymentIntentId: string) => Promise<void> | void;
+  submitting: boolean;
+  error: string | null;
+  onPay: () => void;
 }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [paying, setPaying] = React.useState(false);
-  const [ready, setReady] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-
-  const requiredFilled = Boolean(
-    name.trim() && location.trim() && phone.trim()
-  );
-  // Wallets (Apple/Google Pay) only appear once the card form is mounted and
-  // the delivery details are filled in.
-  const canExpressPay = ready && requiredFilled && !blocked;
-
-  const guard = (): boolean => {
-    setError(null);
-    if (!stripe || !elements) {
-      setError("Payment form is still loading — one moment.");
-      return false;
-    }
-    if (blocked) {
-      setError(blockedMessage);
-      return false;
-    }
-    if (!requiredFilled) {
-      setError("Add your name, delivery address, and phone number first.");
-      return false;
-    }
-    return true;
-  };
-
-  // Deferred-intent flow shared by the card button and the wallet buttons:
-  //   1) validate the entered payment details,
-  //   2) create the PaymentIntent on the server,
-  //   3) confirm the payment.
-  const runPayment = async (): Promise<void> => {
-    if (!stripe || !elements) return;
-
-    const { error: submitError } = await elements.submit();
-    if (submitError) {
-      setError(submitError.message ?? "Please check your payment details.");
-      return;
-    }
-
-    let clientSecret: string | null = null;
-    try {
-      const res = await fetch(api("/api/create-payment-intent"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total }),
-      });
-      const data = await res.json();
-      clientSecret = data?.clientSecret ?? null;
-    } catch (err) {
-      console.error("create-payment-intent request failed:", err);
-    }
-    if (!clientSecret) {
-      setError(
-        "We couldn't reach the payment processor. Check your Stripe keys and try again."
-      );
-      return;
-    }
-
-    const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      clientSecret,
-      redirect: "if_required",
-      confirmParams: { return_url: window.location.href },
-    });
-    if (confirmError) {
-      console.error("Stripe confirmPayment error:", confirmError);
-      setError(
-        confirmError.message ??
-          "Payment failed. Please check your card details and try again."
-      );
-      return;
-    }
-    if (paymentIntent && paymentIntent.status === "succeeded") {
-      await onPaid(paymentIntent.id);
-      return;
-    }
-    console.error("Unexpected PaymentIntent status:", paymentIntent?.status);
-    setError("Payment didn't complete. Please try again.");
-  };
-
-  const startPayment = async () => {
-    if (!guard()) return;
-    setPaying(true);
-    try {
-      await runPayment();
-    } catch (err) {
-      console.error("Payment threw:", err);
-      setError("Something went wrong processing your payment. Please try again.");
-    } finally {
-      setPaying(false);
-    }
-  };
-
+  const hosted = hasSquareCheckoutLink();
   return (
     <div className="space-y-3">
-      {/* Apple Pay / Google Pay (only rendered when a wallet is available) */}
-      {canExpressPay && <ExpressCheckoutElement onConfirm={startPayment} />}
-      {ready && !canExpressPay && (
-        <p className="rounded-lg border border-dashed border-border px-3 py-2 text-center text-xs text-muted-foreground">
-          Enter your name, address & phone to unlock Apple&nbsp;Pay /
-          Google&nbsp;Pay.
+      <Label>Payment</Label>
+      <div className="space-y-2 rounded-xl border border-border bg-card p-4">
+        <p className="text-sm font-medium">Pay with Square</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          {hosted
+            ? "Opens the Square Online checkout link configured for this site."
+            : "Placeholder — set NEXT_PUBLIC_SQUARE_CHECKOUT_URL (or Square Web Payments ids in .env.example) to take live cards. No Stripe on this path."}
         </p>
-      )}
-
-      <div className="flex items-center gap-3 text-[11px] tracking-widest text-muted-foreground uppercase">
-        <span className="h-px flex-1 bg-border" /> pay by card{" "}
-        <span className="h-px flex-1 bg-border" />
-      </div>
-
-      <div className="rounded-xl border border-border bg-card p-3">
-        {!ready && (
-          <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
-            <LoaderCircle className="size-4 animate-spin" /> Loading secure card
-            form…
-          </div>
-        )}
-        <PaymentElement
-          options={{ layout: "tabs" }}
-          onReady={() => setReady(true)}
-          onLoadError={(event) => {
-            console.error("PaymentElement failed to load:", event);
-            setError(
-              "The card form failed to load. Please refresh and try again."
-            );
-          }}
-        />
-      </div>
-
-      {error && <p className="text-xs text-primary">{error}</p>}
-
-      <Button
-        type="button"
-        size="lg"
-        onClick={startPayment}
-        disabled={paying || !ready || blocked}
-        className="haptic h-12 w-full rounded-xl text-base font-semibold"
-      >
-        {paying ? (
-          <>
-            <LoaderCircle className="animate-spin" /> Processing payment…
-          </>
-        ) : blocked ? (
-          blockedMessage
-        ) : (
-          `Pay ${money(total)} & Place Order`
-        )}
-      </Button>
-    </div>
-  );
-}
-
-/* ========================================================================== */
-/*  Try-On promo banner                                                        */
-/* ========================================================================== */
-
-function TryOnBanner({ compact = false }: { compact?: boolean }) {
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-primary/30 bg-primary/10",
-        compact ? "p-3" : "p-4"
-      )}
-    >
-      <div className="flex items-start gap-3">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <Sparkles className="size-4" />
-        </span>
-        <div className="space-y-0.5">
-          <p className="font-serif text-base tracking-wide">Try before you buy!</p>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            Add any 2nd Chance items to your cart, and try them on while we wait
-            during delivery. Love it? Purchase it right on the spot.
-
-          </p>
-        </div>
+        {error && <p className="text-xs text-primary">{error}</p>}
+        <Button
+          type="button"
+          size="lg"
+          onClick={onPay}
+          disabled={submitting}
+          className="haptic h-12 w-full rounded-xl text-base font-semibold"
+        >
+          {submitting ? (
+            <>
+              <LoaderCircle className="animate-spin" /> Starting Square…
+            </>
+          ) : hosted ? (
+            `Pay ${money(total)} with Square`
+          ) : (
+            `Request Square checkout · ${money(total)}`
+          )}
+        </Button>
       </div>
     </div>
   );
 }
-
-/* ========================================================================== */
-/*  Checkout up-sell (cart bump)                                               */
-/* ========================================================================== */
-
-function CartUpsell({
-  cart,
-  onAdd,
-}: {
-  cart: CartItem[];
-  onAdd: (p: Product, qty?: number) => void;
-}) {
-  const inCart = new Set(cart.map((i) => i.product.id));
-  const items = upsellProducts.filter((p) => !inCart.has(p.id));
-  if (items.length === 0) return null;
-  return (
-    <div className="space-y-2">
-      <Label>You might also need:</Label>
-      <div className="no-scrollbar flex gap-3 overflow-x-auto pb-1">
-        {items.map((p) => (
-          <div
-            key={p.id}
-            className="flex w-32 shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card"
-          >
-            <div className="aspect-square bg-secondary">
-              <ProductImage
-                src={resolveImage(p)}
-                alt={p.name}
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="flex flex-1 flex-col gap-1 p-2">
-              <p className="line-clamp-2 text-xs font-medium leading-tight">
-                {p.name}
-              </p>
-              <div className="mt-auto flex items-center justify-between">
-                <span className="text-xs font-semibold">{money(p.price)}</span>
-                <Button
-                  size="icon-xs"
-                  className="haptic rounded-full"
-                  aria-label={`Add ${p.name}`}
-                  onClick={() => onAdd(p, 1)}
-                >
-                  <Plus />
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ========================================================================== */
-/*  Site menu drawer (hamburger): national catalog + suggest an item           */
-/* ========================================================================== */
 
 function SiteMenuDrawer({
   open,
@@ -2054,32 +1495,51 @@ function SiteMenuDrawer({
       <DialogContent className={cn(sheetClass, "max-h-[92vh] overflow-hidden")}>
         <DialogHeader className="border-b border-border px-5 py-4">
           <DialogTitle className="font-serif text-2xl tracking-tight">Menu</DialogTitle>
-          <DialogDescription>Shop everything or send us a note.</DialogDescription>
+          <DialogDescription>
+            Shop the closet, Poshmark, or send a note.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="no-scrollbar flex-1 space-y-6 overflow-y-auto px-5 py-5">
           <a
-            href={CONTACT.secondChanceUrl}
+            href={CONTACT.storeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="haptic flex items-center justify-between rounded-2xl bg-primary px-5 py-4 text-primary-foreground"
           >
             <span className="flex flex-col">
               <span className="font-serif text-lg leading-tight">
-                Shop Full National Catalog
+                Shop jengerluxurious.com
               </span>
-              <span className="text-xs opacity-80">www.jengerluxurious.com</span>
+              <span className="text-xs opacity-80">Square Online storefront</span>
             </span>
             <ExternalLink className="size-5 shrink-0" />
+          </a>
+
+          <a
+            href={CONTACT.poshmarkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="haptic flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4"
+          >
+            <span className="flex flex-col">
+              <span className="font-serif text-lg leading-tight">
+                Poshmark closet
+              </span>
+              <span className="text-xs text-muted-foreground">
+                @{CONTACT.poshmarkHandle}
+              </span>
+            </span>
+            <ExternalLink className="size-5 shrink-0 text-muted-foreground" />
           </a>
 
           <div className="space-y-3">
             <div>
               <h3 className="font-serif text-lg tracking-wide">
-                Contact us / Suggest an item
+                Contact us / Suggest a piece
               </h3>
               <p className="text-xs text-muted-foreground">
-                Want us to stock something specific? Let us know.
+                Looking for something specific? Let us know.
               </p>
             </div>
 
@@ -2124,7 +1584,7 @@ function SiteMenuDrawer({
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={3}
-                    placeholder="What should we stock? Any feedback?"
+                    placeholder="What should we source? Any feedback?"
                     className="w-full resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                     required
                   />
@@ -2169,10 +1629,6 @@ function SiteMenuDrawer({
   );
 }
 
-/* ========================================================================== */
-/*  Sticky contact bar                                                         */
-/* ========================================================================== */
-
 function ContactBar({
   onOpenMenu,
   failedQuery,
@@ -2182,7 +1638,7 @@ function ContactBar({
 }) {
   const smsHref = `sms:${CONTACT.phone}${
     failedQuery
-      ? `?&body=${encodeURIComponent(`Hi Jenger Drop! I need: ${failedQuery}`)}`
+      ? `?&body=${encodeURIComponent(`Hi Jengerluxurious! Looking for: ${failedQuery}`)}`
       : ""
   }`;
   const actions = [
@@ -2211,7 +1667,7 @@ function ContactBar({
           className="haptic flex flex-1 flex-col items-center gap-1 rounded-xl bg-primary py-2 text-[11px] font-semibold text-primary-foreground"
         >
           <MenuIcon className="size-5" />
-          Menu
+          Closet
         </button>
       </div>
     </div>

@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jengerluxurious — 2nd Chance Resale
+
+Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
+
+- Closet on this site: `data/products.ts` (`2nd Chance Resale` only)
+- Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
+- Live Square storefront: [jengerluxurious.com](http://www.jengerluxurious.com)
+
+The former **Jenger Drop** emergency-delivery side (Fashion & Beauty Fix, Game Day & Going Out, Essentials) is removed from the shoppable catalog and homepage.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Production web build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Capacitor/Android remains in the tree (`npm run build:mobile`, `capacitor.config.ts`) but is not required for the website.
+
+## Payments (Square)
+
+Checkout uses **Square**, not Stripe.
+
+Copy `.env.example` to `.env.local` and fill only what you have. **Do not invent keys.** The site builds with every Square value empty.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SQUARE_CHECKOUT_URL` | Preferred. Hosted Square Online checkout / payment-link URL. |
+| `NEXT_PUBLIC_SQUARE_APPLICATION_ID` | Optional Square Web Payments placeholder. |
+| `NEXT_PUBLIC_SQUARE_LOCATION_ID` | Optional Square Web Payments placeholder. |
+| `SQUARE_ACCESS_TOKEN` | Server-only. Never commit a real token. |
+
+`/api/square-checkout` returns a hosted link when configured, or a documented placeholder when not.
+
+Stripe is parked: `/api/create-payment-intent` returns `410` and is not used by the UI.
+
+## Poshmark import (later)
+
+See `data/poshmark-import.example.json` and `data/POSHMARK.md`. Map an export onto that schema, then merge into `data/products.ts`. Do not invent photos or prices.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)

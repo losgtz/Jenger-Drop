@@ -17,9 +17,9 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Jenger Drop — Jengerluxurious",
+  title: "Jengerluxurious — 2nd Chance Resale",
   description:
-    "O sh!t! What do you need right now? Jenger Drop delivers campus emergency essentials fast.",
+    "Pre-loved closet finds from Jengerluxurious 2nd Chance Resale. Shop one-of-a-kind pieces online.",
 };
 
 export const viewport: Viewport = {
