@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Camera,
   Check,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   LoaderCircle,
   Menu as MenuIcon,
@@ -38,6 +37,7 @@ import {
   SHIPPING,
   shippingFeeForSubtotal,
 } from "../../data/shipping";
+import { productSlug } from "@/lib/catalog";
 import {
   RESALE_CATEGORY,
   resaleProducts,
@@ -53,7 +53,7 @@ const CONTACT = {
   phoneDisplay: "(346) 525-7753",
   instagram: "jengerluxurious.second.chance",
   instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
-  storeUrl: "http://www.jengerluxurious.com",
+  storeUrl: "https://www.jengerluxurious.com",
   poshmarkHandle: "jengerluxuri0us",
   poshmarkUrl: "https://poshmark.com/closet/jengerluxuri0us",
 };
@@ -120,12 +120,6 @@ function resolveImage(product: Product): string {
   return product.image;
 }
 
-function resolveGallery(product: Product): string[] {
-  return product.images && product.images.length > 0
-    ? product.images
-    : [product.image];
-}
-
 function searchProducts(raw: string, source: Product[]): Product[] {
   const q = raw.trim().toLowerCase();
   if (!q) return source;
@@ -184,7 +178,6 @@ export default function Home() {
   const [query, setQuery] = React.useState("");
   const [activeQuery, setActiveQuery] = React.useState<string | null>(null);
 
-  const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [siteMenuOpen, setSiteMenuOpen] = React.useState(false);
   const [requestOpen, setRequestOpen] = React.useState(false);
@@ -193,6 +186,7 @@ export default function Home() {
 
   const [cart, setCart] = React.useState<CartItem[]>([]);
   const cartCount = cart.reduce((n, i) => n + i.qty, 0);
+  const handledAdd = React.useRef<string | null>(null);
 
   const isSearching = activeQuery !== null;
 
@@ -249,6 +243,19 @@ export default function Home() {
     setRequestOpen(true);
   };
 
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const addId = params.get("add");
+    if (!addId || handledAdd.current === addId) return;
+    const product = resaleProducts.find((p) => p.id === addId);
+    if (!product) return;
+    handledAdd.current = addId;
+    addToCart(product);
+    if (params.get("checkout") === "1") {
+      setCheckoutOpen(true);
+    }
+  }, []);
+
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-28">
       <Header
@@ -272,7 +279,6 @@ export default function Home() {
             title={`Results for “${activeQuery}”`}
             results={results}
             onClear={clearSearch}
-            onSelect={setSelectedProduct}
             onAdd={addToCart}
             failedQuery={activeQuery ?? ""}
             onRequest={openRequest}
@@ -282,8 +288,7 @@ export default function Home() {
           <>
             <TheEdit
               products={catalog}
-              title="2nd Chance Resale"
-              onSelect={setSelectedProduct}
+              title="The closet"
               onAdd={addToCart}
             />
             <RequestBanner onRequest={() => openRequest("")} />
@@ -299,10 +304,6 @@ export default function Home() {
       <FullMenuDrawer
         open={menuOpen}
         onOpenChange={setMenuOpen}
-        onSelect={(p) => {
-          setMenuOpen(false);
-          setSelectedProduct(p);
-        }}
         onAdd={addToCart}
       />
 
@@ -312,20 +313,6 @@ export default function Home() {
         open={requestOpen}
         onOpenChange={setRequestOpen}
         prefill={requestPrefill}
-      />
-
-      <ProductDetailModal
-        product={selectedProduct}
-        onOpenChange={(open) => !open && setSelectedProduct(null)}
-        onAdd={(p, qty) => {
-          addToCart(p, qty);
-          setSelectedProduct(null);
-        }}
-        onBuy={(p, qty) => {
-          addToCart(p, qty);
-          setSelectedProduct(null);
-          setCheckoutOpen(true);
-        }}
       />
 
       <CheckoutDrawer
@@ -417,10 +404,11 @@ function Hero({
           Jengerluxurious · 2nd Chance Resale
         </p>
         <h1 className="font-serif text-4xl leading-[1.05] tracking-tight text-foreground">
-          One-of-a-kind
-          <br />
-          closet finds.
+          2nd Chance Resale
         </h1>
+        <p className="font-serif text-2xl leading-snug tracking-tight text-foreground">
+          One-of-a-kind closet finds.
+        </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Pre-loved pieces from the Jengerluxurious closet. Condition and
           original price show when we have them.
@@ -494,11 +482,9 @@ function PoshmarkBanner() {
 
 function ProductCard({
   product,
-  onSelect,
   onAdd,
 }: {
   product: Product;
-  onSelect: (p: Product) => void;
   onAdd: (p: Product) => void;
 }) {
   const [added, setAdded] = React.useState(false);
@@ -510,9 +496,8 @@ function ProductCard({
         soldOut && "opacity-45 grayscale"
       )}
     >
-      <button
-        type="button"
-        onClick={() => onSelect(product)}
+      <Link
+        href={`/product/${productSlug(product)}`}
         className="relative aspect-square overflow-hidden bg-secondary"
         aria-label={`View ${product.name}`}
       >
@@ -536,18 +521,17 @@ function ProductCard({
             {product.condition}
           </span>
         )}
-      </button>
+      </Link>
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <button
-          type="button"
-          onClick={() => onSelect(product)}
+        <Link
+          href={`/product/${productSlug(product)}`}
           className={cn(
             "text-left text-sm font-medium leading-snug line-clamp-2",
             soldOut && "text-muted-foreground"
           )}
         >
           {product.name}
-        </button>
+        </Link>
         <div className="mt-auto flex items-center justify-between gap-2">
           <span className="flex items-baseline gap-1.5">
             <span className="font-serif text-base">{money(product.price)}</span>
@@ -588,17 +572,15 @@ function ProductCard({
 
 function ProductGrid({
   products,
-  onSelect,
   onAdd,
 }: {
   products: Product[];
-  onSelect: (p: Product) => void;
   onAdd: (p: Product) => void;
 }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} onSelect={onSelect} onAdd={onAdd} />
+        <ProductCard key={p.id} product={p} onAdd={onAdd} />
       ))}
     </div>
   );
@@ -607,18 +589,16 @@ function ProductGrid({
 function TheEdit({
   products: items,
   title,
-  onSelect,
   onAdd,
 }: {
   products: Product[];
   title: string;
-  onSelect: (p: Product) => void;
   onAdd: (p: Product) => void;
 }) {
   return (
     <section className="space-y-3">
       <h2 className="font-serif text-xl tracking-wide">{title}</h2>
-      <ProductGrid products={items} onSelect={onSelect} onAdd={onAdd} />
+      <ProductGrid products={items} onAdd={onAdd} />
     </section>
   );
 }
@@ -654,7 +634,6 @@ function SearchResults({
   title,
   results,
   onClear,
-  onSelect,
   onAdd,
   failedQuery,
   onRequest,
@@ -663,7 +642,6 @@ function SearchResults({
   title: string;
   results: Product[];
   onClear: () => void;
-  onSelect: (p: Product) => void;
   onAdd: (p: Product) => void;
   failedQuery: string;
   onRequest: (prefill: string) => void;
@@ -684,7 +662,7 @@ function SearchResults({
       </div>
 
       {results.length > 0 ? (
-        <ProductGrid products={results} onSelect={onSelect} onAdd={onAdd} />
+        <ProductGrid products={results} onAdd={onAdd} />
       ) : (
         <NoResultFallback
           failedQuery={failedQuery}
@@ -751,12 +729,10 @@ function NoResultFallback({
 function FullMenuDrawer({
   open,
   onOpenChange,
-  onSelect,
   onAdd,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSelect: (p: Product) => void;
   onAdd: (p: Product) => void;
 }) {
   return (
@@ -774,21 +750,14 @@ function FullMenuDrawer({
         <div className="no-scrollbar flex-1 space-y-8 overflow-y-auto px-5 py-5">
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
-              <h3 className="font-serif text-lg tracking-wide">
-                2nd Chance Resale
-              </h3>
+              <h2 className="font-serif text-lg tracking-wide">The closet</h2>
               <span className="text-xs text-muted-foreground">
                 {resaleProducts.length}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {resaleProducts.map((p) => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  onSelect={onSelect}
-                  onAdd={onAdd}
-                />
+                <ProductCard key={p.id} product={p} onAdd={onAdd} />
               ))}
             </div>
           </div>
@@ -955,193 +924,6 @@ function RequestItemModal({
               </Button>
             </form>
           </>
-        )}
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function ProductDetailModal({
-  product,
-  onOpenChange,
-  onAdd,
-  onBuy,
-}: {
-  product: Product | null;
-  onOpenChange: (open: boolean) => void;
-  onAdd: (p: Product, qty: number) => void;
-  onBuy: (p: Product, qty: number) => void;
-}) {
-  const [index, setIndex] = React.useState(0);
-  const qty = 1;
-  const soldOut = product ? isSoldOut(product) : false;
-  const gallery = React.useMemo(
-    () => (product ? resolveGallery(product) : []),
-    [product]
-  );
-
-  React.useEffect(() => {
-    setIndex(0);
-  }, [product]);
-
-  return (
-    <Dialog open={!!product} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(sheetClass, "max-h-[92vh] overflow-hidden")}>
-        {product && (
-          <div
-            className={cn(
-              "no-scrollbar flex max-h-[92vh] flex-col overflow-y-auto",
-              soldOut && "opacity-50 grayscale"
-            )}
-          >
-            <div className="relative aspect-square w-full shrink-0 bg-secondary">
-              <ProductImage
-                src={gallery[index]}
-                alt={product.name}
-                className="h-full w-full object-cover"
-              />
-              {soldOut && (
-                <span className="absolute inset-0 flex items-center justify-center bg-black/55">
-                  <span className="rounded-full bg-background px-5 py-2 text-sm font-bold tracking-[0.18em] text-muted-foreground uppercase">
-                    Sold Out
-                  </span>
-                </span>
-              )}
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    type="button"
-                    aria-label="Previous image"
-                    onClick={() =>
-                      setIndex((i) => (i - 1 + gallery.length) % gallery.length)
-                    }
-                    className="haptic absolute top-1/2 left-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground shadow"
-                  >
-                    <ChevronLeft className="size-5" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Next image"
-                    onClick={() => setIndex((i) => (i + 1) % gallery.length)}
-                    className="haptic absolute top-1/2 right-3 flex size-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/80 text-foreground shadow"
-                  >
-                    <ChevronRight className="size-5" />
-                  </button>
-                  <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-                    {gallery.map((_, i) => (
-                      <span
-                        key={i}
-                        className={cn(
-                          "size-1.5 rounded-full transition-colors",
-                          i === index ? "bg-primary" : "bg-background/70"
-                        )}
-                      />
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-4 p-5">
-              <div className="space-y-1">
-                {product.condition && (
-                  <span className="inline-block rounded-full bg-secondary px-2.5 py-1 text-[10px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
-                    {product.condition}
-                  </span>
-                )}
-                <DialogTitle className="font-serif text-2xl leading-tight tracking-tight">
-                  {product.name}
-                </DialogTitle>
-                <DialogDescription className="sr-only">
-                  Product details for {product.name}
-                </DialogDescription>
-                {product.brand && (
-                  <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
-                    {product.brand}
-                  </p>
-                )}
-                <div className="flex items-center gap-2">
-                  <span className="font-serif text-xl">{money(product.price)}</span>
-                  {product.originalPrice && (
-                    <span className="text-sm text-muted-foreground line-through">
-                      {money(product.originalPrice)}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {product.description}
-              </p>
-
-              {product.listingUrl && (
-                <a
-                  href={product.listingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="haptic inline-flex items-center gap-1.5 text-sm font-medium text-primary"
-                >
-                  View on Poshmark <ExternalLink className="size-3.5" />
-                </a>
-              )}
-
-              {product.sizes?.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((s) => (
-                    <span
-                      key={s}
-                      className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {soldOut ? (
-                <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-center text-sm font-medium text-muted-foreground">
-                  This item is currently sold out.
-                </div>
-              ) : (
-                <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/40 px-4 py-3">
-                  <span className="text-sm font-medium">Quantity</span>
-                  <span className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
-                    One-of-a-kind · 1 only
-                  </span>
-                </div>
-              )}
-
-              <div className="flex gap-2.5">
-                {soldOut ? (
-                  <Button
-                    size="lg"
-                    disabled
-                    className="haptic h-12 w-full cursor-not-allowed rounded-xl text-sm font-semibold opacity-70"
-                  >
-                    Sold Out
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
-                      onClick={() => onAdd(product, qty)}
-                    >
-                      Add to bag
-                    </Button>
-                    <Button
-                      size="lg"
-                      className="haptic h-12 flex-1 rounded-xl text-sm font-semibold"
-                      onClick={() => onBuy(product, qty)}
-                    >
-                      Get it now
-                    </Button>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
         )}
       </DialogContent>
     </Dialog>

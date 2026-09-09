@@ -4,7 +4,7 @@ Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
 
 - Closet on this site: Poshmark batch 1/5 in `data/poshmark-import.json` (100 listings from `@jengerluxuri0us`)
 - Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
-- Live Square storefront: [jengerluxurious.com](http://www.jengerluxurious.com)
+- Live Square storefront: [jengerluxurious.com](https://www.jengerluxurious.com)
 
 The former **Jenger Drop** emergency-delivery side (Fashion & Beauty Fix, Game Day & Going Out, Essentials) is removed from the shoppable catalog and homepage.
 
@@ -23,6 +23,8 @@ npm start
 ```
 
 Capacitor/Android remains in the tree (`npm run build:mobile`, `capacitor.config.ts`) but is not required for the website.
+
+Product pages live at `/product/[slug]` (brand + name slug + id). `robots.ts` and `sitemap.ts` cover the homepage and every resale listing. Set `NEXT_PUBLIC_SITE_URL` if the canonical host is not `https://www.jengerluxurious.com`.
 
 ## Payments (Square)
 

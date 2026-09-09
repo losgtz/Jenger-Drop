@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,9 +18,14 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Jengerluxurious — 2nd Chance Resale",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "2nd Chance Resale | Jengerluxurious",
+    template: "%s",
+  },
   description:
     "Pre-loved closet finds from Jengerluxurious 2nd Chance Resale. Shop one-of-a-kind pieces online.",
+  alternates: { canonical: "/" },
 };
 
 export const viewport: Viewport = {
