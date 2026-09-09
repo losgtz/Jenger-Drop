@@ -308,7 +308,7 @@ function Hero({
           2nd Chance Resale
         </h1>
         <p className="font-serif text-2xl leading-snug tracking-tight text-foreground">
-          One-of-a-kind closet finds.
+          One-of-a-kind pieces.
         </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
           Pre-loved pieces from the Jengerluxurious closet. Condition and
@@ -698,8 +698,8 @@ function CheckoutDrawer({
               Continue in Square
             </DialogTitle>
             <DialogDescription className="max-w-xs text-base">
-              Complete payment in the Square checkout window. Your bag is logged
-              with shipping included.
+              Complete payment in the Square checkout window. Your order has
+              been recorded, including shipping.
             </DialogDescription>
             <Button
               className="haptic mt-2 h-12 w-full rounded-xl text-sm font-semibold"
@@ -722,7 +722,7 @@ function CheckoutDrawer({
             <div className="space-y-5 px-5 py-5">
               {cart.length === 0 ? (
                 <p className="rounded-xl bg-secondary px-4 py-6 text-center text-sm text-muted-foreground">
-                  Your bag is empty. Add a closet piece first.
+                  Your bag is empty. Add an item from the shop to continue.
                 </p>
               ) : (
                 <div className="space-y-3">

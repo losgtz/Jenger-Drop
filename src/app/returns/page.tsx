@@ -33,8 +33,8 @@ export default function ReturnsPage() {
           >
             {CONTACT.phoneDisplay}
           </a>{" "}
-          within a few days of delivery with photos. We will work it out —
-          refund, store credit, or another fix that fits the piece.
+          within a few days of delivery with photos. We will arrange a
+          refund, store credit, or another resolution that fits the piece.
         </p>
         <p>
           Try-on returns for change of mind are not offered on resale. Measure
