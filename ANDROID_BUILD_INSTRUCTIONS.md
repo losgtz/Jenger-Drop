@@ -1,4 +1,4 @@
-# Jenger Drop Android Build Instructions for Cursor
+# 2nd Chance Resale Android Build Instructions
 
 Cursor, please execute the following steps to wrap our Next.js App Router project into a native Android application using Capacitor. 
 
@@ -17,7 +17,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.jengerluxurious.drop',
-  appName: 'Jenger Drop',
+  appName: '2nd Chance Resale',
   webDir: 'out',
   bundledWebRuntime: false
 };

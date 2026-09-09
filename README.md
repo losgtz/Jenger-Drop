@@ -6,7 +6,7 @@ Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
 - Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
 - Live Square storefront: [jengerluxurious.com](https://www.jengerluxurious.com)
 
-The former **Jenger Drop** emergency-delivery side (Fashion & Beauty Fix, Game Day & Going Out, Essentials) is removed from the shoppable catalog and homepage.
+One product: **2nd Chance Resale**. The shoppable catalog is only the Poshmark closet import. Square checkout and $6.49 US shipping.
 
 ## Getting Started
 

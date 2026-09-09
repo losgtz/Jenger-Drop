@@ -3,17 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import {
-  Camera,
   Check,
   ExternalLink,
   LoaderCircle,
-  Menu as MenuIcon,
   MessageCircle,
   Minus,
-  Phone,
   Plus,
   Search,
-  Send,
   ShoppingBag,
   X,
 } from "lucide-react";
@@ -29,17 +25,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import {
-  hasSquareCheckoutLink,
-  SQUARE,
-} from "@/lib/square";
-import {
-  SHIPPING,
-  shippingFeeForSubtotal,
-} from "../../data/shipping";
+import { hasSquareCheckoutLink, SQUARE } from "@/lib/square";
+import { SHIPPING, shippingFeeForSubtotal } from "../../data/shipping";
 import { productSlug } from "@/lib/catalog";
-import { CONTACT, TRUST_PAGES } from "@/lib/contact";
+import { CONTACT } from "@/lib/contact";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import {
   RESALE_CATEGORY,
   resaleProducts,
@@ -79,8 +70,6 @@ const SYNONYMS: Record<string, string> = {
   bikini: "bikini",
   swim: "bikini",
   swimsuit: "bikini",
-  "game day": "game-day",
-  gameday: "game-day",
   crop: "crop",
   blazer: "blazer",
   jacket: "jacket",
@@ -92,7 +81,6 @@ const SYNONYMS: Record<string, string> = {
 const CLOSET_SUGGESTIONS = [
   "vintage",
   "dress",
-  "game day",
   "bikini",
   "sequin",
   "coach",
@@ -114,7 +102,8 @@ function searchProducts(raw: string, source: Product[]): Product[] {
   const mapped = SYNONYMS[q] ?? q;
   const terms = Array.from(new Set([q, mapped]));
   return source.filter((p) => {
-    const hay = `${p.name} ${p.category} ${p.description} ${p.condition ?? ""} ${p.brand ?? ""}`.toLowerCase();
+    const hay =
+      `${p.name} ${p.category} ${p.description} ${p.condition ?? ""} ${p.brand ?? ""}`.toLowerCase();
     return terms.some((t) => hay.includes(t));
   });
 }
@@ -165,11 +154,6 @@ export default function Home() {
 
   const [query, setQuery] = React.useState("");
   const [activeQuery, setActiveQuery] = React.useState<string | null>(null);
-
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [siteMenuOpen, setSiteMenuOpen] = React.useState(false);
-  const [requestOpen, setRequestOpen] = React.useState(false);
-  const [requestPrefill, setRequestPrefill] = React.useState("");
   const [checkoutOpen, setCheckoutOpen] = React.useState(false);
 
   const [cart, setCart] = React.useState<CartItem[]>([]);
@@ -226,11 +210,6 @@ export default function Home() {
     );
   };
 
-  const openRequest = (prefill: string) => {
-    setRequestPrefill(prefill);
-    setRequestOpen(true);
-  };
-
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const addId = params.get("add");
@@ -245,11 +224,24 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-28">
-      <Header
-        cartCount={cartCount}
-        onOpenMenu={() => setSiteMenuOpen(true)}
-        onOpenCart={() => setCheckoutOpen(true)}
+    <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-12">
+      <SiteHeader
+        trailing={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="haptic relative"
+            aria-label="Cart"
+            onClick={() => setCheckoutOpen(true)}
+          >
+            <ShoppingBag />
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+                {cartCount}
+              </span>
+            )}
+          </Button>
+        }
       />
 
       <main className="flex flex-col gap-10 px-5 pt-6">
@@ -260,8 +252,6 @@ export default function Home() {
           onSuggestion={runSearch}
         />
 
-        <TrustStrip />
-
         <PoshmarkBanner />
 
         {isSearching ? (
@@ -271,40 +261,16 @@ export default function Home() {
             onClear={clearSearch}
             onAdd={addToCart}
             failedQuery={activeQuery ?? ""}
-            onRequest={openRequest}
-            onOpenMenu={() => setMenuOpen(true)}
           />
         ) : (
-          <>
-            <TheEdit
-              products={catalog}
-              title="The closet"
-              onAdd={addToCart}
-            />
-            <RequestBanner onRequest={() => openRequest("")} />
-          </>
+          <TheEdit
+            products={catalog}
+            title="The closet"
+            onAdd={addToCart}
+          />
         )}
       </main>
       <SiteFooter />
-
-      <ContactBar
-        onOpenMenu={() => setMenuOpen(true)}
-        failedQuery={activeQuery ?? ""}
-      />
-
-      <FullMenuDrawer
-        open={menuOpen}
-        onOpenChange={setMenuOpen}
-        onAdd={addToCart}
-      />
-
-      <SiteMenuDrawer open={siteMenuOpen} onOpenChange={setSiteMenuOpen} />
-
-      <RequestItemModal
-        open={requestOpen}
-        onOpenChange={setRequestOpen}
-        prefill={requestPrefill}
-      />
 
       <CheckoutDrawer
         open={checkoutOpen}
@@ -314,62 +280,6 @@ export default function Home() {
         onDone={() => setCart([])}
       />
     </div>
-  );
-}
-
-/* ========================================================================== */
-/*  Header                                                                     */
-/* ========================================================================== */
-
-function Header({
-  cartCount,
-  onOpenMenu,
-  onOpenCart,
-}: {
-  cartCount: number;
-  onOpenMenu: () => void;
-  onOpenCart: () => void;
-}) {
-  return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="flex items-center justify-between px-5 pt-4">
-        <span className="font-serif text-sm tracking-[0.28em] text-muted-foreground uppercase">
-          Jengerluxurious
-        </span>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="haptic"
-            aria-label="Menu"
-            onClick={onOpenMenu}
-          >
-            <MenuIcon />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="haptic relative"
-            aria-label="Cart"
-            onClick={onOpenCart}
-          >
-            <ShoppingBag />
-            {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
-                {cartCount}
-              </span>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      <nav className="px-5 pt-3" aria-label="Storefront">
-        <p className="relative pb-2.5 text-base font-semibold text-foreground">
-          2nd Chance Resale
-          <span className="absolute inset-x-0 bottom-0 h-0.5 w-36 rounded-full bg-primary" />
-        </p>
-      </nav>
-    </header>
   );
 }
 
@@ -426,7 +336,7 @@ function Hero({
           className="haptic h-10 rounded-xl px-5 text-sm font-semibold tracking-wide"
           size="lg"
         >
-          Go
+          Search
         </Button>
       </form>
 
@@ -443,25 +353,6 @@ function Hero({
         ))}
       </div>
     </section>
-  );
-}
-
-function TrustStrip() {
-  return (
-    <nav
-      aria-label="About, shipping, and returns"
-      className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium"
-    >
-      {TRUST_PAGES.map((page) => (
-        <Link
-          key={page.href}
-          href={page.href}
-          className="text-primary underline-offset-4 hover:underline"
-        >
-          {page.label}
-        </Link>
-      ))}
-    </nav>
   );
 }
 
@@ -606,36 +497,9 @@ function TheEdit({
   onAdd: (p: Product) => void;
 }) {
   return (
-    <section className="space-y-3">
+    <section id="closet" className="space-y-3 scroll-mt-28">
       <h2 className="font-serif text-xl tracking-wide">{title}</h2>
       <ProductGrid products={items} onAdd={onAdd} />
-    </section>
-  );
-}
-
-function RequestBanner({ onRequest }: { onRequest: () => void }) {
-  return (
-    <section>
-      <button
-        type="button"
-        onClick={onRequest}
-        className="haptic group flex w-full flex-col items-center gap-4 rounded-3xl border border-border bg-card px-6 py-10 text-center transition-colors hover:border-primary/40"
-      >
-        <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Search className="size-6" />
-        </span>
-        <span className="space-y-1">
-          <span className="block font-serif text-2xl tracking-tight">
-            Don&apos;t see that piece?
-          </span>
-          <span className="block text-sm text-muted-foreground">
-            Request a closet find — we&apos;ll look for it.
-          </span>
-        </span>
-        <span className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground">
-          Request it
-        </span>
-      </button>
     </section>
   );
 }
@@ -646,16 +510,12 @@ function SearchResults({
   onClear,
   onAdd,
   failedQuery,
-  onRequest,
-  onOpenMenu,
 }: {
   title: string;
   results: Product[];
   onClear: () => void;
   onAdd: (p: Product) => void;
   failedQuery: string;
-  onRequest: (prefill: string) => void;
-  onOpenMenu: () => void;
 }) {
   return (
     <section className="space-y-4">
@@ -674,11 +534,7 @@ function SearchResults({
       {results.length > 0 ? (
         <ProductGrid products={results} onAdd={onAdd} />
       ) : (
-        <NoResultFallback
-          failedQuery={failedQuery}
-          onRequest={onRequest}
-          onOpenMenu={onOpenMenu}
-        />
+        <NoResultFallback failedQuery={failedQuery} onBrowse={onClear} />
       )}
     </section>
   );
@@ -686,15 +542,13 @@ function SearchResults({
 
 function NoResultFallback({
   failedQuery,
-  onRequest,
-  onOpenMenu,
+  onBrowse,
 }: {
   failedQuery: string;
-  onRequest: (prefill: string) => void;
-  onOpenMenu: () => void;
+  onBrowse: () => void;
 }) {
   const smsHref = `sms:${CONTACT.phone}?&body=${encodeURIComponent(
-    `Hi Jengerluxurious! Looking for: ${failedQuery}`
+    `Hello, I am looking for: ${failedQuery}`
   )}`;
   return (
     <div className="flex flex-col items-center gap-5 rounded-3xl border border-border bg-card px-6 py-10 text-center">
@@ -703,25 +557,18 @@ function NoResultFallback({
       </span>
       <div className="space-y-1">
         <h3 className="font-serif text-2xl tracking-tight">
-          We don&apos;t have that yet.
+          No matching listings
         </h3>
         <p className="text-sm text-muted-foreground">
-          Tell us what you&apos;re hunting — we&apos;ll check the closet.
+          That search is not in the closet right now. Browse available pieces
+          or send us a message.
         </p>
       </div>
       <div className="flex w-full flex-col gap-2.5">
         <Button
           size="lg"
           className="haptic h-12 w-full rounded-xl text-sm font-semibold"
-          onClick={() => onRequest(failedQuery)}
-        >
-          Request this item
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          className="haptic h-12 w-full rounded-xl text-sm font-semibold"
-          onClick={onOpenMenu}
+          onClick={onBrowse}
         >
           Browse the closet
         </Button>
@@ -729,214 +576,10 @@ function NoResultFallback({
           href={smsHref}
           className="haptic inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
         >
-          <MessageCircle className="size-4" /> Text us what you need
+          <MessageCircle className="size-4" /> Text us
         </a>
       </div>
     </div>
-  );
-}
-
-function FullMenuDrawer({
-  open,
-  onOpenChange,
-  onAdd,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onAdd: (p: Product) => void;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(sheetClass, "h-[88vh]")}>
-        <DialogHeader className="border-b border-border px-5 py-4">
-          <DialogTitle className="font-serif text-2xl tracking-tight">
-            The closet
-          </DialogTitle>
-          <DialogDescription>
-            Everything in 2nd Chance Resale right now.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="no-scrollbar flex-1 space-y-8 overflow-y-auto px-5 py-5">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
-              <h2 className="font-serif text-lg tracking-wide">The closet</h2>
-              <span className="text-xs text-muted-foreground">
-                {resaleProducts.length}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {resaleProducts.map((p) => (
-                <ProductCard key={p.id} product={p} onAdd={onAdd} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function RequestItemModal({
-  open,
-  onOpenChange,
-  prefill,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  prefill: string;
-}) {
-  const [submitted, setSubmitted] = React.useState(false);
-  const [sending, setSending] = React.useState(false);
-  const [itemName, setItemName] = React.useState(prefill);
-  const [need, setNeed] = React.useState("this-week");
-  const [details, setDetails] = React.useState("");
-  const [contact, setContact] = React.useState("");
-
-  React.useEffect(() => {
-    if (open) {
-      setItemName(prefill);
-      setSubmitted(false);
-      setSending(false);
-      setNeed("this-week");
-      setDetails("");
-      setContact("");
-    }
-  }, [open, prefill]);
-
-  const submitRequest = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    try {
-      await fetch(api("/api/telegram-request"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "Closet Request",
-          item: itemName,
-          need,
-          details,
-          contact,
-        }),
-      });
-    } catch (err) {
-      console.error("Item request failed to send:", err);
-    } finally {
-      setSending(false);
-      setSubmitted(true);
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="rounded-2xl sm:max-w-md">
-        {submitted ? (
-          <div className="flex flex-col items-center gap-3 py-6 text-center">
-            <span className="flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Check className="size-7" />
-            </span>
-            <DialogTitle className="font-serif text-2xl">Request sent</DialogTitle>
-            <DialogDescription>
-              We&apos;ll text you if we can source it.
-            </DialogDescription>
-            <Button
-              className="haptic mt-2 h-11 w-full rounded-xl"
-              onClick={() => onOpenChange(false)}
-            >
-              Done
-            </Button>
-          </div>
-        ) : (
-          <>
-            <DialogHeader>
-              <DialogTitle className="font-serif text-2xl tracking-tight">
-                Request this piece
-              </DialogTitle>
-              <DialogDescription>
-                Can&apos;t find it in the closet? We&apos;ll look.
-              </DialogDescription>
-            </DialogHeader>
-
-            <form className="flex flex-col gap-4" onSubmit={submitRequest}>
-              <div className="space-y-1.5">
-                <Label htmlFor="req-item">Item name</Label>
-                <Input
-                  id="req-item"
-                  value={itemName}
-                  onChange={(e) => setItemName(e.target.value)}
-                  placeholder="What are you looking for?"
-                  className="h-11"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label>Need it by</Label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { v: "this-week", l: "This week" },
-                    { v: "this-month", l: "This month" },
-                    { v: "exploring", l: "Just exploring" },
-                  ].map((opt) => (
-                    <button
-                      key={opt.v}
-                      type="button"
-                      onClick={() => setNeed(opt.v)}
-                      className={cn(
-                        "haptic rounded-xl border px-2 py-2.5 text-xs font-medium transition-colors",
-                        need === opt.v
-                          ? "border-primary bg-primary/5 text-foreground"
-                          : "border-border text-muted-foreground"
-                      )}
-                    >
-                      {opt.l}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="req-details">Details (optional)</Label>
-                <Input
-                  id="req-details"
-                  value={details}
-                  onChange={(e) => setDetails(e.target.value)}
-                  placeholder="Size, color, notes…"
-                  className="h-11"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="req-contact">Phone or email</Label>
-                <Input
-                  id="req-contact"
-                  value={contact}
-                  onChange={(e) => setContact(e.target.value)}
-                  placeholder="So we can reach you"
-                  className="h-11"
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={sending}
-                className="haptic h-12 w-full rounded-xl text-sm font-semibold"
-              >
-                {sending ? (
-                  <>
-                    <LoaderCircle className="animate-spin" /> Sending…
-                  </>
-                ) : (
-                  "Send request"
-                )}
-              </Button>
-            </form>
-          </>
-        )}
-      </DialogContent>
-    </Dialog>
   );
 }
 
@@ -1037,7 +680,7 @@ function CheckoutDrawer({
       onDone();
     } catch (err) {
       console.error("Square checkout failed:", err);
-      setError("We couldn't start Square checkout. Please try again or text us.");
+      setError("We could not start Square checkout. Please try again or text us.");
     } finally {
       setSubmitting(false);
     }
@@ -1055,7 +698,7 @@ function CheckoutDrawer({
               Continue in Square
             </DialogTitle>
             <DialogDescription className="max-w-xs text-base">
-              Finish payment in the Square checkout tab. Your bag is logged
+              Complete payment in the Square checkout window. Your bag is logged
               with shipping included.
             </DialogDescription>
             <Button
@@ -1160,7 +803,7 @@ function CheckoutDrawer({
                     id="co-name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Who should we ship to?"
+                    placeholder="Recipient name"
                     className="h-11"
                     required
                   />
@@ -1185,7 +828,7 @@ function CheckoutDrawer({
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="So we can text about your order"
+                    placeholder="Mobile number for order updates"
                     className="h-11"
                     required
                   />
@@ -1203,7 +846,7 @@ function CheckoutDrawer({
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
                     rows={3}
-                    placeholder="Fit questions, gift note, pickup vs ship…"
+                    placeholder="Fit questions or a gift note"
                     className="w-full resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
                   />
                 </div>
@@ -1263,247 +906,6 @@ function SquareCheckoutPanel({
             `Pay ${money(total)} with Square`
           )}
         </Button>
-      </div>
-    </div>
-  );
-}
-
-function SiteMenuDrawer({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
-  const [name, setName] = React.useState("");
-  const [contact, setContact] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const [sending, setSending] = React.useState(false);
-  const [sent, setSent] = React.useState(false);
-
-  React.useEffect(() => {
-    if (open) {
-      setSent(false);
-      setSending(false);
-    }
-  }, [open]);
-
-  const submitSuggestion = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    try {
-      await fetch(api("/api/telegram-request"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "Contact / Suggestion",
-          name,
-          contact,
-          message,
-        }),
-      });
-    } catch (err) {
-      console.error("Suggestion failed to send:", err);
-    } finally {
-      setSending(false);
-      setSent(true);
-      setName("");
-      setContact("");
-      setMessage("");
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={cn(sheetClass, "max-h-[92vh] overflow-hidden")}>
-        <DialogHeader className="border-b border-border px-5 py-4">
-          <DialogTitle className="font-serif text-2xl tracking-tight">Menu</DialogTitle>
-          <DialogDescription>
-            Shop the closet, Poshmark, or send a note.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="no-scrollbar flex-1 space-y-6 overflow-y-auto px-5 py-5">
-          <nav aria-label="Policies" className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
-            {TRUST_PAGES.map((page) => (
-              <Link
-                key={page.href}
-                href={page.href}
-                className="text-primary underline-offset-4 hover:underline"
-                onClick={() => onOpenChange(false)}
-              >
-                {page.label}
-              </Link>
-            ))}
-          </nav>
-          <a
-            href={CONTACT.storeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="haptic flex items-center justify-between rounded-2xl bg-primary px-5 py-4 text-primary-foreground"
-          >
-            <span className="flex flex-col">
-              <span className="font-serif text-lg leading-tight">
-                Shop jengerluxurious.com
-              </span>
-              <span className="text-xs opacity-80">Square Online storefront</span>
-            </span>
-            <ExternalLink className="size-5 shrink-0" />
-          </a>
-
-          <a
-            href={CONTACT.poshmarkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="haptic flex items-center justify-between rounded-2xl border border-border bg-card px-5 py-4"
-          >
-            <span className="flex flex-col">
-              <span className="font-serif text-lg leading-tight">
-                Poshmark closet
-              </span>
-              <span className="text-xs text-muted-foreground">
-                @{CONTACT.poshmarkHandle}
-              </span>
-            </span>
-            <ExternalLink className="size-5 shrink-0 text-muted-foreground" />
-          </a>
-
-          <div className="space-y-3">
-            <div>
-              <h3 className="font-serif text-lg tracking-wide">
-                Contact us / Suggest a piece
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Looking for something specific? Let us know.
-              </p>
-            </div>
-
-            {sent ? (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-border py-8 text-center">
-                <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Check className="size-6" />
-                </span>
-                <p className="font-serif text-xl">Thanks — got it!</p>
-                <p className="text-sm text-muted-foreground">
-                  We&apos;ll be in touch soon.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={submitSuggestion} className="space-y-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="sm-name">Name</Label>
-                  <Input
-                    id="sm-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    className="h-11"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="sm-contact">Phone or email</Label>
-                  <Input
-                    id="sm-contact"
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    placeholder="So we can reach you"
-                    className="h-11"
-                    required
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="sm-message">Message</Label>
-                  <textarea
-                    id="sm-message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    rows={3}
-                    placeholder="What should we source? Any feedback?"
-                    className="w-full resize-none rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={sending}
-                  className="haptic h-12 w-full rounded-xl text-sm font-semibold"
-                >
-                  {sending ? (
-                    <>
-                      <LoaderCircle className="animate-spin" /> Sending…
-                    </>
-                  ) : (
-                    <>
-                      <Send className="size-4" /> Send
-                    </>
-                  )}
-                </Button>
-              </form>
-            )}
-
-            <div className="flex items-center gap-2 pt-1">
-              <a
-                href={`tel:${CONTACT.phone}`}
-                className="haptic flex flex-1 items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium hover:text-foreground"
-              >
-                <Phone className="size-4" /> Call
-              </a>
-              <a
-                href={`sms:${CONTACT.phone}`}
-                className="haptic flex flex-1 items-center justify-center gap-2 rounded-xl border border-border py-2.5 text-sm font-medium hover:text-foreground"
-              >
-                <MessageCircle className="size-4" /> Text
-              </a>
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function ContactBar({
-  onOpenMenu,
-  failedQuery,
-}: {
-  onOpenMenu: () => void;
-  failedQuery: string;
-}) {
-  const smsHref = `sms:${CONTACT.phone}${
-    failedQuery
-      ? `?&body=${encodeURIComponent(`Hi Jengerluxurious! Looking for: ${failedQuery}`)}`
-      : ""
-  }`;
-  const actions = [
-    { label: "Text", icon: MessageCircle, href: smsHref },
-    { label: "Call", icon: Phone, href: `tel:${CONTACT.phone}` },
-    { label: "DM", icon: Camera, href: CONTACT.instagramUrl, external: true },
-  ];
-  return (
-    <div className="fixed inset-x-0 bottom-0 z-40 mx-auto max-w-md px-4 pb-4">
-      <div className="flex items-center justify-around gap-1 rounded-2xl border border-border bg-background/90 p-1.5 shadow-lg ring-1 ring-black/5 backdrop-blur-md">
-        {actions.map((a) => (
-          <a
-            key={a.label}
-            href={a.href}
-            target={a.external ? "_blank" : undefined}
-            rel={a.external ? "noopener noreferrer" : undefined}
-            className="haptic flex flex-1 flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <a.icon className="size-5" />
-            {a.label}
-          </a>
-        ))}
-        <button
-          type="button"
-          onClick={onOpenMenu}
-          className="haptic flex flex-1 flex-col items-center gap-1 rounded-xl bg-primary py-2 text-[11px] font-semibold text-primary-foreground"
-        >
-          <MenuIcon className="size-5" />
-          Closet
-        </button>
       </div>
     </div>
   );
