@@ -104,13 +104,13 @@ def main() -> None:
         "source": "poshmark",
         "closet": "jengerluxuri0us",
         "closetUrl": "https://poshmark.com/closet/jengerluxuri0us",
-        "batch": f"{batches}/5",
+        "batch": f"{batches}/10",
         "range": f"{lo}-{hi}",
         "count": len(products),
         "listings": products,
     }
     dest.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Wrote {len(products)} listings ({lo}-{hi}, {batches}/5) to {dest}")
+    print(f"Wrote {len(products)} listings ({lo}-{hi}, {batches}/10) to {dest}")
 
 
 if __name__ == "__main__":
