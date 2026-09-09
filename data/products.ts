@@ -1,3 +1,5 @@
+import poshmarkImport from "./poshmark-import.json";
+
 export type Product = {
   id: string;
   name: string;
@@ -10,203 +12,19 @@ export type Product = {
   description: string;
   condition?: string;
   originalPrice?: number;
+  brand?: string;
+  listingUrl?: string;
+  poshmarkId?: string;
   /** Units on hand. 0 = sold out. If omitted, a mock default is applied below. */
   stock?: number;
 };
 
-/**
- * Jenger Drop = the emergency delivery side.
- * Only these categories are surfaced on the Jenger Drop homepage.
- * (The resale clothing lives on the external "Jengerluxurious 2nd Chance" storefront.)
- */
-export const DROP_CATEGORIES = [
-  "Fashion & Beauty Fix",
-  "Game Day & Going Out",
-  "Essentials",
-] as const;
-
-export type DropCategory = (typeof DROP_CATEGORIES)[number];
+/** The single shoppable category for this resale-only storefront. */
+export const RESALE_CATEGORY = "2nd Chance Resale";
 
 const rawProducts: Product[] = [
   // =========================================================
-  //  JENGER DROP — EMERGENCY SUPPLIES (retail, immediate delivery)
-  // =========================================================
-
-  // --- FASHION FIX ---
-  {
-    id: "item_031",
-    name: "Fashion tape",
-    price: 9.0,
-    image: "/boob_tape---e15735e4-761e-4a45-9035-2c0848b33538.jpg",
-    category: "Fashion & Beauty Fix",
-    sizes: ["OS"],
-    description: "High-quality, sweat-resistant double-sided fashion tape. Keeps everything exactly where it should be.",
-    condition: "NEW",
-  },
-  {
-    id: "item_032",
-    name: "Pasties",
-    price: 9.0,
-    image: "/placeholder.jpg",
-    category: "Fashion & Beauty Fix",
-    sizes: ["OS"],
-    description: "Seamless silicone pasties. Invisible under anything.",
-    condition: "NEW",
-  },
-  {
-    id: "item_033",
-    name: "Mini sewing kit",
-    price: 7.0,
-    image: "/mini_sewing_kit---dd80f4e7-6b93-4a26-a96c-c0868497623f.jpg",
-    category: "Fashion & Beauty Fix",
-    sizes: ["OS"],
-    description: "Emergency repair kit for popped buttons and busted seams.",
-    condition: "NEW",
-  },
-  {
-    id: "item_034",
-    name: "Safety pins pack",
-    price: 5.0,
-    image: "/safety_pins---e12086a6-b086-4477-8bc5-6e21f1c22682.jpg",
-    category: "Fashion & Beauty Fix",
-    sizes: ["OS"],
-    description: "Assorted sizes for last-minute wardrobe saves.",
-    condition: "NEW",
-  },
-
-  // --- BEAUTY FIX ---
-  {
-    id: "item_035",
-    name: "Lash glue",
-    price: 6.0,
-    image: "/lash_glue---e35b53a3-42b7-41e5-a690-4d1e61503881.jpg",
-    sizes: ["OS"],
-    description: "Strong-hold clear lash adhesive.",
-    condition: "NEW",
-  },
-  {
-    id: "item_036",
-    name: "Lashes (1 pair)",
-    price: 8.0,
-    image: "/lashes---8d5587ef-8948-4c02-a2b3-c0cebb5fe217.jpg",
-    sizes: ["OS"],
-    description: "Fluffy faux-mink lashes for an instant glam moment.",
-    condition: "NEW",
-  },
-  {
-    id: "item_037",
-    name: "Lip gloss",
-    price: 8.0,
-    image: "/lip_gloss---a662e684-d9fb-4c3f-9a9f-5a57d946c179.jpg",
-    sizes: ["OS"],
-    description: "High-shine clear gloss.",
-    condition: "NEW",
-  },
-  {
-    id: "item_038",
-    name: "Lip balm",
-    price: 5.0,
-    image: "/lip_balm---3c8b39f6-ac8a-4280-a725-fe1be86b5028.jpg",
-    sizes: ["OS"],
-    description: "Hydrating recovery balm.",
-    condition: "NEW",
-  },
-  {
-    id: "item_039",
-    name: "Oil-blotting sheets",
-    price: 6.0,
-    image: "/oil_blotting_sheets---39970307-38c3-466d-8b36-e28dc44f8c35.jpg",
-    sizes: ["OS"],
-    description: "Removes shine instantly without ruining your makeup.",
-    condition: "NEW",
-  },
-  {
-    id: "item_040",
-    name: "Makeup remover wipes (travel)",
-    price: 7.0,
-    image: "/makeup_wipes---73bf1a20-ba99-4acb-86bd-37d5feb93050.jpg",
-    sizes: ["OS"],
-    description: "Gentle cleansing wipes for a quick reset.",
-    condition: "NEW",
-  },
-
-  // --- GAME DAY & GOING OUT ---
-  {
-    id: "item_041",
-    name: "Clear stadium bag",
-    price: 18.0,
-    image: "/clear_purse---9254c583-bd95-4c48-89d5-840f19894ece.jpg",
-    category: "Game Day & Going Out",
-    sizes: ["OS"],
-    description: "Chic clear PVC stadium bag — meets every venue's clear-bag policy.",
-    condition: "NEW",
-  },
-  {
-    id: "item_042",
-    name: "Face stickers / eye black",
-    price: 6.0,
-    image: "/eye_black---0b707dca-48a6-491a-82f3-e939618e117a.jpg",
-    category: "Game Day & Going Out",
-    sizes: ["OS"],
-    description: "Game day spirit in a stick.",
-    condition: "NEW",
-  },
-  {
-    id: "item_043",
-    name: "Electrolyte packet",
-    price: 4.0,
-    image: "/electrolyte_packet---60fcb1e9-310b-4f6b-8ea1-27075fd0a911.jpg",
-    category: "Game Day & Going Out",
-    sizes: ["OS"],
-    description: "Rapid hydration powder. The unofficial hangover kit.",
-    condition: "NEW",
-  },
-  {
-    id: "item_044",
-    name: "Sunscreen packet",
-    price: 4.0,
-    image: "/sunscreen_packet---76e6bcbd-edaf-42bc-b8d9-26954fecab89.jpg",
-    category: "Game Day & Going Out",
-    sizes: ["OS"],
-    description: "SPF 50 travel packet for all-day tailgates.",
-    condition: "NEW",
-  },
-
-  // --- ESSENTIALS ---
-  {
-    id: "item_045",
-    name: "Phone charger cable",
-    price: 14.0,
-    image: "/phone_charger---51e11673-53f6-4e3d-9938-feb9e8325f41.jpg",
-    category: "Essentials",
-    sizes: ["OS"],
-    description: "Fast-charging iPhone cable so you never miss the ride home.",
-    condition: "NEW",
-  },
-  {
-    id: "item_046",
-    name: "Pain reliever 2-pack",
-    price: 5.0,
-    image: "/pain_reliever---fe000a2e-c4b7-4626-8585-625ae9c9565c.jpg",
-    category: "Essentials",
-    sizes: ["OS"],
-    description: "Travel-size ibuprofen for the morning after.",
-    condition: "NEW",
-  },
-  {
-    id: "item_047",
-    name: "Tampons / pads pack",
-    price: 8.0,
-    image: "/feminine_care---4845ec5f-d371-4028-8a52-774d289ad1cf.jpg",
-    category: "Essentials",
-    sizes: ["OS"],
-    description: "Feminine care emergency kit.",
-    condition: "NEW",
-  },
-
-  // =========================================================
   //  JENGERLUXURIOUS 2ND CHANCE — RESALE CLOTHING
-  //  (surfaced on the external storefront only; kept here for data completeness)
   // =========================================================
 
   // --- RUSH / EVENT DRESSES ---
@@ -625,45 +443,37 @@ const rawProducts: Product[] = [
 ];
 
 /**
- * Mock inventory levels: resale items are one-of-a-kind (stock 1), emergency
- * items are stocked deeper (stock 5). Any item can override this by setting an
- * explicit `stock` above (including `stock: 0` to force "Sold Out").
+ * Earlier local/demo closet rows. Demoted — the shoppable grid uses the
+ * Poshmark batch instead. Kept so photos already in /public are not lost.
  */
-export const products: Product[] = rawProducts.map((p) => ({
+export const demoResaleProducts: Product[] = rawProducts.map((p) => ({
   ...p,
-  stock: p.stock ?? (p.category === "2nd Chance Resale" ? 1 : 5),
+  stock: p.stock ?? 1,
 }));
 
-/** Items shown on the Jenger Drop (emergency delivery) homepage. */
-export const dropProducts: Product[] = products.filter((p) =>
-  (DROP_CATEGORIES as readonly string[]).includes(p.category)
+function fromPoshmarkListing(raw: (typeof poshmarkImport.listings)[number]): Product {
+  return {
+    id: raw.id,
+    name: raw.name,
+    price: raw.price,
+    image: raw.image,
+    images: raw.images,
+    category: raw.category,
+    sizes: raw.sizes,
+    description: raw.description,
+    condition: raw.condition,
+    originalPrice: raw.originalPrice,
+    brand: raw.brand,
+    listingUrl: raw.listingUrl,
+    poshmarkId: raw.poshmarkId,
+    stock: raw.stock ?? 1,
+  };
+}
+
+/** Live closet — Poshmark batches 1–10/10 (@jengerluxuri0us, items 1–955). Inventory FROZEN. */
+export const resaleProducts: Product[] = poshmarkImport.listings.map(
+  fromPoshmarkListing
 );
 
-/** The single category that holds all resale clothing on the 2nd Chance tab. */
-export const RESALE_CATEGORY = "2nd Chance Resale";
-
-/** Items shown on the Jengerluxurious 2nd Chance (resale) tab. */
-export const resaleProducts: Product[] = products.filter(
-  (p) => p.category === RESALE_CATEGORY
-);
-
-/** Group Jenger Drop items by their category, preserving DROP_CATEGORIES order. */
-export const dropProductsByCategory: { category: DropCategory; items: Product[] }[] =
-  DROP_CATEGORIES.map((category) => ({
-    category,
-    items: dropProducts.filter((p) => p.category === category),
-  }));
-
-/** A curated set of "trending" emergency items for the homepage carousel. */
-export const trendingProductIds = [
-  "item_045", // phone charger
-  "item_031", // fashion tape
-  "item_043", // electrolyte
-  "item_041", // clear stadium bag
-  "item_047", // tampons/pads
-  "item_035", // lash glue
-];
-
-export const trendingProducts: Product[] = trendingProductIds
-  .map((id) => dropProducts.find((p) => p.id === id))
-  .filter((p): p is Product => Boolean(p));
+/** Shoppable catalog = Poshmark import (demo SKUs are not included). */
+export const products: Product[] = resaleProducts;

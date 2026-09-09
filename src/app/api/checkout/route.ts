@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-// Frictionless MVP: append each order to a local JSON queue on disk.
-// Jarvis (the AI assistant) monitors this file and handles notifications.
+// Append each order to a local JSON queue on disk.
 const QUEUE_PATH = path.join(process.cwd(), "order_queue.json");
 
 export async function POST(request: Request) {
@@ -16,10 +15,11 @@ export async function POST(request: Request) {
       phone,
       instructions,
       subtotal,
-      deliveryFee,
+      shippingFee,
       total,
-      paymentIntentId,
+      paymentProvider,
       paymentStatus,
+      squareCheckoutUrl,
     } = body ?? {};
 
     const order = {
@@ -31,10 +31,11 @@ export async function POST(request: Request) {
       instructions: instructions ?? "",
       subtotal: subtotal ?? 0,
       tax: body.tax ?? 0,
-      deliveryFee: deliveryFee ?? 0,
+      shippingFee: shippingFee ?? 0,
       total: total ?? subtotal ?? 0,
-      paymentIntentId: paymentIntentId ?? "",
+      paymentProvider: paymentProvider ?? "square",
       paymentStatus: paymentStatus ?? "",
+      squareCheckoutUrl: squareCheckoutUrl ?? "",
       items: Array.isArray(items) ? items : [],
     };
 

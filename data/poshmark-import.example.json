@@ -1,0 +1,24 @@
+{
+  "$comment": "Merge schema for a later Poshmark export (~48 available listings; closet advertises ~2366). Do not invent live listings, photos, or prices. Closet: @jengerluxuri0us — https://poshmark.com/closet/jengerluxuri0us. Map each listing to Product { id, name, price, image, images?, category: '2nd Chance Resale', sizes, description, condition?, originalPrice?, stock? }.",
+  "source": "poshmark",
+  "closet": "jengerluxuri0us",
+  "closetUrl": "https://poshmark.com/closet/jengerluxuri0us",
+  "expectedAvailableCount": 48,
+  "exportedAt": "YYYY-MM-DD",
+  "listings": [
+    {
+      "poshmarkId": "listing-id-from-export",
+      "title": "Example listing title",
+      "brand": "Brand name",
+      "price": 0,
+      "originalPrice": 0,
+      "size": "S",
+      "condition": "NWT | LIKE NEW | GENTLY LOVED | EXCELLENT | VINTAGE",
+      "description": "Seller notes from Poshmark",
+      "category": "2nd Chance Resale",
+      "photoUrls": [],
+      "available": true,
+      "poshmarkUrl": "https://poshmark.com/listing/example"
+    }
+  ]
+}

@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jengerluxurious — 2nd Chance Resale
+
+Web-first clothing resale shop for **Jengerluxurious / 2nd Chance Resale**.
+
+- Closet on this site: Poshmark batches 1–10/10 in `data/poshmark-import.json` (955 listings from `@jengerluxuri0us`)
+- Poshmark closet: [@jengerluxuri0us](https://poshmark.com/closet/jengerluxuri0us)
+- Live Square storefront: [jengerluxurious.com](https://www.jengerluxurious.com)
+
+The former **Jenger Drop** emergency-delivery side (Fashion & Beauty Fix, Game Day & Going Out, Essentials) is removed from the shoppable catalog and homepage.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Production web build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Capacitor/Android remains in the tree (`npm run build:mobile`, `capacitor.config.ts`) but is not required for the website.
+
+Product pages live at `/product/[slug]` (brand + name slug + id). Thin trust pages: `/about`, `/shipping`, `/returns`. `robots.ts` and `sitemap.ts` cover the homepage, those pages, and every resale listing.
+
+## Environment
+
+Copy `.env.example` to `.env.local`. **Do not invent keys.** The site builds with Square values empty.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata, sitemap, and robots. Defaults to `https://www.jengerluxurious.com`. |
+| `NEXT_PUBLIC_SQUARE_CHECKOUT_URL` | Required to collect payment. Square Online checkout / Payment Link URL. |
+| `NEXT_PUBLIC_SQUARE_APPLICATION_ID` | Optional Square Web Payments placeholder. |
+| `NEXT_PUBLIC_SQUARE_LOCATION_ID` | Optional Square Web Payments placeholder. |
+| `SQUARE_ACCESS_TOKEN` | Server-only. Never commit a real token. |
+
+## Payments (Square)
+
+Checkout uses **Square**, not Stripe. Without `NEXT_PUBLIC_SQUARE_CHECKOUT_URL`, the bag shows a config message and `/api/square-checkout` returns **503** — there is no pay-later / hold path.
+
+Stripe is parked: `/api/create-payment-intent` returns `410` and is not used by the UI.
+
+## Shipping
+
+US domestic only. Rate lives in `data/shipping.ts` (`SHIPPING.flatRateUsd = 6.49`) and is shown as a separate checkout line before pay. Mirrors Poshmark’s 2026 flat buyer rate for packages up to 5 lb. Heavy/oversize (seller-paid upgrades above 5 lb) is out of scope.
+
+## Poshmark import
+
+See `data/POSHMARK.md`. The live closet is batches 1–10 of 10 on this PR (**955** listings). Inventory is **FROZEN** until Carlos green-lights more. Do not invent photos or prices.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js Documentation](https://nextjs.org/docs)
