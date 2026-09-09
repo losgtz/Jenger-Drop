@@ -24,22 +24,23 @@ npm start
 
 Capacitor/Android remains in the tree (`npm run build:mobile`, `capacitor.config.ts`) but is not required for the website.
 
-Product pages live at `/product/[slug]` (brand + name slug + id). `robots.ts` and `sitemap.ts` cover the homepage and every resale listing. Set `NEXT_PUBLIC_SITE_URL` if the canonical host is not `https://www.jengerluxurious.com`.
+Product pages live at `/product/[slug]` (brand + name slug + id). Thin trust pages: `/about`, `/shipping`, `/returns`. `robots.ts` and `sitemap.ts` cover the homepage, those pages, and every resale listing.
 
-## Payments (Square)
+## Environment
 
-Checkout uses **Square**, not Stripe.
-
-Copy `.env.example` to `.env.local` and fill only what you have. **Do not invent keys.** The site builds with every Square value empty.
+Copy `.env.example` to `.env.local`. **Do not invent keys.** The site builds with Square values empty.
 
 | Variable | Purpose |
 | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata, sitemap, and robots. Defaults to `https://www.jengerluxurious.com`. |
 | `NEXT_PUBLIC_SQUARE_CHECKOUT_URL` | Required to collect payment. Square Online checkout / Payment Link URL. |
 | `NEXT_PUBLIC_SQUARE_APPLICATION_ID` | Optional Square Web Payments placeholder. |
 | `NEXT_PUBLIC_SQUARE_LOCATION_ID` | Optional Square Web Payments placeholder. |
 | `SQUARE_ACCESS_TOKEN` | Server-only. Never commit a real token. |
 
-`/api/square-checkout` opens the hosted Square link when configured. Without it, checkout returns **503** with a config error — there is no pay-later / hold path.
+## Payments (Square)
+
+Checkout uses **Square**, not Stripe. Without `NEXT_PUBLIC_SQUARE_CHECKOUT_URL`, the bag shows a config message and `/api/square-checkout` returns **503** — there is no pay-later / hold path.
 
 Stripe is parked: `/api/create-payment-intent` returns `410` and is not used by the UI.
 

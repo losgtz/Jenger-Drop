@@ -9,6 +9,7 @@ import { findProductBySlug, productSlug } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
+import { SiteFooter } from "@/components/site-footer";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -208,6 +209,7 @@ export default async function ProductPage({ params }: PageProps) {
           <ProductPdpActions productId={product.id} soldOut={soldOut} />
         </div>
       </main>
+      <SiteFooter />
     </div>
   );
 }

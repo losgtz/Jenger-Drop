@@ -38,25 +38,13 @@ import {
   shippingFeeForSubtotal,
 } from "../../data/shipping";
 import { productSlug } from "@/lib/catalog";
+import { CONTACT, TRUST_PAGES } from "@/lib/contact";
+import { SiteFooter } from "@/components/site-footer";
 import {
   RESALE_CATEGORY,
   resaleProducts,
   type Product,
 } from "../../data/products";
-
-/* -------------------------------------------------------------------------- */
-/*  Brand + contact config                                                    */
-/* -------------------------------------------------------------------------- */
-
-const CONTACT = {
-  phone: "3465257753",
-  phoneDisplay: "(346) 525-7753",
-  instagram: "jengerluxurious.second.chance",
-  instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
-  storeUrl: "https://www.jengerluxurious.com",
-  poshmarkHandle: "jengerluxuri0us",
-  poshmarkUrl: "https://poshmark.com/closet/jengerluxuri0us",
-};
 
 /* -------------------------------------------------------------------------- */
 /*  API base URL                                                              */
@@ -294,6 +282,7 @@ export default function Home() {
             <RequestBanner onRequest={() => openRequest("")} />
           </>
         )}
+        <SiteFooter />
       </main>
 
       <ContactBar
@@ -1235,7 +1224,7 @@ function SquareCheckoutPanel({
         <p className="text-xs leading-relaxed text-muted-foreground">
           {hosted
             ? "Opens Square Online checkout / Payment Link to collect card payment (same processor as jengerluxurious.com)."
-            : "Square-ready path: set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Payment Link or Online checkout URL. Optional Web Payments ids are in .env.example. Pay is required — this is not a hold."}
+            : "Square checkout is not configured on this deploy. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL in .env.local to a Square Payment Link or Online checkout URL (see .env.example). Payment is required — this is not a hold."}
         </p>
         {error && <p className="text-xs text-primary">{error}</p>}
         <Button
@@ -1314,6 +1303,18 @@ function SiteMenuDrawer({
         </DialogHeader>
 
         <div className="no-scrollbar flex-1 space-y-6 overflow-y-auto px-5 py-5">
+          <nav aria-label="Policies" className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
+            {TRUST_PAGES.map((page) => (
+              <Link
+                key={page.href}
+                href={page.href}
+                className="text-primary underline-offset-4 hover:underline"
+                onClick={() => onOpenChange(false)}
+              >
+                {page.label}
+              </Link>
+            ))}
+          </nav>
           <a
             href={CONTACT.storeUrl}
             target="_blank"
