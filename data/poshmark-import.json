@@ -2,9 +2,9 @@
   "source": "poshmark",
   "closet": "jengerluxuri0us",
   "closetUrl": "https://poshmark.com/closet/jengerluxuri0us",
-  "batch": "1/5",
-  "range": "1-100",
-  "count": 100,
+  "batch": "2/5",
+  "range": "1-200",
+  "count": 200,
   "listings": [
     {
       "id": "posh_001_6a9fc631d776bd290d1daf8b",
@@ -1951,6 +1951,1988 @@
       "listingUrl": "https://poshmark.com/listing/6a9281dcb9f4ea39e91849bb",
       "stock": 1,
       "originalPrice": 68.0,
+      "brand": "lululemon athletica",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_101_6a927b1e8b21c8ee91e1f0fd",
+      "poshmarkId": "6a927b1e8b21c8ee91e1f0fd",
+      "name": "MICHALE KORS MK Cheetah Print Calf Fur Heels Sandal Size 8",
+      "price": 68.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a927b1e8b21c8ee91e1f0fd/l_6a927b1e8b21c8ee91e1f0fe.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a927b1e8b21c8ee91e1f0fd/l_6a927b1e8b21c8ee91e1f0fe.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "8"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a927b1e8b21c8ee91e1f0fd",
+      "stock": 1,
+      "originalPrice": 160.0,
+      "brand": "MICHAEL Michael Kors",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_102_6a927718d733735ddc922da4",
+      "poshmarkId": "6a927718d733735ddc922da4",
+      "name": "*RARE* DOONEY & BOURKE Vintage 90s Green/Orange Bolero Leather Handbag",
+      "price": 600.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a927718d733735ddc922da4/l_6a927718d733735ddc922da5.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a927718d733735ddc922da4/l_6a927718d733735ddc922da5.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a927718d733735ddc922da4",
+      "stock": 1,
+      "originalPrice": 1500.0,
+      "brand": "Dooney & Bourke",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_103_6a9275ab72e624b61b7ea1a9",
+      "poshmarkId": "6a9275ab72e624b61b7ea1a9",
+      "name": "GIANNI BINI Y2K Blue Denim Extreme Wide Leg Trouser Jean 4-button Crop Pant 11",
+      "price": 53.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9275ab72e624b61b7ea1a9/l_6a9275ab72e624b61b7ea1aa.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9275ab72e624b61b7ea1a9/l_6a9275ab72e624b61b7ea1aa.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "11J"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9275ab72e624b61b7ea1a9",
+      "stock": 1,
+      "originalPrice": 200.0,
+      "brand": "Gianni Bini",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_104_6a9267cb64399b150f17039d",
+      "poshmarkId": "6a9267cb64399b150f17039d",
+      "name": "Patagonia Re-Tool Snap-T Pullover Fleece Yellow Womens XS Polartec",
+      "price": 102.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9267cb64399b150f17039d/l_6a9267cb64399b150f17039e.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9267cb64399b150f17039d/l_6a9267cb64399b150f17039e.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9267cb64399b150f17039d",
+      "stock": 1,
+      "originalPrice": 210.0,
+      "brand": "Patagonia",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_105_6a915d7218db02e4fc276c52",
+      "poshmarkId": "6a915d7218db02e4fc276c52",
+      "name": "McQ Alexander McQueen Yellow Striped Plaited Turtleneck Size XS",
+      "price": 142.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a915d7218db02e4fc276c52/l_6a915d7218db02e4fc276c53.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a915d7218db02e4fc276c52/l_6a915d7218db02e4fc276c53.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a915d7218db02e4fc276c52",
+      "stock": 1,
+      "originalPrice": 280.0,
+      "brand": "McQ by Alexander McQueen",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_106_6a9154d3386937943ea37f27",
+      "poshmarkId": "6a9154d3386937943ea37f27",
+      "name": "Anthropologie Moth Navy Blue Floral Tie Front Midi Dress Long Sleeve Pockets",
+      "price": 85.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9154d3386937943ea37f27/l_6a9154d3386937943ea37f28.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9154d3386937943ea37f27/l_6a9154d3386937943ea37f28.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9154d3386937943ea37f27",
+      "stock": 1,
+      "originalPrice": 186.0,
+      "brand": "Anthropologie Moth",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_107_6a914d4bc5c2ede7bb1b62da",
+      "poshmarkId": "6a914d4bc5c2ede7bb1b62da",
+      "name": "OP Purple Bikini Set with Black Mesh Trim",
+      "price": 20.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a914d4bc5c2ede7bb1b62da/l_6a914d4bc5c2ede7bb1b62db.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a914d4bc5c2ede7bb1b62da/l_6a914d4bc5c2ede7bb1b62db.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "M"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a914d4bc5c2ede7bb1b62da",
+      "stock": 1,
+      "brand": "OP",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_108_6a9144d1ef676c7ed36936f5",
+      "poshmarkId": "6a9144d1ef676c7ed36936f5",
+      "name": "B. DARLIN White Long-Sleeve Sweetheart Neck Fitted Lace Dress Size 5/6 NWT",
+      "price": 45.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9144d1ef676c7ed36936f5/l_6a9144d1ef676c7ed36936f6.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9144d1ef676c7ed36936f5/l_6a9144d1ef676c7ed36936f6.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9144d1ef676c7ed36936f5",
+      "stock": 1,
+      "originalPrice": 108.0,
+      "brand": "B Darlin",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_109_6a914221721f58211b4c0f43",
+      "poshmarkId": "6a914221721f58211b4c0f43",
+      "name": "PRETTY LITTLE THING Joggers Sz 6",
+      "price": 11.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a914221721f58211b4c0f43/l_6a914221721f58211b4c0f44.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a914221721f58211b4c0f43/l_6a914221721f58211b4c0f44.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6P"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a914221721f58211b4c0f43",
+      "stock": 1,
+      "originalPrice": 45.0,
+      "brand": "PrettyLittleThing",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_110_6a9140e08f9d3e3a37dc76d2",
+      "poshmarkId": "6a9140e08f9d3e3a37dc76d2",
+      "name": "EUNINA High-Rise 3\" Fray Hem Short Size 27",
+      "price": 18.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9140e08f9d3e3a37dc76d2/l_6a9140e08f9d3e3a37dc76d3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9140e08f9d3e3a37dc76d2/l_6a9140e08f9d3e3a37dc76d3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "27"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9140e08f9d3e3a37dc76d2",
+      "stock": 1,
+      "originalPrice": 50.0,
+      "brand": "eunina",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_111_6a9132da1179ac953d545be1",
+      "poshmarkId": "6a9132da1179ac953d545be1",
+      "name": "NEFF Blue Boy Rainbow Vomit Puke Barf Shirt Size 10/12",
+      "price": 15.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9132da1179ac953d545be1/l_6a9132da1179ac953d545be2.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/28/6a9132da1179ac953d545be1/l_6a9132da1179ac953d545be2.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "10B"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9132da1179ac953d545be1",
+      "stock": 1,
+      "originalPrice": 60.0,
+      "brand": "Neff",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_112_6a912f0a23cd1eeab5e94fb8",
+      "poshmarkId": "6a912f0a23cd1eeab5e94fb8",
+      "name": "FRANCISCO RUSSO Beige/White Ballet Flats Size 39",
+      "price": 259.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a912f0a23cd1eeab5e94fb8/l_6a912f0a23cd1eeab5e94fb9.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a912f0a23cd1eeab5e94fb8/l_6a912f0a23cd1eeab5e94fb9.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "9"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a912f0a23cd1eeab5e94fb8",
+      "stock": 1,
+      "originalPrice": 783.0,
+      "brand": "FRANCISCO RUSSO",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_113_6a912b1bd3de6568d9b5d8c3",
+      "poshmarkId": "6a912b1bd3de6568d9b5d8c3",
+      "name": "RAG & BONE Lance Crewneck Sweater S",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a912b1bd3de6568d9b5d8c3/l_6a912b1bd3de6568d9b5d8c4.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a912b1bd3de6568d9b5d8c3/l_6a912b1bd3de6568d9b5d8c4.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a912b1bd3de6568d9b5d8c3",
+      "stock": 1,
+      "originalPrice": 250.0,
+      "brand": "rag & bone",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_114_6a9129a8839f7a90d47771a7",
+      "poshmarkId": "6a9129a8839f7a90d47771a7",
+      "name": "AEROPOSTALE Black Distressed Ripped \"Bermuda\" Raw Hem Shorts Size 000",
+      "price": 16.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9129a8839f7a90d47771a7/l_6a9129a8839f7a90d47771a8.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9129a8839f7a90d47771a7/l_6a9129a8839f7a90d47771a8.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "000"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9129a8839f7a90d47771a7",
+      "stock": 1,
+      "originalPrice": 55.0,
+      "brand": "Aeropostale",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_115_6a91278f106eeb21ca15b12d",
+      "poshmarkId": "6a91278f106eeb21ca15b12d",
+      "name": "WARNER BROS. Green Vintage Looney Tunes Nighty Chemise Slip Size S",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a91278f106eeb21ca15b12d/l_6a91278f106eeb21ca15b12e.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a91278f106eeb21ca15b12d/l_6a91278f106eeb21ca15b12e.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a91278f106eeb21ca15b12d",
+      "stock": 1,
+      "originalPrice": 999.0,
+      "brand": "Warner Bros.",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_116_6a9125883869374a24972b42",
+      "poshmarkId": "6a9125883869374a24972b42",
+      "name": "MANOLO BLAHNIK Early 80s Vintage Suede/Velvet Rhinestone Buckle Boots 39.5",
+      "price": 550.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9125883869374a24972b42/l_6a9125883869374a24972b43.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9125883869374a24972b42/l_6a9125883869374a24972b43.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "9.5"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9125883869374a24972b42",
+      "stock": 1,
+      "originalPrice": 2000.0,
+      "brand": "Manolo Blahnik",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_117_6a9122f5014ea3fececd6b71",
+      "poshmarkId": "6a9122f5014ea3fececd6b71",
+      "name": "FOREVER 21 White Closed Eyes Oversized Crop Top Size S",
+      "price": 13.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9122f5014ea3fececd6b71/l_6a9122f5014ea3fececd6b72.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9122f5014ea3fececd6b71/l_6a9122f5014ea3fececd6b72.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9122f5014ea3fececd6b71",
+      "stock": 1,
+      "originalPrice": 42.0,
+      "brand": "Forever 21",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_118_6a9120fbce5b0aeb2b6767e9",
+      "poshmarkId": "6a9120fbce5b0aeb2b6767e9",
+      "name": "RIPPLE JUNCTION Naruto Anime T-Shirt L",
+      "price": 18.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9120fbce5b0aeb2b6767e9/l_6a9120fbce5b0aeb2b6767ea.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a9120fbce5b0aeb2b6767e9/l_6a9120fbce5b0aeb2b6767ea.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "L"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a9120fbce5b0aeb2b6767e9",
+      "stock": 1,
+      "originalPrice": 60.0,
+      "brand": "Ripple Junction",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_119_6a911f62875d65a45be0b7dc",
+      "poshmarkId": "6a911f62875d65a45be0b7dc",
+      "name": "J.Crew Womens XXS Black Button Shoulder Mock Neck Sweater Knit Long Sleeve Top",
+      "price": 43.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911f62875d65a45be0b7dc/l_6a911f62875d65a45be0b7dd.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911f62875d65a45be0b7dc/l_6a911f62875d65a45be0b7dd.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XXS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a911f62875d65a45be0b7dc",
+      "stock": 1,
+      "originalPrice": 168.0,
+      "brand": "J. Crew",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_120_6a911ccacbbea55da720c7a2",
+      "poshmarkId": "6a911ccacbbea55da720c7a2",
+      "name": "Vans Authentic \"Flipping Sequin\"",
+      "price": 72.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911ccacbbea55da720c7a2/l_6a911ccacbbea55da720c7a3.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911ccacbbea55da720c7a2/l_6a911ccacbbea55da720c7a3.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "1.5G"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a911ccacbbea55da720c7a2",
+      "stock": 1,
+      "brand": "Vans",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_121_6a911b1d06c77384d169dd7d",
+      "poshmarkId": "6a911b1d06c77384d169dd7d",
+      "name": "PRINCESS POLLY White Zariah Mini Dress Size 6",
+      "price": 51.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911b1d06c77384d169dd7d/l_6a911b1d06c77384d169dd7e.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a911b1d06c77384d169dd7d/l_6a911b1d06c77384d169dd7e.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a911b1d06c77384d169dd7d",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Princess Polly",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_122_6a8ff1d22fc9f85be5f4897b",
+      "poshmarkId": "6a8ff1d22fc9f85be5f4897b",
+      "name": "LULULEMON White/Navy/Orange Spin Top Size 4",
+      "price": 39.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8ff1d22fc9f85be5f4897b/l_6a8ff1d22fc9f85be5f4897c.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8ff1d22fc9f85be5f4897b/l_6a8ff1d22fc9f85be5f4897c.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "4"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8ff1d22fc9f85be5f4897b",
+      "stock": 1,
+      "originalPrice": 120.0,
+      "brand": "lululemon athletica",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_123_6a8fec85d776bd978c18e3e2",
+      "poshmarkId": "6a8fec85d776bd978c18e3e2",
+      "name": "JESSICA SIMPSON Burgundy Fur/Rhinestone House Slippers Slides Size S 6-7",
+      "price": 36.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fec85d776bd978c18e3e2/l_6a8fec85d776bd978c18e3e3.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fec85d776bd978c18e3e2/l_6a8fec85d776bd978c18e3e3.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6.5"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fec85d776bd978c18e3e2",
+      "stock": 1,
+      "originalPrice": 78.0,
+      "brand": "Jessica Simpson",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_124_6a8fe8dc106eeb8d37031867",
+      "poshmarkId": "6a8fe8dc106eeb8d37031867",
+      "name": "MAEVE by Anthropologie White Knit Strawberry Embroidered Sweater XS",
+      "price": 81.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe8dc106eeb8d37031867/l_6a8fe8dc106eeb8d37031868.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe8dc106eeb8d37031867/l_6a8fe8dc106eeb8d37031868.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fe8dc106eeb8d37031867",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Maeve",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_125_6a8fe7827e9749c5cd9ecf65",
+      "poshmarkId": "6a8fe7827e9749c5cd9ecf65",
+      "name": "WORTHINGTON WOMAN Black Stretch Career Pant Leggings Yoga Band NWOT Size OX",
+      "price": 17.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe7827e9749c5cd9ecf65/l_6a8fe7827e9749c5cd9ecf66.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe7827e9749c5cd9ecf65/l_6a8fe7827e9749c5cd9ecf66.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "0X"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fe7827e9749c5cd9ecf65",
+      "stock": 1,
+      "originalPrice": 82.0,
+      "brand": "Worthington",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_126_6a8fe4b87789ea0368fe691d",
+      "poshmarkId": "6a8fe4b87789ea0368fe691d",
+      "name": "TOBI Olive Green Setting Fires Plunging Ro…",
+      "price": 21.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe4b87789ea0368fe691d/l_6a8fe4b87789ea0368fe691e.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe4b87789ea0368fe691d/l_6a8fe4b87789ea0368fe691e.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fe4b87789ea0368fe691d",
+      "stock": 1,
+      "originalPrice": 75.0,
+      "brand": "Tobi",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_127_6a8fe35642b6addfca0fc477",
+      "poshmarkId": "6a8fe35642b6addfca0fc477",
+      "name": "PARKER Silk Print Racerback Ruffle Mini Dress XS",
+      "price": 70.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe35642b6addfca0fc477/l_6a8fe35642b6addfca0fc478.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe35642b6addfca0fc477/l_6a8fe35642b6addfca0fc478.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fe35642b6addfca0fc477",
+      "stock": 1,
+      "originalPrice": 198.0,
+      "brand": "Parker",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_128_6a8fe0893cc1173fb96cfaab",
+      "poshmarkId": "6a8fe0893cc1173fb96cfaab",
+      "name": "NF Red/Black Sparkly Loose Designer Kaftan Beach Swimsuit Cover-up OS",
+      "price": 29.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe0893cc1173fb96cfaab/l_6a8fe0893cc1173fb96cfaac.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/27/6a8fe0893cc1173fb96cfaab/l_6a8fe0893cc1173fb96cfaac.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fe0893cc1173fb96cfaab",
+      "stock": 1,
+      "originalPrice": 119.0,
+      "brand": "NF",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_129_6a8fdec0fa43c1bf140ed8f3",
+      "poshmarkId": "6a8fdec0fa43c1bf140ed8f3",
+      "name": "NO BOUNDARIES Black Denim Mini Skirt Size 1",
+      "price": 14.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fdec0fa43c1bf140ed8f3/l_6a8fdec0fa43c1bf140ed8f4.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fdec0fa43c1bf140ed8f3/l_6a8fdec0fa43c1bf140ed8f4.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "1J"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fdec0fa43c1bf140ed8f3",
+      "stock": 1,
+      "originalPrice": 39.0,
+      "brand": "No Boundaries",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_130_6a8fdd267fd46af790aacfc6",
+      "poshmarkId": "6a8fdd267fd46af790aacfc6",
+      "name": "FUNKY PEOPLE Vintage Black/White Marylin Monroe Polkadot Handkerchief Dress",
+      "price": 32.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fdd267fd46af790aacfc6/l_6a8fdd267fd46af790aacfc7.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fdd267fd46af790aacfc6/l_6a8fdd267fd46af790aacfc7.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fdd267fd46af790aacfc6",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Funky People",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_131_6a8fda9d5ad4becdbc03eed4",
+      "poshmarkId": "6a8fda9d5ad4becdbc03eed4",
+      "name": "HANDMADE Glidan Pink/Silver Vinyl Mickey Mouse Magic Kingdom #Snackgoals Size S",
+      "price": 22.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fda9d5ad4becdbc03eed4/l_6a8fda9d5ad4becdbc03eed5.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fda9d5ad4becdbc03eed4/l_6a8fda9d5ad4becdbc03eed5.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fda9d5ad4becdbc03eed4",
+      "stock": 1,
+      "originalPrice": 60.0,
+      "brand": "Gildan",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_132_6a8fd89d71a00353e40f976e",
+      "poshmarkId": "6a8fd89d71a00353e40f976e",
+      "name": "KISUII Pink Nylon/Lycra Bikini Bottoms Size M",
+      "price": 37.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fd89d71a00353e40f976e/l_6a8fd89d71a00353e40f976f.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fd89d71a00353e40f976e/l_6a8fd89d71a00353e40f976f.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "M"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fd89d71a00353e40f976e",
+      "stock": 1,
+      "originalPrice": 90.0,
+      "brand": "kisuii",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_133_6a8fd3f9aa5c23eaa8eee64b",
+      "poshmarkId": "6a8fd3f9aa5c23eaa8eee64b",
+      "name": "Skye Swimwear Turquoise Coral Navy Stripe Bandeau Bikini",
+      "price": 65.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fd3f9aa5c23eaa8eee64b/l_6a8fd3f9aa5c23eaa8eee64c.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fd3f9aa5c23eaa8eee64b/l_6a8fd3f9aa5c23eaa8eee64c.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fd3f9aa5c23eaa8eee64b",
+      "stock": 1,
+      "brand": "Skye Swimwear",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_134_6a8fcff0bd7d002936c4a76f",
+      "poshmarkId": "6a8fcff0bd7d002936c4a76f",
+      "name": "JEM Mens Ugly Christmas Holiday Sweater Tuxedo Wreath Black Small",
+      "price": 63.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fcff0bd7d002936c4a76f/l_6a8fcff0bd7d002936c4a770.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fcff0bd7d002936c4a76f/l_6a8fcff0bd7d002936c4a770.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fcff0bd7d002936c4a76f",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "JEM Holiday Sweater",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_135_6a8fce69ead45f41b9ff66ff",
+      "poshmarkId": "6a8fce69ead45f41b9ff66ff",
+      "name": "MICKEY & CO Red/Blue Stripe Mickey Sweater L",
+      "price": 122.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fce69ead45f41b9ff66ff/l_6a8fce69ead45f41b9ff6700.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fce69ead45f41b9ff66ff/l_6a8fce69ead45f41b9ff6700.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "L"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fce69ead45f41b9ff66ff",
+      "stock": 1,
+      "brand": "Mickey & Co",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_136_6a8fc920d47f7ef0e3b54559",
+      "poshmarkId": "6a8fc920d47f7ef0e3b54559",
+      "name": "SHEIN Frenchy Striped Print Button Front Blouse Size S",
+      "price": 12.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc920d47f7ef0e3b54559/l_6a8fc920d47f7ef0e3b5455a.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc920d47f7ef0e3b54559/l_6a8fc920d47f7ef0e3b5455a.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fc920d47f7ef0e3b54559",
+      "stock": 1,
+      "originalPrice": 22.0,
+      "brand": "SHEIN",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_137_6a8fc7d83559d5e7c810bfe0",
+      "poshmarkId": "6a8fc7d83559d5e7c810bfe0",
+      "name": "B52 Vintage Pastel Unisex Shirt Size XL",
+      "price": 29.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc7d83559d5e7c810bfe0/l_6a8fc7d83559d5e7c810bfe1.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc7d83559d5e7c810bfe0/l_6a8fc7d83559d5e7c810bfe1.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XL"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fc7d83559d5e7c810bfe0",
+      "stock": 1,
+      "originalPrice": 125.0,
+      "brand": "B52",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_138_6a8fc632d721dee28e8e00e5",
+      "poshmarkId": "6a8fc632d721dee28e8e00e5",
+      "name": "PLENTY by Tracy Reese Red/White Peplum \"Broken Levels Skirt\" Size 8",
+      "price": 23.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc632d721dee28e8e00e5/l_6a8fc632d721dee28e8e00e6.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8fc632d721dee28e8e00e5/l_6a8fc632d721dee28e8e00e6.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "8"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8fc632d721dee28e8e00e5",
+      "stock": 1,
+      "originalPrice": 138.0,
+      "brand": "Plenty by Tracy Reese",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_139_6a8ea3f237ab17ec6ee57c67",
+      "poshmarkId": "6a8ea3f237ab17ec6ee57c67",
+      "name": "STÈNAY Vintage Black 100% Silk Diamond Sequin Blouse Size S",
+      "price": 102.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea3f237ab17ec6ee57c67/l_6a8ea3f237ab17ec6ee57c68.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea3f237ab17ec6ee57c67/l_6a8ea3f237ab17ec6ee57c68.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8ea3f237ab17ec6ee57c67",
+      "stock": 1,
+      "originalPrice": 300.0,
+      "brand": "Stenay",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_140_6a8ea194d0e933402ef6db2a",
+      "poshmarkId": "6a8ea194d0e933402ef6db2a",
+      "name": "FREE PEOPLE Chunky Long Knit Cardigan Size M",
+      "price": 100.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea194d0e933402ef6db2a/l_6a8ea194d0e933402ef6db2b.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea194d0e933402ef6db2a/l_6a8ea194d0e933402ef6db2b.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "8"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8ea194d0e933402ef6db2a",
+      "stock": 1,
+      "brand": "Free People",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_141_6a8ea03495154f73e10376f2",
+      "poshmarkId": "6a8ea03495154f73e10376f2",
+      "name": "HOLIDAY TIME Ugly Sweater Size Small",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea03495154f73e10376f2/l_6a8ea03495154f73e10376f3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8ea03495154f73e10376f2/l_6a8ea03495154f73e10376f3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8ea03495154f73e10376f2",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "Holiday Time",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_142_6a8e9da29fd4b95bff7cc2fb",
+      "poshmarkId": "6a8e9da29fd4b95bff7cc2fb",
+      "name": "TIEKS BY GAVRIELI Box",
+      "price": 29.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9da29fd4b95bff7cc2fb/l_6a8e9da29fd4b95bff7cc2fc.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9da29fd4b95bff7cc2fb/l_6a8e9da29fd4b95bff7cc2fc.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e9da29fd4b95bff7cc2fb",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "Tieks",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_143_6a8e9b661a166d40f25f66f9",
+      "poshmarkId": "6a8e9b661a166d40f25f66f9",
+      "name": "Faux Gold Bangles Trio",
+      "price": 11.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9b661a166d40f25f66f9/l_6a8e9b661a166d40f25f66fa.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9b661a166d40f25f66f9/l_6a8e9b661a166d40f25f66fa.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e9b661a166d40f25f66f9",
+      "stock": 1,
+      "brand": "??",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_144_6a8e9755684147820c8820d0",
+      "poshmarkId": "6a8e9755684147820c8820d0",
+      "name": "FOREVER 21 Tropical Bikini Top Sz L",
+      "price": 20.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9755684147820c8820d0/l_6a8e9755684147820c8820d1.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e9755684147820c8820d0/l_6a8e9755684147820c8820d1.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "L"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e9755684147820c8820d0",
+      "stock": 1,
+      "originalPrice": 50.0,
+      "brand": "Forever 21",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_145_6a8e92e195154fd899ffd232",
+      "poshmarkId": "6a8e92e195154fd899ffd232",
+      "name": "MAEVE ANTHROPOLOGIE Ivory Linen Hi-Low Eyelet Dress Size 12",
+      "price": 94.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e92e195154fd899ffd232/l_6a8e92e195154fd899ffd233.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e92e195154fd899ffd232/l_6a8e92e195154fd899ffd233.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "12"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e92e195154fd899ffd232",
+      "stock": 1,
+      "originalPrice": 220.0,
+      "brand": "Maeve",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_146_6a8e914509c3e375391e0729",
+      "poshmarkId": "6a8e914509c3e375391e0729",
+      "name": "ANTHROPLOGIE Green Earrings",
+      "price": 35.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e914509c3e375391e0729/l_6a8e914509c3e375391e072a.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/26/6a8e914509c3e375391e0729/l_6a8e914509c3e375391e072a.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e914509c3e375391e0729",
+      "stock": 1,
+      "brand": "Anthropologie",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_147_6a8e86407b0e8047d1f2a345",
+      "poshmarkId": "6a8e86407b0e8047d1f2a345",
+      "name": "CHRISTMAS Onsies",
+      "price": 55.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e86407b0e8047d1f2a345/l_6a8e86407b0e8047d1f2a346.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e86407b0e8047d1f2a345/l_6a8e86407b0e8047d1f2a346.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "Various"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e86407b0e8047d1f2a345",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Multiple Brands",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_148_6a8e85043559d50a67720c0d",
+      "poshmarkId": "6a8e85043559d50a67720c0d",
+      "name": "LULULEMON Orange \"Full Day Ahead\" Turtleneck Size L",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e85043559d50a67720c0d/l_6a8e85043559d50a67720c0e.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e85043559d50a67720c0d/l_6a8e85043559d50a67720c0e.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "L"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e85043559d50a67720c0d",
+      "stock": 1,
+      "originalPrice": 88.0,
+      "brand": "lululemon athletica",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_149_6a8e835b72e62456d256f9c9",
+      "poshmarkId": "6a8e835b72e62456d256f9c9",
+      "name": "JANUARY 7 Pink/White Geometric Mini dress Sz M",
+      "price": 6.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e835b72e62456d256f9c9/l_6a8e835b72e62456d256f9ca.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e835b72e62456d256f9c9/l_6a8e835b72e62456d256f9ca.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "MJ"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e835b72e62456d256f9c9",
+      "stock": 1,
+      "originalPrice": 69.0,
+      "brand": "January 7",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_150_6a8e81381a24d0873b37049e",
+      "poshmarkId": "6a8e81381a24d0873b37049e",
+      "name": "ALICE & OLIVIA Black Beaded 3/4 Sleeve Dress Sz0",
+      "price": 324.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e81381a24d0873b37049e/l_6a8e81381a24d0873b37049f.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e81381a24d0873b37049e/l_6a8e81381a24d0873b37049f.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "0"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e81381a24d0873b37049e",
+      "stock": 1,
+      "originalPrice": 898.0,
+      "brand": "Alice + Olivia",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_151_6a8e7edacbbea53d389c137b",
+      "poshmarkId": "6a8e7edacbbea53d389c137b",
+      "name": "ROTHY'S \"The Flat\" Black Size 6.5",
+      "price": 77.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e7edacbbea53d389c137b/l_6a8e7edacbbea53d389c137c.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e7edacbbea53d389c137b/l_6a8e7edacbbea53d389c137c.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6.5"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e7edacbbea53d389c137b",
+      "stock": 1,
+      "originalPrice": 165.0,
+      "brand": "Rothy's",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_152_6a8e7ac23fce2bf4715546c3",
+      "poshmarkId": "6a8e7ac23fce2bf4715546c3",
+      "name": "Silver Tone 3ct Round Solitaire Rhinestone Side Baguettes Ring Size 6",
+      "price": 68.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e7ac23fce2bf4715546c3/l_6a8e7ac23fce2bf4715546c4.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e7ac23fce2bf4715546c3/l_6a8e7ac23fce2bf4715546c4.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e7ac23fce2bf4715546c3",
+      "stock": 1,
+      "originalPrice": 1050.0,
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_153_6a8e79811a24d098aa3418d2",
+      "poshmarkId": "6a8e79811a24d098aa3418d2",
+      "name": "HANDMADE VINTAGE Sunshine Yellow Pleated Midi Skirt Size XS",
+      "price": 45.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e79811a24d098aa3418d2/l_6a8e79811a24d098aa3418d3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e79811a24d098aa3418d2/l_6a8e79811a24d098aa3418d3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e79811a24d098aa3418d2",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "HANDMADE",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_154_6a8e760ace5b0a5e1fec019a",
+      "poshmarkId": "6a8e760ace5b0a5e1fec019a",
+      "name": "JUICY COUTURE Black Velour/Silver Rhinestone Size Small",
+      "price": 63.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e760ace5b0a5e1fec019a/l_6a8e760ace5b0a5e1fec019b.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8e760ace5b0a5e1fec019a/l_6a8e760ace5b0a5e1fec019b.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8e760ace5b0a5e1fec019a",
+      "stock": 1,
+      "brand": "Juicy Couture",
+      "condition": "USED — LIKE NEW"
+    },
+    {
+      "id": "posh_155_6a8db84cdc9435ddd1c4c4b7",
+      "poshmarkId": "6a8db84cdc9435ddd1c4c4b7",
+      "name": "Banana Republic Mens XL Peach Orange Button Down Long Sleeve Shirt Pocket",
+      "price": 30.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8db84cdc9435ddd1c4c4b7/l_6a8db84cdc9435ddd1c4c4b8.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8db84cdc9435ddd1c4c4b7/l_6a8db84cdc9435ddd1c4c4b8.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XL"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8db84cdc9435ddd1c4c4b7",
+      "stock": 1,
+      "originalPrice": 90.0,
+      "brand": "Banana Republic",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_156_6a8db6bef09fc8c0623bc2a2",
+      "poshmarkId": "6a8db6bef09fc8c0623bc2a2",
+      "name": "PREMIER COLLECTIONS PETITES *Vintage* Pink Donut Pattern Mohair Sweater Size S",
+      "price": 225.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8db6bef09fc8c0623bc2a2/l_6a8db6bef09fc8c0623bc2a3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8db6bef09fc8c0623bc2a2/l_6a8db6bef09fc8c0623bc2a3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8db6bef09fc8c0623bc2a2",
+      "stock": 1,
+      "originalPrice": 500.0,
+      "brand": "Vintage",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_157_6a8d9e99c1c79e8be8fb976d",
+      "poshmarkId": "6a8d9e99c1c79e8be8fb976d",
+      "name": "PRETTY LITTLE THING Black Satin Bias Cut Midi Skirt Size 24",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d9e99c1c79e8be8fb976d/l_6a8d9e99c1c79e8be8fb976e.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d9e99c1c79e8be8fb976d/l_6a8d9e99c1c79e8be8fb976e.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "24"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d9e99c1c79e8be8fb976d",
+      "stock": 1,
+      "brand": "PrettyLittleThing",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_158_6a8d99b43535345e2f7fedf1",
+      "poshmarkId": "6a8d99b43535345e2f7fedf1",
+      "name": "MONROW Army Green Ruched-Sleeve Parka Size XS",
+      "price": 110.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d99b43535345e2f7fedf1/l_6a8d99b43535345e2f7fedf2.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d99b43535345e2f7fedf1/l_6a8d99b43535345e2f7fedf2.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d99b43535345e2f7fedf1",
+      "stock": 1,
+      "originalPrice": 198.0,
+      "brand": "Monrow",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_159_6a8d95e31a166d669cd4ee18",
+      "poshmarkId": "6a8d95e31a166d669cd4ee18",
+      "name": "BEBE Black/Nude Mesh Lace Ruched Cocktail Party Dress Size XS",
+      "price": 61.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d95e31a166d669cd4ee18/l_6a8d95e31a166d669cd4ee19.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d95e31a166d669cd4ee18/l_6a8d95e31a166d669cd4ee19.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d95e31a166d669cd4ee18",
+      "stock": 1,
+      "originalPrice": 148.0,
+      "brand": "bebe",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_160_6a8d930e1b613adb0ec3555b",
+      "poshmarkId": "6a8d930e1b613adb0ec3555b",
+      "name": "POLO RALPH LAUREN White/Red/Blue Striped Button-Front Pocket Size S",
+      "price": 20.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d930e1b613adb0ec3555b/l_6a8d930e1b613adb0ec3555d.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d930e1b613adb0ec3555b/l_6a8d930e1b613adb0ec3555d.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d930e1b613adb0ec3555b",
+      "stock": 1,
+      "originalPrice": 125.0,
+      "brand": "Polo Ralph Lauren",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_161_6a8d8e2235353499a07b58b2",
+      "poshmarkId": "6a8d8e2235353499a07b58b2",
+      "name": "NEW YORK & COMPANY Skirt-Overlap Short XS",
+      "price": 26.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d8e2235353499a07b58b2/l_6a8d8e2235353499a07b58b3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d8e2235353499a07b58b2/l_6a8d8e2235353499a07b58b3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d8e2235353499a07b58b2",
+      "stock": 1,
+      "originalPrice": 120.0,
+      "brand": "New York & Company",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_162_6a8d8adb95154fe69473598c",
+      "poshmarkId": "6a8d8adb95154fe69473598c",
+      "name": "INC INTERNATIONAL CONCEPTS Pink/White Lace-Up Top Beaded Sequins Rhinestone S",
+      "price": 27.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d8adb95154fe69473598c/l_6a8d8adb95154fe69473598d.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d8adb95154fe69473598c/l_6a8d8adb95154fe69473598d.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d8adb95154fe69473598c",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "INC International Concepts",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_163_6a8d897bb75e9fd814dfc123",
+      "poshmarkId": "6a8d897bb75e9fd814dfc123",
+      "name": "ANTHROPOLOGIE DELETTA \"Nathalie\" Metallic Plaid Peplum Tank XS",
+      "price": 41.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d897bb75e9fd814dfc123/l_6a8d897bb75e9fd814dfc124.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d897bb75e9fd814dfc123/l_6a8d897bb75e9fd814dfc124.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d897bb75e9fd814dfc123",
+      "stock": 1,
+      "originalPrice": 88.0,
+      "brand": "Deletta",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_164_6a8d87ea34fc5f7225c14208",
+      "poshmarkId": "6a8d87ea34fc5f7225c14208",
+      "name": "ULLA POPKEN Grey Refined Contrast Button Fully Lined Coat Size 28",
+      "price": 167.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d87ea34fc5f7225c14208/l_6a8d87ea34fc5f7225c14209.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d87ea34fc5f7225c14208/l_6a8d87ea34fc5f7225c14209.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "28"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d87ea34fc5f7225c14208",
+      "stock": 1,
+      "originalPrice": 250.0,
+      "brand": "Ulla Popken",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_165_6a8d85ce9f31948022a29137",
+      "poshmarkId": "6a8d85ce9f31948022a29137",
+      "name": "REWASH Acid Wash Denim Fitted Bodycon Dress XS",
+      "price": 23.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d85ce9f31948022a29137/l_6a8d85ce9f31948022a29138.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d85ce9f31948022a29137/l_6a8d85ce9f31948022a29138.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d85ce9f31948022a29137",
+      "stock": 1,
+      "originalPrice": 50.0,
+      "brand": "Rewash",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_166_6a8d836042b6add8abdc8f1c",
+      "poshmarkId": "6a8d836042b6add8abdc8f1c",
+      "name": "ANNA \"Razzle Dazzle\" Black Rhinestone Slide Sandals Size 8",
+      "price": 29.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d836042b6add8abdc8f1c/l_6a8d836042b6add8abdc8f1d.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d836042b6add8abdc8f1c/l_6a8d836042b6add8abdc8f1d.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "8"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d836042b6add8abdc8f1c",
+      "stock": 1,
+      "originalPrice": 50.0,
+      "brand": "Anna",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_167_6a8d7f6932a3e1f831095dfc",
+      "poshmarkId": "6a8d7f6932a3e1f831095dfc",
+      "name": "VICTORIA'S SECRET Grey/Pink \"Very Sexy Push-Up\" Plunge Bra Size 32DDD",
+      "price": 30.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7f6932a3e1f831095dfc/l_6a8d7f6932a3e1f831095dfd.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7f6932a3e1f831095dfc/l_6a8d7f6932a3e1f831095dfd.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "32F (3D)"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d7f6932a3e1f831095dfc",
+      "stock": 1,
+      "originalPrice": 88.0,
+      "brand": "Victoria's Secret",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_168_6a8d7e1c76de00eb42396c45",
+      "poshmarkId": "6a8d7e1c76de00eb42396c45",
+      "name": "FLEO Coral Shibori Foundation Long Sleeve Althletic Top Size XS",
+      "price": 37.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7e1c76de00eb42396c45/l_6a8d7e1c76de00eb42396c46.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7e1c76de00eb42396c45/l_6a8d7e1c76de00eb42396c46.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d7e1c76de00eb42396c45",
+      "stock": 1,
+      "originalPrice": 58.0,
+      "brand": "Fleo",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_169_6a8d7ce17789ea55d1c87126",
+      "poshmarkId": "6a8d7ce17789ea55d1c87126",
+      "name": "VICTORIA'S SECRET Leopard Print Lace Sleep Shorts Size XS",
+      "price": 14.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7ce17789ea55d1c87126/l_6a8d7ce17789ea55d1c87127.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7ce17789ea55d1c87126/l_6a8d7ce17789ea55d1c87127.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d7ce17789ea55d1c87126",
+      "stock": 1,
+      "originalPrice": 35.0,
+      "brand": "Victoria's Secret",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_170_6a8d7ba44dfc814cf545cc4c",
+      "poshmarkId": "6a8d7ba44dfc814cf545cc4c",
+      "name": "ALL SAINTS “Neve Lepo” Leopard Print Trousers Size 00",
+      "price": 61.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7ba44dfc814cf545cc4c/l_6a8d7ba44dfc814cf545cc4d.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7ba44dfc814cf545cc4c/l_6a8d7ba44dfc814cf545cc4d.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "00"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d7ba44dfc814cf545cc4c",
+      "stock": 1,
+      "originalPrice": 249.0,
+      "brand": "All Saints",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_171_6a8d7a663fce2bf204c9e7a8",
+      "poshmarkId": "6a8d7a663fce2bf204c9e7a8",
+      "name": "Squishmallows Penguin Christmas Santa Hat Plush Slippers Kids Size 13/1",
+      "price": 13.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7a663fce2bf204c9e7a8/l_6a8d7a663fce2bf204c9e7a9.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/25/6a8d7a663fce2bf204c9e7a8/l_6a8d7a663fce2bf204c9e7a9.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "1B"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8d7a663fce2bf204c9e7a8",
+      "stock": 1,
+      "originalPrice": 40.0,
+      "brand": "Squishmallows",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_172_6a8bec72aa5c2334317b59a4",
+      "poshmarkId": "6a8bec72aa5c2334317b59a4",
+      "name": "Strapless Pink Shimmer Sequins Ball Gown Mermaid Tail Dress XXS 00",
+      "price": 1500.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/24/6a8bec72aa5c2334317b59a4/l_6a8bec72aa5c2334317b59a5.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/24/6a8bec72aa5c2334317b59a4/l_6a8bec72aa5c2334317b59a5.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XXS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bec72aa5c2334317b59a4",
+      "stock": 1,
+      "originalPrice": 2000.0,
+      "condition": "USED — LIKE NEW"
+    },
+    {
+      "id": "posh_173_6a8beb37c6e38a1de9f6e600",
+      "poshmarkId": "6a8beb37c6e38a1de9f6e600",
+      "name": "VINTAGE 90s TIARA INTERNATIONAL Santa Rudolph Sequin Ugly Christmas Sweater M",
+      "price": 32.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8beb37c6e38a1de9f6e600/l_6a8beb37c6e38a1de9f6e601.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8beb37c6e38a1de9f6e600/l_6a8beb37c6e38a1de9f6e601.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "M"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8beb37c6e38a1de9f6e600",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Vintage",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_174_6a8be9d995154f2faf638d9f",
+      "poshmarkId": "6a8be9d995154f2faf638d9f",
+      "name": "PATAGONIA Polartec Re-Tool Synchilla Snap Fleece Pullover Sweater XXS",
+      "price": 71.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be9d995154f2faf638d9f/l_6a8be9d995154f2faf638da0.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be9d995154f2faf638d9f/l_6a8be9d995154f2faf638da0.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XXS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be9d995154f2faf638d9f",
+      "stock": 1,
+      "originalPrice": 210.0,
+      "brand": "Patagonia",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_175_6a8be85076de00a1b60188e9",
+      "poshmarkId": "6a8be85076de00a1b60188e9",
+      "name": "MOSSIMO Burgundy Reindeer Ornaments Ugly Christmas Sweater Cardigan S",
+      "price": 32.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be85076de00a1b60188e9/l_6a8be85076de00a1b60188ea.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be85076de00a1b60188e9/l_6a8be85076de00a1b60188ea.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be85076de00a1b60188e9",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "Mossimo Supply Co.",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_176_6a8be6f25ad4be4e0f555d05",
+      "poshmarkId": "6a8be6f25ad4be4e0f555d05",
+      "name": "WWF WWE Vintage 2000s Grey Ultimate Warrior T-Shirt Size M",
+      "price": 32.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be6f25ad4be4e0f555d05/l_6a8be6f25ad4be4e0f555d06.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be6f25ad4be4e0f555d05/l_6a8be6f25ad4be4e0f555d06.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "M"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be6f25ad4be4e0f555d05",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "WWE",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_177_6a8be59b7058260a0dd2e9c9",
+      "poshmarkId": "6a8be59b7058260a0dd2e9c9",
+      "name": "VOLCOM Brown Rust Zip Skirt Size M (8)",
+      "price": 17.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be59b7058260a0dd2e9c9/l_6a8be59b7058260a0dd2e9ca.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be59b7058260a0dd2e9c9/l_6a8be59b7058260a0dd2e9ca.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "M"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be59b7058260a0dd2e9c9",
+      "stock": 1,
+      "originalPrice": 60.0,
+      "brand": "Volcom",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_178_6a8be39e1696a788eb7fe081",
+      "poshmarkId": "6a8be39e1696a788eb7fe081",
+      "name": "RATIONALLE White Tempo Pant with Green Front Stitch $148.00 Size XS",
+      "price": 94.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be39e1696a788eb7fe081/l_6a8be39e1696a788eb7fe082.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be39e1696a788eb7fe081/l_6a8be39e1696a788eb7fe082.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be39e1696a788eb7fe081",
+      "stock": 1,
+      "originalPrice": 148.0,
+      "brand": "rationalle",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_179_6a8be1f68cafcc38d41e9b1c",
+      "poshmarkId": "6a8be1f68cafcc38d41e9b1c",
+      "name": "FORVER 21 \"Beetlejuice\" Black and White Striped Trench Coat XS",
+      "price": 57.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be1f68cafcc38d41e9b1c/l_6a8be1f68cafcc38d41e9b1d.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8be1f68cafcc38d41e9b1c/l_6a8be1f68cafcc38d41e9b1d.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8be1f68cafcc38d41e9b1c",
+      "stock": 1,
+      "originalPrice": 100.0,
+      "brand": "Forever 21",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_180_6a8bdf7a98bbf3a5f68a9f73",
+      "poshmarkId": "6a8bdf7a98bbf3a5f68a9f73",
+      "name": "RAG & BONE \"Santa Cruz\" Mini Skirt 31",
+      "price": 45.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdf7a98bbf3a5f68a9f73/l_6a8bdf7a98bbf3a5f68a9f75.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdf7a98bbf3a5f68a9f73/l_6a8bdf7a98bbf3a5f68a9f75.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "31"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bdf7a98bbf3a5f68a9f73",
+      "stock": 1,
+      "originalPrice": 200.0,
+      "brand": "rag & bone",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_181_6a8bdc326bb7d6676026395c",
+      "poshmarkId": "6a8bdc326bb7d6676026395c",
+      "name": "GYMSHARK Grey Moisture Management Mesh Dry Sculpture Leggings Size XS",
+      "price": 18.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdc326bb7d6676026395c/l_6a8bdc326bb7d6676026395d.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdc326bb7d6676026395c/l_6a8bdc326bb7d6676026395d.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bdc326bb7d6676026395c",
+      "stock": 1,
+      "originalPrice": 68.0,
+      "brand": "Gymshark",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_182_6a8bdae435353408746739e8",
+      "poshmarkId": "6a8bdae435353408746739e8",
+      "name": "BETSEY JOHNSON Orange \"Palms Of Paradise\" Dress XS",
+      "price": 63.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdae435353408746739e8/l_6a8bdae435353408746739e9.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bdae435353408746739e8/l_6a8bdae435353408746739e9.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bdae435353408746739e8",
+      "stock": 1,
+      "originalPrice": 129.0,
+      "brand": "Betsey Johnson",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_183_6a8bd993648655da04e8bb85",
+      "poshmarkId": "6a8bd993648655da04e8bb85",
+      "name": "NASTY GAL \"Callin' All Country Queens\" Diamante Belt Large",
+      "price": 21.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd993648655da04e8bb85/l_6a8bd993648655da04e8bb86.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd993648655da04e8bb85/l_6a8bd993648655da04e8bb86.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "L"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd993648655da04e8bb85",
+      "stock": 1,
+      "originalPrice": 52.0,
+      "brand": "Nasty Gal",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_184_6a8bd80f34fc5f2d1d2c16b5",
+      "poshmarkId": "6a8bd80f34fc5f2d1d2c16b5",
+      "name": "FOREVER 21 White/Black Mini Dress Sz S/P",
+      "price": 8.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd80f34fc5f2d1d2c16b5/l_6a8bd80f34fc5f2d1d2c16b6.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd80f34fc5f2d1d2c16b5/l_6a8bd80f34fc5f2d1d2c16b6.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "SP"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd80f34fc5f2d1d2c16b5",
+      "stock": 1,
+      "originalPrice": 32.0,
+      "brand": "Forever 21",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_185_6a8bd6ca6841471a5e42bba9",
+      "poshmarkId": "6a8bd6ca6841471a5e42bba9",
+      "name": "Live show sale",
+      "price": 500.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd6ca6841471a5e42bba9/l_6a8bd6ca6841471a5e42bbaa.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd6ca6841471a5e42bba9/l_6a8bd6ca6841471a5e42bbaa.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd6ca6841471a5e42bba9",
+      "stock": 1,
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_186_6a8bd5610ef143eb197f72f9",
+      "poshmarkId": "6a8bd5610ef143eb197f72f9",
+      "name": "AMAZON Snake-print Black/White Lace Camisole Tank Top Size S",
+      "price": 14.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd5610ef143eb197f72f9/l_6a8bd5610ef143eb197f72fa.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd5610ef143eb197f72f9/l_6a8bd5610ef143eb197f72fa.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd5610ef143eb197f72f9",
+      "stock": 1,
+      "originalPrice": 35.0,
+      "brand": "Amazon",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_187_6a8bd3e8260ae285afbb51b2",
+      "poshmarkId": "6a8bd3e8260ae285afbb51b2",
+      "name": "Silver Chain Links Necklace",
+      "price": 12.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd3e8260ae285afbb51b2/l_6a8bd3e8260ae285afbb51b3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd3e8260ae285afbb51b2/l_6a8bd3e8260ae285afbb51b3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd3e8260ae285afbb51b2",
+      "stock": 1,
+      "originalPrice": 25.0,
+      "brand": "??",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_188_6a8bd0529fd4b99309b31a8a",
+      "poshmarkId": "6a8bd0529fd4b99309b31a8a",
+      "name": "POPIV 5-Piece Neon Pink Mesh Lingerie Size Small",
+      "price": 23.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd0529fd4b99309b31a8a/l_6a8bd0529fd4b99309b31a8b.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8bd0529fd4b99309b31a8a/l_6a8bd0529fd4b99309b31a8b.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8bd0529fd4b99309b31a8a",
+      "stock": 1,
+      "originalPrice": 45.0,
+      "brand": "POPIV",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_189_6a8b7a7d441b1977becd04eb",
+      "poshmarkId": "6a8b7a7d441b1977becd04eb",
+      "name": "MICKEY & CO Red/Black Western Shirt with Cartoon Embroidery Size XS",
+      "price": 100.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b7a7d441b1977becd04eb/l_6a8b7a97adedd1d9d973a846.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b7a7d441b1977becd04eb/l_6a8b7a97adedd1d9d973a846.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "XS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8b7a7d441b1977becd04eb",
+      "stock": 1,
+      "originalPrice": 300.0,
+      "brand": "Mickey"
+    },
+    {
+      "id": "posh_190_6a8b733eb9dd70b54a8419e7",
+      "poshmarkId": "6a8b733eb9dd70b54a8419e7",
+      "name": "Blue and White Dragon Graphic Short-Sleeve Mesh T-Shirt Size S",
+      "price": 70.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b733eb9dd70b54a8419e7/l_6a8b740e231393e4b5dd1eb8.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b733eb9dd70b54a8419e7/l_6a8b740e231393e4b5dd1eb8.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8b733eb9dd70b54a8419e7",
+      "stock": 1,
+      "brand": "Ed Hardy",
+      "condition": "USED — LIKE NEW"
+    },
+    {
+      "id": "posh_191_6a8b6f9913a647801318f3a9",
+      "poshmarkId": "6a8b6f9913a647801318f3a9",
+      "name": "COACH Black Leather Sling Backpack",
+      "price": 500.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b6f9913a647801318f3a9/l_6a8b6fcfb3acdeaf65cacf7d.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b6f9913a647801318f3a9/l_6a8b6fcfb3acdeaf65cacf7d.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8b6f9913a647801318f3a9",
+      "stock": 1,
+      "brand": "Coach",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_192_6a8b6d84da3eeb35c31ca993",
+      "poshmarkId": "6a8b6d84da3eeb35c31ca993",
+      "name": "Whimsical Ceramic Christmas Tree Face Figurine with Yellow Star",
+      "price": 93.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b6d84da3eeb35c31ca993/l_6a8b6df8046d1f4f1ed5974e.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8b6d84da3eeb35c31ca993/l_6a8b6df8046d1f4f1ed5974e.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "OS"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8b6d84da3eeb35c31ca993",
+      "stock": 1,
+      "originalPrice": 150.0,
+      "brand": "Vintage"
+    },
+    {
+      "id": "posh_193_6a8aa8d1d73373e6aff3a473",
+      "poshmarkId": "6a8aa8d1d73373e6aff3a473",
+      "name": "VINTAGE VICTORIA'S SECRET Y2k 2000s Very Sexy Blue/Cheetah Silk Chemise Size S",
+      "price": 180.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa8d1d73373e6aff3a473/l_6a8aa8d1d73373e6aff3a474.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa8d1d73373e6aff3a473/l_6a8aa8d1d73373e6aff3a474.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8aa8d1d73373e6aff3a473",
+      "stock": 1,
+      "originalPrice": 500.0,
+      "brand": "Victoria's Secret",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_194_6a8aa7442536214f3538ae16",
+      "poshmarkId": "6a8aa7442536214f3538ae16",
+      "name": "ALTERD STATE Blue Distressed Jeans Size 1/25 Medium",
+      "price": 32.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa7442536214f3538ae16/l_6a8aa7442536214f3538ae17.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa7442536214f3538ae16/l_6a8aa7442536214f3538ae17.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "25"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8aa7442536214f3538ae16",
+      "stock": 1,
+      "originalPrice": 90.0,
+      "brand": "Altar'd State",
+      "condition": "NEW WITH TAGS"
+    },
+    {
+      "id": "posh_195_6a8aa4e7b94eb8e62eb85cb2",
+      "poshmarkId": "6a8aa4e7b94eb8e62eb85cb2",
+      "name": "SAMANTHA STEVENS Blue/Black Polka Dot Dress Size 6",
+      "price": 97.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa4e7b94eb8e62eb85cb2/l_6a8aa4e7b94eb8e62eb85cb3.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa4e7b94eb8e62eb85cb2/l_6a8aa4e7b94eb8e62eb85cb3.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8aa4e7b94eb8e62eb85cb2",
+      "stock": 1,
+      "originalPrice": 999.0,
+      "brand": "Vintage",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_196_6a8aa3556bb7d6d5ba9031d0",
+      "poshmarkId": "6a8aa3556bb7d6d5ba9031d0",
+      "name": "NIKE Black/Rainbow Ashin Flyknit Youth Running Shoes Size 3Y",
+      "price": 30.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa3556bb7d6d5ba9031d0/l_6a8aa3556bb7d6d5ba9031d1.jpg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa3556bb7d6d5ba9031d0/l_6a8aa3556bb7d6d5ba9031d1.jpg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "3G"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8aa3556bb7d6d5ba9031d0",
+      "stock": 1,
+      "originalPrice": 80.0,
+      "brand": "Nike",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_197_6a8aa00906c77360f2000640",
+      "poshmarkId": "6a8aa00906c77360f2000640",
+      "name": "VICTORIA'S SECRET Very Sexy Push-up Bra 32DD",
+      "price": 36.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa00906c77360f2000640/l_6a8aa00906c77360f2000641.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8aa00906c77360f2000640/l_6a8aa00906c77360f2000641.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "32E (DD)"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8aa00906c77360f2000640",
+      "stock": 1,
+      "brand": "Victoria's Secret",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_198_6a8a9ea77d9057f511cc57aa",
+      "poshmarkId": "6a8a9ea77d9057f511cc57aa",
+      "name": "XHILARATION Red/Orange Crochet Mesh High-Neck Halter 2-Piece Bikini Size Small",
+      "price": 14.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9ea77d9057f511cc57aa/l_6a8a9ea77d9057f511cc57ab.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9ea77d9057f511cc57aa/l_6a8a9ea77d9057f511cc57ab.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8a9ea77d9057f511cc57aa",
+      "stock": 1,
+      "originalPrice": 46.0,
+      "brand": "Xhilaration",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_199_6a8a9d5876de0022e166552a",
+      "poshmarkId": "6a8a9d5876de0022e166552a",
+      "name": "TRIXXI dress",
+      "price": 7.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9d5876de0022e166552a/l_6a8a9d5876de0022e166552b.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9d5876de0022e166552a/l_6a8a9d5876de0022e166552b.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "S"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8a9d5876de0022e166552a",
+      "stock": 1,
+      "originalPrice": 35.0,
+      "brand": "Trixxi",
+      "condition": "USED — GOOD"
+    },
+    {
+      "id": "posh_200_6a8a9bd023cd1e1efbc31bcd",
+      "poshmarkId": "6a8a9bd023cd1e1efbc31bcd",
+      "name": "LULULEMON Purple/Black \"Energy Bra\" Nulux Vivid Vision Size 6",
+      "price": 29.0,
+      "image": "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9bd023cd1e1efbc31bcd/l_6a8a9bd023cd1e1efbc31bce.jpeg",
+      "images": [
+        "https://di2ponv0v5otw.cloudfront.net/posts/2026/08/23/6a8a9bd023cd1e1efbc31bcd/l_6a8a9bd023cd1e1efbc31bce.jpeg"
+      ],
+      "category": "2nd Chance Resale",
+      "sizes": [
+        "6"
+      ],
+      "description": "From the @jengerluxuri0us Poshmark closet.",
+      "listingUrl": "https://poshmark.com/listing/6a8a9bd023cd1e1efbc31bcd",
+      "stock": 1,
+      "originalPrice": 52.0,
       "brand": "lululemon athletica",
       "condition": "USED — GOOD"
     }

@@ -470,7 +470,7 @@ function fromPoshmarkListing(raw: (typeof poshmarkImport.listings)[number]): Pro
   };
 }
 
-/** Live closet — Poshmark batch 1/5 (@jengerluxuri0us, items 1–100). */
+/** Live closet — Poshmark batches 1–2/5 (@jengerluxuri0us, items 1–200). */
 export const resaleProducts: Product[] = poshmarkImport.listings.map(
   fromPoshmarkListing
 );

@@ -66,33 +66,51 @@ def map_row(cols: list[str]) -> dict:
     return product
 
 
-def main() -> None:
-    src = Path(sys.argv[1])
-    dest = Path(sys.argv[2])
+def map_file(src: Path) -> list[dict]:
     lines = src.read_text(encoding="utf-8").splitlines()
     header = lines[0]
     expected = "n|title|price|originalPrice|size|brand|condition|listingUrl|imageUrl"
     if header != expected:
-        raise SystemExit(f"Unexpected header: {header!r}")
+        raise SystemExit(f"{src}: unexpected header: {header!r}")
     products = []
     for line in lines[1:]:
         if not line.strip():
             continue
         cols = line.split("|")
         if len(cols) != 9:
-            raise SystemExit(f"Bad column count ({len(cols)}): {line[:80]!r}")
+            raise SystemExit(f"{src}: bad column count ({len(cols)}): {line[:80]!r}")
         products.append(map_row(cols))
+    return products
+
+
+def main() -> None:
+    if len(sys.argv) < 3:
+        raise SystemExit(
+            "usage: map-poshmark-psv.py <batch.psv> [<batch.psv> ...] <dest.json>"
+        )
+    sources = [Path(p) for p in sys.argv[1:-1]]
+    dest = Path(sys.argv[-1])
+    products: list[dict] = []
+    ns: list[int] = []
+    for src in sources:
+        chunk = map_file(src)
+        products.extend(chunk)
+        for line in src.read_text(encoding="utf-8").splitlines()[1:]:
+            if line.strip():
+                ns.append(int(line.split("|", 1)[0]))
+    lo, hi = min(ns), max(ns)
+    batches = len(sources)
     payload = {
         "source": "poshmark",
         "closet": "jengerluxuri0us",
         "closetUrl": "https://poshmark.com/closet/jengerluxuri0us",
-        "batch": "1/5",
-        "range": "1-100",
+        "batch": f"{batches}/5",
+        "range": f"{lo}-{hi}",
         "count": len(products),
         "listings": products,
     }
     dest.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Wrote {len(products)} listings to {dest}")
+    print(f"Wrote {len(products)} listings ({lo}-{hi}, {batches}/5) to {dest}")
 
 
 if __name__ == "__main__":
