@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
 
 /**
- * Square checkout stub.
+ * Square checkout — primary payment path (same processor as
+ * http://www.jengerluxurious.com).
  *
- * Preferred path: set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Online
- * checkout / payment-link URL (same processor as http://www.jengerluxurious.com).
- *
- * Web Payments SDK can be wired later with:
+ * Preferred: NEXT_PUBLIC_SQUARE_CHECKOUT_URL = Square Online checkout
+ * or Payment Link. Optional Web Payments placeholders:
  *   NEXT_PUBLIC_SQUARE_APPLICATION_ID
  *   NEXT_PUBLIC_SQUARE_LOCATION_ID
  *   SQUARE_ACCESS_TOKEN   (server-only — never commit a real value)
  *
- * This route must succeed without any live secrets so `npm run build` stays clean.
+ * Builds without secrets. Unconfigured deploys return 503 so checkout
+ * cannot complete as a pay-later hold.
  */
 export async function POST(request: Request) {
   try {
@@ -21,21 +21,33 @@ export async function POST(request: Request) {
     const applicationId =
       process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID?.trim() || "";
     const locationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID?.trim() || "";
+    const amount = Number(body?.amount ?? 0);
+    const shippingFee = Number(body?.shippingFee ?? 0);
 
-    return NextResponse.json({
-      provider: "square",
-      mode: checkoutUrl
-        ? "hosted_checkout_link"
-        : applicationId && locationId
-          ? "web_payments_placeholder"
-          : "unconfigured",
-      checkoutUrl: checkoutUrl || null,
-      webPaymentsReady: Boolean(applicationId && locationId),
-      amount: Number(body?.amount ?? 0),
-      message: checkoutUrl
-        ? "Open the Square Online checkout link to complete payment."
-        : "Square is not configured. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL (hosted link) or the Web Payments placeholders in .env.example.",
-    });
+    if (checkoutUrl) {
+      return NextResponse.json({
+        provider: "square",
+        mode: "hosted_checkout_link",
+        checkoutUrl,
+        amount,
+        shippingFee,
+        message: "Open the Square Online checkout / Payment Link to pay.",
+      });
+    }
+
+    return NextResponse.json(
+      {
+        provider: "square",
+        mode: "unconfigured",
+        checkoutUrl: null,
+        webPaymentsReady: Boolean(applicationId && locationId),
+        amount,
+        shippingFee,
+        error:
+          "Square checkout is not configured. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Payment Link or Online checkout URL (see .env.example). Payment is required.",
+      },
+      { status: 503 }
+    );
   } catch (error) {
     console.error("square-checkout error:", error);
     return NextResponse.json(

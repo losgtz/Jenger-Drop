@@ -35,6 +35,10 @@ import {
   SQUARE,
 } from "@/lib/square";
 import {
+  SHIPPING,
+  shippingFeeForSubtotal,
+} from "../../data/shipping";
+import {
   RESALE_CATEGORY,
   resaleProducts,
   type Product,
@@ -1150,10 +1154,9 @@ function CheckoutDrawer({
   const [error, setError] = React.useState<string | null>(null);
 
   const subtotal = cart.reduce((n, i) => n + i.product.price * i.qty, 0);
-  const shippingFee = 0;
+  const shippingFee = shippingFeeForSubtotal(subtotal);
   const tax = 0;
   const total = subtotal + shippingFee + tax;
-  const squareReady = hasSquareCheckoutLink();
 
   React.useEffect(() => {
     if (open) {
@@ -1204,18 +1207,24 @@ function CheckoutDrawer({
       const squareRes = await fetch(api("/api/square-checkout"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: total }),
+        body: JSON.stringify({
+          amount: total,
+          subtotal,
+          shippingFee,
+        }),
       });
       const squareData = await squareRes.json().catch(() => ({}));
 
-      await finalizeOrder(
-        squareReady ? "square_link_opened" : "square_unconfigured"
-      );
-
-      if (squareData?.checkoutUrl) {
-        window.open(squareData.checkoutUrl, "_blank", "noopener,noreferrer");
+      if (!squareRes.ok || !squareData?.checkoutUrl) {
+        setError(
+          squareData?.error ||
+            "Square checkout is not configured. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Payment Link / Online checkout URL. Payment is required — this is not a pay-later hold."
+        );
+        return;
       }
 
+      await finalizeOrder("square_checkout_opened");
+      window.open(squareData.checkoutUrl, "_blank", "noopener,noreferrer");
       setSuccess(true);
       onDone();
     } catch (err) {
@@ -1235,12 +1244,11 @@ function CheckoutDrawer({
               <Check className="size-8" />
             </span>
             <DialogTitle className="font-serif text-3xl tracking-tight">
-              {squareReady ? "Continue in Square" : "Request received"}
+              Continue in Square
             </DialogTitle>
             <DialogDescription className="max-w-xs text-base">
-              {squareReady
-                ? "We logged your bag. Finish payment in the Square checkout tab."
-                : "We logged your bag. Square checkout isn't configured on this deploy — we'll text you a payment link."}
+              Finish payment in the Square checkout tab. Your bag is logged
+              with shipping included.
             </DialogDescription>
             <Button
               className="haptic mt-2 h-12 w-full rounded-xl text-sm font-semibold"
@@ -1320,6 +1328,15 @@ function CheckoutDrawer({
                       <span className="text-muted-foreground">Subtotal</span>
                       <span className="font-medium">{money(subtotal)}</span>
                     </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">
+                        {SHIPPING.label}
+                      </span>
+                      <span className="font-medium">{money(shippingFee)}</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">
+                      {SHIPPING.note}
+                    </p>
                     <div className="flex items-center justify-between pt-1">
                       <span className="text-muted-foreground">Total</span>
                       <span className="font-serif text-lg">{money(total)}</span>
@@ -1419,8 +1436,8 @@ function SquareCheckoutPanel({
         <p className="text-sm font-medium">Pay with Square</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
           {hosted
-            ? "Opens the Square Online checkout link configured for this site."
-            : "Placeholder — set NEXT_PUBLIC_SQUARE_CHECKOUT_URL (or Square Web Payments ids in .env.example) to take live cards. No Stripe on this path."}
+            ? "Opens Square Online checkout / Payment Link to collect card payment (same processor as jengerluxurious.com)."
+            : "Square-ready path: set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Payment Link or Online checkout URL. Optional Web Payments ids are in .env.example. Pay is required — this is not a hold."}
         </p>
         {error && <p className="text-xs text-primary">{error}</p>}
         <Button
@@ -1434,10 +1451,8 @@ function SquareCheckoutPanel({
             <>
               <LoaderCircle className="animate-spin" /> Starting Square…
             </>
-          ) : hosted ? (
-            `Pay ${money(total)} with Square`
           ) : (
-            `Request Square checkout · ${money(total)}`
+            `Pay ${money(total)} with Square`
           )}
         </Button>
       </div>

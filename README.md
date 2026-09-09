@@ -32,14 +32,18 @@ Copy `.env.example` to `.env.local` and fill only what you have. **Do not invent
 
 | Variable | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SQUARE_CHECKOUT_URL` | Preferred. Hosted Square Online checkout / payment-link URL. |
+| `NEXT_PUBLIC_SQUARE_CHECKOUT_URL` | Required to collect payment. Square Online checkout / Payment Link URL. |
 | `NEXT_PUBLIC_SQUARE_APPLICATION_ID` | Optional Square Web Payments placeholder. |
 | `NEXT_PUBLIC_SQUARE_LOCATION_ID` | Optional Square Web Payments placeholder. |
 | `SQUARE_ACCESS_TOKEN` | Server-only. Never commit a real token. |
 
-`/api/square-checkout` returns a hosted link when configured, or a documented placeholder when not.
+`/api/square-checkout` opens the hosted Square link when configured. Without it, checkout returns **503** with a config error — there is no pay-later / hold path.
 
 Stripe is parked: `/api/create-payment-intent` returns `410` and is not used by the UI.
+
+## Shipping
+
+US domestic only. Rate lives in `data/shipping.ts` (`SHIPPING.flatRateUsd = 6.49`) and is shown as a separate checkout line before pay. It mirrors Poshmark’s current standard buyer shipping for packages up to 5 lb. Heavy/oversize tiers are out of scope.
 
 ## Poshmark import (later)
 
