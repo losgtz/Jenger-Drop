@@ -5,8 +5,15 @@ import { TrustPageShell } from "@/components/trust-page-shell";
 export const metadata: Metadata = {
   title: "About | 2nd Chance Resale",
   description:
-    "Houston-based luxury resale from Jengerluxurious. One-of-a-kind pieces on 2nd Chance Resale.",
+    "2nd Chance Resale is the online closet for Jengerluxurious — one-of-a-kind pre-loved clothing.",
   alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About | 2nd Chance Resale",
+    description:
+      "2nd Chance Resale is the online closet for Jengerluxurious — one-of-a-kind pre-loved clothing.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 export default function AboutPage() {
@@ -16,35 +23,14 @@ export default function AboutPage() {
         Jengerluxurious
       </p>
       <h1 className="mt-2 font-serif text-3xl leading-tight tracking-tight">
-        About
+        About 2nd Chance Resale
       </h1>
       <div className="mt-5 space-y-4 text-sm leading-relaxed text-muted-foreground">
         <p>
           2nd Chance Resale is the web closet for{" "}
-          <span className="text-foreground">Jengerluxurious</span> — Houston-based
-          luxury and contemporary resale. Pieces are one-of-a-kind. Condition and
-          original price show when we have them.
-        </p>
-        <p>
-          Shop here, on our{" "}
-          <a
-            href={CONTACT.storeUrl}
-            className="text-primary underline-offset-4 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Square storefront
-          </a>
-          , or the Poshmark closet{" "}
-          <a
-            href={CONTACT.poshmarkUrl}
-            className="text-primary underline-offset-4 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @{CONTACT.poshmarkHandle}
-          </a>
-          .
+          <span className="text-foreground">Jengerluxurious</span> — luxury and
+          contemporary resale. Pieces are one-of-a-kind. Condition and original
+          price show when we have them.
         </p>
         <p>
           Questions about a listing? Text or call{" "}
@@ -63,7 +49,7 @@ export default function AboutPage() {
           >
             @{CONTACT.instagram}
           </a>
-          . We list a city, not a public storefront street address.
+          .
         </p>
       </div>
     </TrustPageShell>

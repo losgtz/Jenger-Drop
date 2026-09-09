@@ -22,7 +22,24 @@ export type Product = {
 /** The single shoppable category for this resale-only storefront. */
 export const RESALE_CATEGORY = "2nd Chance Resale";
 
-function fromPoshmarkListing(
+function publicDescription(
+  raw: (typeof poshmarkImport.listings)[number]
+): string {
+  const text = raw.description ?? "";
+  if (/poshmark|jengerluxuri0us/i.test(text)) {
+    const parts = [
+      raw.brand,
+      raw.condition,
+      raw.sizes?.[0] ? `Size ${raw.sizes[0]}` : null,
+    ].filter(Boolean);
+    return parts.length
+      ? `${parts.join(" · ")}. One-of-a-kind piece from the 2nd Chance Resale closet.`
+      : "One-of-a-kind piece from the 2nd Chance Resale closet.";
+  }
+  return text;
+}
+
+function fromImportedListing(
   raw: (typeof poshmarkImport.listings)[number]
 ): Product {
   return {
@@ -33,7 +50,7 @@ function fromPoshmarkListing(
     images: raw.images,
     category: raw.category,
     sizes: raw.sizes,
-    description: raw.description,
+    description: publicDescription(raw),
     condition: raw.condition,
     originalPrice: raw.originalPrice,
     brand: raw.brand,
@@ -43,13 +60,10 @@ function fromPoshmarkListing(
   };
 }
 
-/**
- * Live closet only — Poshmark `@jengerluxuri0us` listings from
- * `data/poshmark-import.json`. No seed, demo, or placeholder SKUs.
- */
+/** Live closet from `data/poshmark-import.json`. No seed or demo SKUs. */
 export const resaleProducts: Product[] = poshmarkImport.listings.map(
-  fromPoshmarkListing
+  fromImportedListing
 );
 
-/** Shoppable catalog = Poshmark import exclusively. */
+/** Shoppable catalog = import file exclusively. */
 export const products: Product[] = resaleProducts;

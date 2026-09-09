@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExternalLink } from "lucide-react";
 
 import { resaleProducts } from "../../../../data/products";
 import { SHIPPING } from "../../../../data/shipping";
@@ -45,7 +44,8 @@ export async function generateMetadata({
     product.brand,
     product.condition,
     product.sizes?.[0] ? `Size ${product.sizes[0]}` : null,
-    product.description,
+    `$${product.price.toFixed(2)}`,
+    "One-of-a-kind piece from 2nd Chance Resale.",
   ]
     .filter(Boolean)
     .join(" · ");
@@ -183,16 +183,6 @@ export default async function ProductPage({ params }: PageProps) {
                 </span>
               ))}
             </div>
-          )}
-          {product.listingUrl && (
-            <a
-              href={product.listingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary"
-            >
-              View on Poshmark <ExternalLink className="size-3.5" />
-            </a>
           )}
           <ProductPdpActions productId={product.id} soldOut={soldOut} />
         </div>

@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import {
   Check,
-  ExternalLink,
   LoaderCircle,
   MessageCircle,
   Minus,
@@ -25,7 +24,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { hasSquareCheckoutLink, SQUARE } from "@/lib/square";
+import { hasStripePaymentLink } from "@/lib/stripe";
 import { SHIPPING, shippingFeeForSubtotal } from "../../data/shipping";
 import { productSlug } from "@/lib/catalog";
 import { CONTACT } from "@/lib/contact";
@@ -252,8 +251,6 @@ export default function Home() {
           onSuggestion={runSearch}
         />
 
-        <PoshmarkBanner />
-
         {isSearching ? (
           <SearchResults
             title={`Results for “${activeQuery}”`}
@@ -353,27 +350,6 @@ function Hero({
         ))}
       </div>
     </section>
-  );
-}
-
-function PoshmarkBanner() {
-  return (
-    <a
-      href={CONTACT.poshmarkUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="haptic flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3"
-    >
-      <span className="space-y-0.5">
-        <span className="block text-xs font-semibold tracking-[0.16em] text-primary uppercase">
-          Also on Poshmark
-        </span>
-        <span className="block text-sm text-muted-foreground">
-          Closet @{CONTACT.poshmarkHandle}
-        </span>
-      </span>
-      <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
-    </a>
   );
 }
 
@@ -635,14 +611,14 @@ function CheckoutDrawer({
         subtotal,
         shippingFee,
         total,
-        paymentProvider: "square",
+        paymentProvider: "stripe",
         paymentStatus,
-        squareCheckoutUrl: SQUARE.checkoutUrl || "",
+        stripeCheckoutUrl: "",
       }),
     });
   };
 
-  const startSquareCheckout = async () => {
+  const startStripeCheckout = async () => {
     setError(null);
     if (!name.trim() || !location.trim() || !phone.trim()) {
       setError("Add your name, shipping address, and phone number first.");
@@ -655,32 +631,42 @@ function CheckoutDrawer({
 
     setSubmitting(true);
     try {
-      const squareRes = await fetch(api("/api/square-checkout"), {
+      const stripeRes = await fetch(api("/api/stripe-checkout"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: total,
           subtotal,
           shippingFee,
+          name,
+          location,
+          phone,
+          instructions,
+          items: cart.map((i) => ({
+            id: i.product.id,
+            name: i.product.name,
+            price: i.product.price,
+            qty: i.qty,
+          })),
         }),
       });
-      const squareData = await squareRes.json().catch(() => ({}));
+      const stripeData = await stripeRes.json().catch(() => ({}));
 
-      if (!squareRes.ok || !squareData?.checkoutUrl) {
+      if (!stripeRes.ok || !stripeData?.checkoutUrl) {
         setError(
-          squareData?.error ||
-            "Square checkout is not configured. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL to a Square Payment Link / Online checkout URL. Payment is required — this is not a pay-later hold."
+          stripeData?.error ||
+            "Stripe checkout is not configured. Set STRIPE_SECRET_KEY or NEXT_PUBLIC_STRIPE_PAYMENT_LINK (see .env.example). Payment is required."
         );
         return;
       }
 
-      await finalizeOrder("square_checkout_opened");
-      window.open(squareData.checkoutUrl, "_blank", "noopener,noreferrer");
+      await finalizeOrder("stripe_checkout_opened");
+      window.location.href = stripeData.checkoutUrl as string;
       setSuccess(true);
       onDone();
     } catch (err) {
-      console.error("Square checkout failed:", err);
-      setError("We could not start Square checkout. Please try again or text us.");
+      console.error("Stripe checkout failed:", err);
+      setError("We could not start Stripe checkout. Please try again or text us.");
     } finally {
       setSubmitting(false);
     }
@@ -695,11 +681,11 @@ function CheckoutDrawer({
               <Check className="size-8" />
             </span>
             <DialogTitle className="font-serif text-3xl tracking-tight">
-              Continue in Square
+              Continue in Stripe
             </DialogTitle>
             <DialogDescription className="max-w-xs text-base">
-              Complete payment in the Square checkout window. Your order has
-              been recorded, including shipping.
+              Complete payment in Stripe Checkout. Your order has been
+              recorded, including shipping.
             </DialogDescription>
             <Button
               className="haptic mt-2 h-12 w-full rounded-xl text-sm font-semibold"
@@ -715,7 +701,7 @@ function CheckoutDrawer({
                 Checkout
               </DialogTitle>
               <DialogDescription>
-                Pay with Square — same processor as jengerluxurious.com.
+                Pay with Stripe. US shipping is added as a separate line.
               </DialogDescription>
             </DialogHeader>
 
@@ -852,11 +838,11 @@ function CheckoutDrawer({
                 </div>
 
                 {cart.length > 0 && (
-                  <SquareCheckoutPanel
+                  <StripeCheckoutPanel
                     total={total}
                     submitting={submitting}
                     error={error}
-                    onPay={startSquareCheckout}
+                    onPay={startStripeCheckout}
                   />
                 )}
               </div>
@@ -868,7 +854,7 @@ function CheckoutDrawer({
   );
 }
 
-function SquareCheckoutPanel({
+function StripeCheckoutPanel({
   total,
   submitting,
   error,
@@ -879,16 +865,16 @@ function SquareCheckoutPanel({
   error: string | null;
   onPay: () => void;
 }) {
-  const hosted = hasSquareCheckoutLink();
+  const hosted = hasStripePaymentLink();
   return (
     <div className="space-y-3">
       <Label>Payment</Label>
       <div className="space-y-2 rounded-xl border border-border bg-card p-4">
-        <p className="text-sm font-medium">Pay with Square</p>
+        <p className="text-sm font-medium">Pay with Stripe</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
           {hosted
-            ? "Opens Square Online checkout / Payment Link to collect card payment (same processor as jengerluxurious.com)."
-            : "Square checkout is not configured on this deploy. Set NEXT_PUBLIC_SQUARE_CHECKOUT_URL in .env.local to a Square Payment Link or Online checkout URL (see .env.example). Payment is required — this is not a hold."}
+            ? "Opens Stripe Checkout or your Payment Link to collect card payment."
+            : "Stripe checkout is not configured on this deploy. Set STRIPE_SECRET_KEY (Checkout Session) or NEXT_PUBLIC_STRIPE_PAYMENT_LINK in Vercel / .env.local (see .env.example). Payment is required."}
         </p>
         {error && <p className="text-xs text-primary">{error}</p>}
         <Button
@@ -900,10 +886,10 @@ function SquareCheckoutPanel({
         >
           {submitting ? (
             <>
-              <LoaderCircle className="animate-spin" /> Starting Square…
+              <LoaderCircle className="animate-spin" /> Starting Stripe…
             </>
           ) : (
-            `Pay ${money(total)} with Square`
+            `Pay ${money(total)} with Stripe`
           )}
         </Button>
       </div>
