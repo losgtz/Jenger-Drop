@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Pre-loved closet finds from Jengerluxurious 2nd Chance Resale. Shop one-of-a-kind pieces online.",
+    "Pre-loved clothing from Jengerluxurious 2nd Chance Resale. Shop one-of-a-kind pieces online.",
   alternates: { canonical: "/" },
 };
 

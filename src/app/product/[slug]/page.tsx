@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 
@@ -10,6 +9,7 @@ import { SITE_URL } from "@/lib/site";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -139,22 +139,7 @@ export default async function ProductPage({ params }: PageProps) {
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-16">
       <ProductJsonLd product={product} slug={productSlug(product)} />
 
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-        <div className="flex items-center justify-between px-5 py-4">
-          <Link
-            href="/"
-            className="font-serif text-sm tracking-[0.28em] text-muted-foreground uppercase"
-          >
-            Jengerluxurious
-          </Link>
-          <Link
-            href="/"
-            className="text-xs font-semibold tracking-[0.14em] text-primary uppercase"
-          >
-            Back to closet
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex flex-col">
         <ProductGallery images={gallery} alt={product.name} soldOut={soldOut} />

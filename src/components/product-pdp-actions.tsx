@@ -27,7 +27,7 @@ export function ProductPdpActions({
         href={`/?add=${encodeURIComponent(productId)}&checkout=1`}
         className="haptic inline-flex h-12 flex-1 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground"
       >
-        Get it now
+        Checkout
       </Link>
     </div>
   );

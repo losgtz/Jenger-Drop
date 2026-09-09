@@ -15,3 +15,9 @@ export const TRUST_PAGES = [
   { href: "/shipping", label: "Shipping" },
   { href: "/returns", label: "Returns" },
 ] as const;
+
+/** Single primary nav: the resale shop plus policy pages. */
+export const PRIMARY_NAV = [
+  { href: "/", label: "Shop" },
+  ...TRUST_PAGES,
+] as const;

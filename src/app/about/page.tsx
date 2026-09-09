@@ -5,7 +5,7 @@ import { TrustPageShell } from "@/components/trust-page-shell";
 export const metadata: Metadata = {
   title: "About | 2nd Chance Resale",
   description:
-    "Houston-based luxury resale from Jengerluxurious. One-of-a-kind closet finds on 2nd Chance Resale.",
+    "Houston-based luxury resale from Jengerluxurious. One-of-a-kind pieces on 2nd Chance Resale.",
   alternates: { canonical: "/about" },
 };
 

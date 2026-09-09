@@ -23,9 +23,7 @@ python3 scripts/map-poshmark-psv.py data/poshmark-batch-{1..10}.psv data/poshmar
 
 Condition codes: `nwt` → NEW WITH TAGS, `ug` → USED — GOOD, `uln` → USED — LIKE NEW, `uf` → USED — FAIR.
 
-Earlier local/demo SKUs stay in `demoResaleProducts` and are not shoppable.
-
-The shop currently holds batches 1–10 of 10 (**955** listings). Do not invent photos or prices.
+The shop currently holds batches 1–10 of 10 (**955** listings). Do not invent photos or prices. Seed and demo SKUs are not in the catalog.
 
 ## Inventory rule
 
