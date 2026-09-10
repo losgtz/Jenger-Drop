@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SOLD_LABEL } from "@/lib/sold";
 
 export function ProductPdpActions({
   productId,
@@ -10,7 +11,7 @@ export function ProductPdpActions({
   if (soldOut) {
     return (
       <span className="inline-flex h-12 w-full cursor-not-allowed items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground opacity-70">
-        Sold Out
+        {SOLD_LABEL}
       </span>
     );
   }

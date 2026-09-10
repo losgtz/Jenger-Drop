@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SoldBadge } from "@/components/sold-badge";
 
 function ProductImage({
   src,
@@ -55,9 +56,7 @@ export function ProductGallery({
         />
         {soldOut && (
           <span className="absolute inset-0 flex items-center justify-center bg-black/55">
-            <span className="rounded-full bg-background px-5 py-2 text-sm font-bold tracking-[0.18em] text-muted-foreground uppercase">
-              Sold Out
-            </span>
+            <SoldBadge size="md" className="bg-background" />
           </span>
         )}
         {multi && (

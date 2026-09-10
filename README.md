@@ -35,6 +35,9 @@ Copy `.env.example` to `.env.local`. **Do not invent keys.** The site builds wit
 | `STRIPE_SECRET_KEY` | Server-only. Creates a Stripe Checkout Session. Never commit a real key. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Optional public key. |
 | `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` | Optional Payment Link fallback if the secret key is unset. |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret for `/api/stripe-webhook`. Required to mark pieces **Sold** after payment. |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Durable sold registry (Upstash Redis REST). Also accepts `KV_REST_API_URL` / `KV_REST_API_TOKEN`. Required on Vercel — the local filesystem is not shared across instances. |
+| `SOLD_ADMIN_SECRET` | Bearer token for `/api/admin/sold` (mark / unmark a mistaken Sold). |
 
 Set the same variables in **Vercel → Project → Settings → Environment Variables** for Production. Do not invent Stripe keys.
 
@@ -43,6 +46,32 @@ Set the same variables in **Vercel → Project → Settings → Environment Vari
 Checkout uses **Stripe**. Preferred path: `STRIPE_SECRET_KEY` → `/api/stripe-checkout` creates a Checkout Session that includes line items plus the **$6.49** shipping line.
 
 Without `STRIPE_SECRET_KEY` or `NEXT_PUBLIC_STRIPE_PAYMENT_LINK`, the bag shows a config message and `/api/stripe-checkout` returns **503**. Square is parked at `/api/square-checkout` (`410`).
+
+## Sold pieces
+
+One-of-a-kind listings stay on the catalog and PDP after purchase (grayed, **Sold** badge). Add to bag and checkout are blocked. `/api/stripe-checkout` rejects sold product ids (409) and does not trust client prices — line items use catalog data.
+
+Sold state is **not** written to `order_queue.json`. On Vercel that file is not durable. Production uses **Upstash Redis** (free tier is enough):
+
+1. Create a Redis database (Upstash console or Vercel Marketplace → Upstash Redis).
+2. Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` on the Vercel project.
+3. In Stripe Dashboard → Developers → Webhooks, add `https://<host>/api/stripe-webhook` for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, and `payment_intent.succeeded`.
+4. Set `STRIPE_WEBHOOK_SECRET` to the signing secret Stripe shows.
+
+Checkout Sessions copy product ids into Session + PaymentIntent metadata so the webhook can mark them. A generic Payment Link does **not** attach line items — prefer Checkout Sessions for automatic Sold.
+
+Locally, if Redis is unset, sold ids are stored in `data/sold-registry.local.json` (gitignored).
+
+### Unmark a mistaken Sold
+
+```bash
+curl -X POST https://<host>/api/admin/sold \
+  -H "Authorization: Bearer $SOLD_ADMIN_SECRET" \
+  -H "Content-Type: application/json" \
+  -d '{"action":"unmark","productId":"posh_001_..."}'
+```
+
+`action: "mark"` is available for recovery tests. `GET /api/admin/sold` lists records. You can also run `node scripts/sold-admin.mjs unmark <productId>` against a running server.
 
 ## Shipping
 

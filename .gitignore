@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# Local sold-registry fallback (dev only — never durable on Vercel)
+data/sold-registry.local.json
+
 # vercel
 .vercel
 

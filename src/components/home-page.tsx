@@ -54,6 +54,8 @@ import {
   resaleProducts,
   type Product,
 } from "../../data/products";
+import { isListedSold, SOLD_LABEL } from "@/lib/sold";
+import { SoldBadge } from "@/components/sold-badge";
 
 /* -------------------------------------------------------------------------- */
 /*  API base URL                                                              */
@@ -75,9 +77,30 @@ function stockOf(product: Product): number {
   return product.stock ?? Number.POSITIVE_INFINITY;
 }
 
-/** Whether a product is out of inventory. */
-function isSoldOut(product: Product): boolean {
-  return stockOf(product) <= 0;
+function useSoldIds() {
+  const [soldIds, setSoldIds] = React.useState<Set<string>>(new Set());
+  const [soldReady, setSoldReady] = React.useState(false);
+
+  const refreshSold = React.useCallback(async () => {
+    try {
+      const response = await fetch(api("/api/sold"), { cache: "no-store" });
+      const data = await response.json().catch(() => ({}));
+      const ids = Array.isArray(data?.ids) ? data.ids.map(String) : [];
+      setSoldIds(new Set(ids));
+    } catch {
+      // Keep last known set; catalog still renders from static stock.
+    } finally {
+      setSoldReady(true);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    // Load the durable sold registry after mount (client catalog).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- fetch then set
+    void refreshSold();
+  }, [refreshSold]);
+
+  return { soldIds, soldReady, refreshSold };
 }
 
 const QUICK_FILTERS: {
@@ -174,8 +197,14 @@ export function HomePage({
   const [checkoutOpen, setCheckoutOpen] = React.useState(false);
 
   const [cart, setCart] = React.useState<CartItem[]>([]);
-  const cartCount = cart.reduce((n, i) => n + i.qty, 0);
   const handledAdd = React.useRef<string | null>(null);
+  const handledPaid = React.useRef(false);
+  const { soldIds, soldReady, refreshSold } = useSoldIds();
+  const shoppableCart = React.useMemo(
+    () => cart.filter((item) => !isListedSold(item.product, soldIds)),
+    [cart, soldIds]
+  );
+  const cartCount = shoppableCart.reduce((n, i) => n + i.qty, 0);
 
   const applyFilters = React.useCallback((next: CatalogQuery) => {
     setFilters(next);
@@ -213,8 +242,8 @@ export function HomePage({
     applyFilters({ ...EMPTY_CATALOG_QUERY });
   };
 
-  const addToCart = (product: Product, qty: number = 1) => {
-    if (isSoldOut(product)) return;
+  const addToCart = React.useCallback((product: Product, qty: number = 1) => {
+    if (isListedSold(product, soldIds)) return;
     const resale = isResale(product);
     const cap = resale ? 1 : stockOf(product);
     const amount = Math.max(1, qty);
@@ -229,7 +258,7 @@ export function HomePage({
       }
       return [...prev, { product, qty: Math.min(amount, cap) }];
     });
-  };
+  }, [soldIds]);
 
   const updateQty = (id: string, delta: number) => {
     setCart((prev) =>
@@ -247,19 +276,25 @@ export function HomePage({
   };
 
   React.useEffect(() => {
+    if (!soldReady) return;
     const params = new URLSearchParams(window.location.search);
+    if (params.get("paid") === "1" && !handledPaid.current) {
+      handledPaid.current = true;
+      void refreshSold();
+    }
     const addId = params.get("add");
     if (!addId || handledAdd.current === addId) return;
     const product = resaleProducts.find((p) => p.id === addId);
     if (!product) return;
     handledAdd.current = addId;
+    if (isListedSold(product, soldIds)) return;
     // PDP deep-link (?add=&checkout=) — hydrate bag after mount.
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-shot URL cart seed
     addToCart(product);
     if (params.get("checkout") === "1") {
       setCheckoutOpen(true);
     }
-  }, []);
+  }, [soldReady, soldIds, refreshSold, addToCart]);
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-12 lg:max-w-6xl">
@@ -321,7 +356,11 @@ export function HomePage({
             </aside>
             <div>
               {results.length > 0 ? (
-                <ProductGrid products={results} onAdd={addToCart} />
+                <ProductGrid
+                  products={results}
+                  onAdd={addToCart}
+                  soldIds={soldIds}
+                />
               ) : (
                 <NoResultFallback
                   failedQuery={filters.q}
@@ -347,9 +386,13 @@ export function HomePage({
       <CheckoutDrawer
         open={checkoutOpen}
         onOpenChange={setCheckoutOpen}
-        cart={cart}
+        cart={shoppableCart}
         updateQty={updateQty}
         onDone={() => setCart([])}
+        soldIds={soldIds}
+        onDropSold={(ids) =>
+          setCart((prev) => prev.filter((item) => !ids.includes(item.product.id)))
+        }
       />
     </div>
   );
@@ -456,12 +499,14 @@ function Hero({
 function ProductCard({
   product,
   onAdd,
+  sold,
 }: {
   product: Product;
   onAdd: (p: Product) => void;
+  sold: boolean;
 }) {
   const [added, setAdded] = React.useState(false);
-  const soldOut = isSoldOut(product);
+  const soldOut = sold;
   const conditionId = deriveConditionId(product.condition);
   const conditionText = conditionId
     ? conditionLabel(conditionId)
@@ -488,9 +533,7 @@ function ProductCard({
         />
         {soldOut && (
           <span className="absolute inset-0 flex items-center justify-center bg-black/50">
-            <span className="rounded-full bg-background/90 px-3 py-1 text-[10px] font-bold tracking-[0.16em] text-muted-foreground uppercase">
-              Sold Out
-            </span>
+            <SoldBadge />
           </span>
         )}
         {conditionText && !soldOut && (
@@ -525,7 +568,7 @@ function ProductCard({
               disabled
               className="h-8 shrink-0 cursor-not-allowed rounded-full px-3 text-[10px] font-semibold tracking-wide opacity-70"
             >
-              Sold Out
+              {SOLD_LABEL}
             </Button>
           ) : (
             <Button
@@ -550,14 +593,21 @@ function ProductCard({
 function ProductGrid({
   products,
   onAdd,
+  soldIds,
 }: {
   products: Product[];
   onAdd: (p: Product) => void;
+  soldIds: ReadonlySet<string>;
 }) {
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
       {products.map((p) => (
-        <ProductCard key={p.id} product={p} onAdd={onAdd} />
+        <ProductCard
+          key={p.id}
+          product={p}
+          onAdd={onAdd}
+          sold={isListedSold(p, soldIds)}
+        />
       ))}
     </div>
   );
@@ -613,12 +663,16 @@ function CheckoutDrawer({
   cart,
   updateQty,
   onDone,
+  soldIds,
+  onDropSold,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   cart: CartItem[];
   updateQty: (id: string, delta: number) => void;
   onDone: () => void;
+  soldIds: ReadonlySet<string>;
+  onDropSold: (ids: string[]) => void;
 }) {
   const [name, setName] = React.useState("");
   const [location, setLocation] = React.useState("");
@@ -677,6 +731,14 @@ function CheckoutDrawer({
       setError("Your bag is empty.");
       return;
     }
+    const soldInBag = cart
+      .filter((item) => isListedSold(item.product, soldIds))
+      .map((item) => item.product.id);
+    if (soldInBag.length > 0) {
+      onDropSold(soldInBag);
+      setError("A piece in your bag has sold and was removed.");
+      return;
+    }
 
     setSubmitting(true);
     try {
@@ -700,6 +762,18 @@ function CheckoutDrawer({
         }),
       });
       const stripeData = await stripeRes.json().catch(() => ({}));
+
+      if (stripeRes.status === 409) {
+        const rejected = Array.isArray(stripeData?.soldIds)
+          ? stripeData.soldIds.map(String)
+          : [];
+        if (rejected.length > 0) onDropSold(rejected);
+        setError(
+          stripeData?.error ||
+            "A piece in your bag has sold and was removed."
+        );
+        return;
+      }
 
       if (!stripeRes.ok || !stripeData?.checkoutUrl) {
         setError(
