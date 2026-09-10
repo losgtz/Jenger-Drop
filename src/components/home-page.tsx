@@ -46,6 +46,10 @@ import {
   type CatalogQuery,
 } from "@/lib/catalog-query";
 import {
+  conditionLabel,
+  deriveConditionId,
+} from "@/lib/taxonomy";
+import {
   RESALE_CATEGORY,
   resaleProducts,
   type Product,
@@ -458,6 +462,10 @@ function ProductCard({
 }) {
   const [added, setAdded] = React.useState(false);
   const soldOut = isSoldOut(product);
+  const conditionId = deriveConditionId(product.condition);
+  const conditionText = conditionId
+    ? conditionLabel(conditionId)
+    : product.condition;
   return (
     <div
       className={cn(
@@ -485,9 +493,9 @@ function ProductCard({
             </span>
           </span>
         )}
-        {product.condition && !soldOut && (
+        {conditionText && !soldOut && (
           <span className="absolute top-2 left-2 rounded-full bg-background/85 px-2 py-0.5 text-[9px] font-semibold tracking-[0.12em] text-foreground uppercase backdrop-blur-sm">
-            {product.condition}
+            {conditionText}
           </span>
         )}
       </Link>
