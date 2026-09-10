@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ContactBar } from "@/components/contact-bar";
 import { CONTACT, TRUST_PAGES } from "@/lib/contact";
 
 export function SiteFooter() {
@@ -24,6 +25,7 @@ export function SiteFooter() {
           </Link>
         ))}
       </nav>
+      <ContactBar className="mt-4" />
       <div className="mt-4 flex flex-col gap-1.5 text-sm">
         <a
           href={CONTACT.storeUrl}

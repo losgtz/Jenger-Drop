@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CONTACT } from "@/lib/contact";
+import { ContactEmailLink, ContactPhoneLink } from "@/components/contact-bar";
 import { TrustPageShell } from "@/components/trust-page-shell";
 
 export const metadata: Metadata = {
@@ -40,14 +40,9 @@ export default function ReturnsPage() {
         <p>
           If your order arrives damaged or not as described (wrong item,
           condition that does not match the listing), text or call{" "}
-          <a
-            href={`tel:${CONTACT.phone}`}
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            {CONTACT.phoneDisplay}
-          </a>{" "}
-          within a few days of delivery with photos. We will arrange a
-          refund, store credit, or another resolution that fits the piece.
+          <ContactPhoneLink /> or email <ContactEmailLink /> within a few
+          days of delivery with photos. We will arrange a refund, store credit,
+          or another resolution that fits the piece.
         </p>
         <p>
           Try-on returns for change of mind are not offered on resale. Measure

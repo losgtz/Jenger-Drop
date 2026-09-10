@@ -10,6 +10,7 @@ import {
   productSlug,
 } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
+import { ContactBar } from "@/components/contact-bar";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
 import { SiteFooter } from "@/components/site-footer";
@@ -179,6 +180,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           )}
           <ProductPdpActions productId={product.id} soldOut={soldOut} />
+          <ContactBar />
         </div>
       </main>
       <SiteFooter />
