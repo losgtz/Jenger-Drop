@@ -28,8 +28,14 @@ function redisCredentials(): RedisCreds | null {
 
 function localRegistryPath(): string {
   const override = process.env.SOLD_REGISTRY_PATH?.trim();
-  if (override) return path.resolve(override);
-  return path.join(process.cwd(), "data", "sold-registry.local.json");
+  if (override) {
+    return path.resolve(/* turbopackIgnore: true */ override);
+  }
+  return path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "data",
+    "sold-registry.local.json"
+  );
 }
 
 /** Redis on Vercel; local JSON file in dev; none if production has no store. */
