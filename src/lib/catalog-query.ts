@@ -11,6 +11,9 @@ import {
   type ConditionId,
   type SizeGroupId,
 } from "@/lib/taxonomy";
+import { parseCatalogPageValue } from "@/lib/catalog-page";
+
+export { CATALOG_PAGE_SIZE, paginateCatalog } from "@/lib/catalog-page";
 
 export const SORT_OPTIONS = [
   { id: "featured", label: "Featured" },
@@ -64,6 +67,7 @@ const FILTER_KEYS = [
   "min",
   "max",
   "sort",
+  "page",
 ] as const;
 
 const TYPE_IDS = new Set<string>(APPAREL_TYPES.map((t) => t.id));
@@ -120,6 +124,10 @@ export function parseCatalogQuery(source: SearchParamSource): CatalogQuery {
   };
 }
 
+export function parseCatalogPage(source: SearchParamSource): number {
+  return parseCatalogPageValue(readParam(source, "page"));
+}
+
 function csv(values: string[]): string | null {
   return values.length ? values.join(",") : null;
 }
@@ -127,7 +135,8 @@ function csv(values: string[]): string | null {
 /** Write filter params onto an existing URLSearchParams, preserving add/checkout. */
 export function applyQueryToSearchParams(
   params: URLSearchParams,
-  query: CatalogQuery
+  query: CatalogQuery,
+  page = 1
 ): URLSearchParams {
   for (const key of FILTER_KEYS) params.delete(key);
 
@@ -144,18 +153,28 @@ export function applyQueryToSearchParams(
   set("min", query.min != null ? String(query.min) : null);
   set("max", query.max != null ? String(query.max) : null);
   set("sort", query.sort === "featured" ? null : query.sort);
+  if (page > 1) params.set("page", String(page));
   return params;
 }
 
-export function catalogQueryToSearch(query: CatalogQuery, currentSearch = ""): string {
+export function catalogQueryToSearch(
+  query: CatalogQuery,
+  currentSearch = "",
+  page = 1
+): string {
   const params = new URLSearchParams(currentSearch);
-  applyQueryToSearchParams(params, query);
+  applyQueryToSearchParams(params, query, page);
   return params.toString();
 }
 
-export function writeCatalogQueryToUrl(query: CatalogQuery): void {
+export function catalogPageHref(query: CatalogQuery, page: number): string {
+  const qs = catalogQueryToSearch(query, "", page);
+  return qs ? `/?${qs}` : "/";
+}
+
+export function writeCatalogQueryToUrl(query: CatalogQuery, page = 1): void {
   if (typeof window === "undefined") return;
-  const qs = catalogQueryToSearch(query, window.location.search);
+  const qs = catalogQueryToSearch(query, window.location.search, page);
   const next = qs ? `?${qs}` : window.location.pathname || "/";
   window.history.replaceState(null, "", next);
 }

@@ -2,9 +2,12 @@
 export const CONTACT = {
   phone: "3465257753",
   phoneDisplay: "(346) 525-7753",
+  email: "jengerluxurious@gmail.com",
+  emailDisplay: "jengerluxurious@gmail.com",
   instagram: "jengerluxurious.second.chance",
   instagramUrl: "https://instagram.com/jengerluxurious.second.chance",
-  storeUrl: "https://www.jengerluxurious.com",
+  /** Relative shop path so DNS cutover does not send users to Square/Weebly. */
+  shopHref: "/",
 } as const;
 
 export const TRUST_PAGES = [

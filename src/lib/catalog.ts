@@ -1,44 +1,44 @@
 import { resaleProducts, type Product } from "../../data/products";
+import {
+  legacyProductSlug,
+  productSlug,
+} from "./product-slug";
 
-/** slugify(brand + name) + "-" + id */
-export function slugify(input: string): string {
-  const slug = input
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-  return slug || "item";
-}
+export {
+  brandAlreadyInName,
+  legacyProductSlug,
+  productDisplayName,
+  productPath,
+  productSeoTitle,
+  productSlug,
+  slugify,
+  stripSoldOutTitleMarkers,
+} from "./product-slug";
 
-function brandAlreadyInName(brand: string, name: string): boolean {
-  const b = slugify(brand);
-  const n = slugify(name);
-  if (!b) return true;
-  if (n === b || n.startsWith(`${b}-`) || n.includes(`-${b}-`)) return true;
-  const compactBrand = b.replace(/-/g, "");
-  const compactName = n.replace(/-/g, "");
-  return compactName.startsWith(compactBrand);
-}
-
-export function productSlug(product: Product): string {
-  const nameSlug = slugify(product.name);
-  const brandSlug = slugify(product.brand ?? "");
-  const base =
-    brandSlug && !brandAlreadyInName(product.brand ?? "", product.name)
-      ? `${brandSlug}-${nameSlug}`
-      : nameSlug;
-  return `${base}-${product.id}`;
-}
-
-/** Title without repeating brand when the listing name already includes it. */
-export function productSeoTitle(product: Product): string {
-  const name = product.name.trim();
-  const brand = (product.brand ?? "").trim();
-  const branded =
-    brand && !brandAlreadyInName(brand, name) ? `${brand} ${name}` : name;
-  return `${branded} | 2nd Chance Resale`;
+/** 301 map for brand-duplicated slugs (e.g. pacsun-pacsun-nwt-… → pacsun-nwt-…). */
+export function legacyProductRedirects(): Array<{
+  source: string;
+  destination: string;
+  statusCode: 301;
+}> {
+  const seen = new Set<string>();
+  const redirects: Array<{
+    source: string;
+    destination: string;
+    statusCode: 301;
+  }> = [];
+  for (const product of resaleProducts) {
+    const canonical = productSlug(product);
+    const legacy = legacyProductSlug(product);
+    if (legacy === canonical || seen.has(legacy)) continue;
+    seen.add(legacy);
+    redirects.push({
+      source: `/product/${legacy}`,
+      destination: `/product/${canonical}`,
+      statusCode: 301,
+    });
+  }
+  return redirects;
 }
 
 export function productSeoDescription(product: Product): string {

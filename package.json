@@ -10,7 +10,7 @@
     "cap:open": "cap open android",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test src/lib/sold-metadata.test.ts src/lib/sold-store.test.ts"
+    "test": "node --experimental-strip-types --test src/lib/sold-metadata.test.ts src/lib/sold-store.test.ts src/lib/catalog.test.ts src/lib/catalog-query.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

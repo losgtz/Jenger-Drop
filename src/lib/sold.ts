@@ -21,3 +21,10 @@ export function isListedSold(
   if (soldIds.has(product.id)) return true;
   return (product.stock ?? 1) <= 0;
 }
+
+/** Product JSON-LD Offer.availability. Sold registry / stock 0 → OutOfStock. */
+export function schemaAvailability(sold: boolean): string {
+  return sold
+    ? "https://schema.org/OutOfStock"
+    : "https://schema.org/InStock";
+}

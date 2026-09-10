@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { packProductIds, unpackProductIds } from "./sold-metadata.ts";
-import { isListedSold, SOLD_LABEL } from "./sold.ts";
+import { isListedSold, schemaAvailability, SOLD_LABEL } from "./sold.ts";
 import type { Product } from "../../data/products.ts";
 
 function stub(partial: Partial<Product> & Pick<Product, "id">): Product {
@@ -58,5 +58,10 @@ describe("isListedSold", () => {
   it("treats static stock 0 as sold", () => {
     const product = stub({ id: "posh_009_xyz", stock: 0 });
     assert.equal(isListedSold(product, new Set()), true);
+  });
+
+  it("maps sold state to Product schema availability", () => {
+    assert.equal(schemaAvailability(false), "https://schema.org/InStock");
+    assert.equal(schemaAvailability(true), "https://schema.org/OutOfStock");
   });
 });

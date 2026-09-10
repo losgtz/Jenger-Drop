@@ -25,7 +25,7 @@ import {
 import { cn } from "@/lib/utils";
 import { hasStripePaymentLink } from "@/lib/stripe";
 import { SHIPPING, shippingFeeForSubtotal } from "../../data/shipping";
-import { productSlug } from "@/lib/catalog";
+import { productDisplayName, productSlug } from "@/lib/catalog";
 import { CONTACT } from "@/lib/contact";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -36,11 +36,15 @@ import {
   CatalogFiltersSheet,
 } from "@/components/catalog-filters";
 import {
+  CATALOG_PAGE_SIZE,
   EMPTY_CATALOG_QUERY,
   activeFilterCount,
   buildFacetModel,
+  catalogPageHref,
   describeActiveChips,
   filterCatalog,
+  paginateCatalog,
+  parseCatalogPage,
   parseCatalogQuery,
   writeCatalogQueryToUrl,
   type CatalogQuery,
@@ -157,10 +161,12 @@ function ProductImage({
   src,
   alt,
   className,
+  priority = false,
 }: {
   src: string;
   alt: string;
   className?: string;
+  priority?: boolean;
 }) {
   const [failedSrc, setFailedSrc] = React.useState<string | null>(null);
   const current = failedSrc === src ? "/placeholder.svg" : src;
@@ -169,7 +175,8 @@ function ProductImage({
     <img
       src={current}
       alt={alt}
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
       onError={() => setFailedSrc(src)}
       className={className}
     />
@@ -188,10 +195,13 @@ type CartItem = { product: Product; qty: number };
 
 export function HomePage({
   initialQuery = EMPTY_CATALOG_QUERY,
+  initialPage = 1,
 }: {
   initialQuery?: CatalogQuery;
+  initialPage?: number;
 }) {
   const [filters, setFilters] = React.useState<CatalogQuery>(initialQuery);
+  const [page, setPage] = React.useState(initialPage);
   const [searchDraft, setSearchDraft] = React.useState(initialQuery.q);
   const [filtersOpen, setFiltersOpen] = React.useState(false);
   const [checkoutOpen, setCheckoutOpen] = React.useState(false);
@@ -208,14 +218,17 @@ export function HomePage({
 
   const applyFilters = React.useCallback((next: CatalogQuery) => {
     setFilters(next);
+    setPage(1);
     setSearchDraft((draft) => (next.q !== filters.q ? next.q : draft));
-    writeCatalogQueryToUrl(next);
+    writeCatalogQueryToUrl(next, 1);
   }, [filters.q]);
 
   React.useEffect(() => {
     const onPopState = () => {
-      const parsed = parseCatalogQuery(new URLSearchParams(window.location.search));
+      const params = new URLSearchParams(window.location.search);
+      const parsed = parseCatalogQuery(params);
       setFilters(parsed);
+      setPage(parseCatalogPage(params));
       setSearchDraft(parsed.q);
     };
     window.addEventListener("popstate", onPopState);
@@ -228,6 +241,19 @@ export function HomePage({
     () => matched.map((item) => item.product),
     [matched]
   );
+  const paged = React.useMemo(
+    () => paginateCatalog(results, page, CATALOG_PAGE_SIZE),
+    [results, page]
+  );
+
+  React.useEffect(() => {
+    if (paged.page !== page) {
+      // Clamp ?page=999 onto the last real page after filters shrink the set.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync URL to clamped page
+      setPage(paged.page);
+      writeCatalogQueryToUrl(filters, paged.page);
+    }
+  }, [filters, page, paged.page]);
   const chips = React.useMemo(
     () => describeActiveChips(filters, facets),
     [filters, facets]
@@ -357,9 +383,19 @@ export function HomePage({
             <div>
               {results.length > 0 ? (
                 <ProductGrid
-                  products={results}
+                  products={paged.items}
                   onAdd={addToCart}
                   soldIds={soldIds}
+                  page={paged.page}
+                  total={paged.total}
+                  totalPages={paged.totalPages}
+                  start={paged.start}
+                  end={paged.end}
+                  filters={filters}
+                  onPageChange={(nextPage) => {
+                    setPage(nextPage);
+                    writeCatalogQueryToUrl(filters, nextPage);
+                  }}
                 />
               ) : (
                 <NoResultFallback
@@ -500,13 +536,16 @@ function ProductCard({
   product,
   onAdd,
   sold,
+  priority = false,
 }: {
   product: Product;
   onAdd: (p: Product) => void;
   sold: boolean;
+  priority?: boolean;
 }) {
   const [added, setAdded] = React.useState(false);
   const soldOut = sold;
+  const displayName = productDisplayName(product);
   const conditionId = deriveConditionId(product.condition);
   const conditionText = conditionId
     ? conditionLabel(conditionId)
@@ -521,11 +560,12 @@ function ProductCard({
       <Link
         href={`/product/${productSlug(product)}`}
         className="relative aspect-square overflow-hidden bg-secondary"
-        aria-label={`View ${product.name}`}
+        aria-label={`View ${displayName}`}
       >
         <ProductImage
           src={resolveImage(product)}
-          alt={product.name}
+          alt={displayName}
+          priority={priority}
           className={cn(
             "h-full w-full object-cover transition-transform duration-300",
             !soldOut && "group-hover:scale-105"
@@ -550,7 +590,7 @@ function ProductCard({
             soldOut && "text-muted-foreground"
           )}
         >
-          {product.name}
+          {displayName}
         </Link>
         <div className="mt-auto flex items-center justify-between gap-2">
           <span className="flex items-baseline gap-1.5">
@@ -574,7 +614,7 @@ function ProductCard({
             <Button
               size="icon-sm"
               className="haptic rounded-full"
-              aria-label={`Add ${product.name}`}
+              aria-label={`Add ${displayName}`}
               onClick={() => {
                 onAdd(product);
                 setAdded(true);
@@ -594,21 +634,91 @@ function ProductGrid({
   products,
   onAdd,
   soldIds,
+  page,
+  total,
+  totalPages,
+  start,
+  end,
+  filters,
+  onPageChange,
 }: {
   products: Product[];
   onAdd: (p: Product) => void;
   soldIds: ReadonlySet<string>;
+  page: number;
+  total: number;
+  totalPages: number;
+  start: number;
+  end: number;
+  filters: CatalogQuery;
+  onPageChange: (page: number) => void;
 }) {
+  const showingFrom = total === 0 ? 0 : start + 1;
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-      {products.map((p) => (
-        <ProductCard
-          key={p.id}
-          product={p}
-          onAdd={onAdd}
-          sold={isListedSold(p, soldIds)}
-        />
-      ))}
+    <div className="space-y-5">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        {products.map((p, index) => (
+          <ProductCard
+            key={p.id}
+            product={p}
+            onAdd={onAdd}
+            sold={isListedSold(p, soldIds)}
+            priority={index < 4}
+          />
+        ))}
+      </div>
+      <nav
+        aria-label="Closet pages"
+        className="flex flex-col items-center gap-3 pt-1"
+      >
+        <p className="text-xs text-muted-foreground">
+          Showing {showingFrom}–{end} of {total}
+        </p>
+        {totalPages > 1 && (
+          <div className="flex w-full items-center justify-center gap-2">
+            {page > 1 ? (
+              <Link
+                href={`${catalogPageHref(filters, page - 1)}#closet`}
+                className="haptic inline-flex h-10 items-center justify-center rounded-xl border border-border px-4 text-sm font-medium"
+                onClick={(event) => {
+                  event.preventDefault();
+                  onPageChange(page - 1);
+                  document.getElementById("closet")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+              >
+                Previous
+              </Link>
+            ) : (
+              <span className="inline-flex h-10 items-center justify-center rounded-xl border border-transparent px-4 text-sm text-muted-foreground">
+                Previous
+              </span>
+            )}
+            {page < totalPages ? (
+              <Link
+                href={`${catalogPageHref(filters, page + 1)}#closet`}
+                className="haptic inline-flex h-10 flex-1 items-center justify-center rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground sm:flex-none"
+                onClick={(event) => {
+                  event.preventDefault();
+                  onPageChange(page + 1);
+                  document.getElementById("closet")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+              >
+                More pieces
+              </Link>
+            ) : (
+              <span className="inline-flex h-10 items-center justify-center rounded-xl border border-transparent px-4 text-sm text-muted-foreground">
+                End of closet
+              </span>
+            )}
+          </div>
+        )}
+      </nav>
     </div>
   );
 }
@@ -847,7 +957,7 @@ function CheckoutDrawer({
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">
-                          {i.product.name}
+                          {productDisplayName(i.product)}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {money(i.product.price)}

@@ -1,5 +1,5 @@
 import { HomePage } from "@/components/home-page";
-import { parseCatalogQuery } from "@/lib/catalog-query";
+import { parseCatalogPage, parseCatalogQuery } from "@/lib/catalog-query";
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -7,5 +7,10 @@ type PageProps = {
 
 export default async function Page({ searchParams }: PageProps) {
   const raw = await searchParams;
-  return <HomePage initialQuery={parseCatalogQuery(raw)} />;
+  return (
+    <HomePage
+      initialQuery={parseCatalogQuery(raw)}
+      initialPage={parseCatalogPage(raw)}
+    />
+  );
 }
