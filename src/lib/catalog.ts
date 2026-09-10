@@ -12,8 +12,45 @@ export function slugify(input: string): string {
   return slug || "item";
 }
 
+function brandAlreadyInName(brand: string, name: string): boolean {
+  const b = slugify(brand);
+  const n = slugify(name);
+  if (!b) return true;
+  if (n === b || n.startsWith(`${b}-`) || n.includes(`-${b}-`)) return true;
+  const compactBrand = b.replace(/-/g, "");
+  const compactName = n.replace(/-/g, "");
+  return compactName.startsWith(compactBrand);
+}
+
 export function productSlug(product: Product): string {
-  return `${slugify(`${product.brand ?? ""} ${product.name}`)}-${product.id}`;
+  const nameSlug = slugify(product.name);
+  const brandSlug = slugify(product.brand ?? "");
+  const base =
+    brandSlug && !brandAlreadyInName(product.brand ?? "", product.name)
+      ? `${brandSlug}-${nameSlug}`
+      : nameSlug;
+  return `${base}-${product.id}`;
+}
+
+/** Title without repeating brand when the listing name already includes it. */
+export function productSeoTitle(product: Product): string {
+  const name = product.name.trim();
+  const brand = (product.brand ?? "").trim();
+  const branded =
+    brand && !brandAlreadyInName(brand, name) ? `${brand} ${name}` : name;
+  return `${branded} | 2nd Chance Resale`;
+}
+
+export function productSeoDescription(product: Product): string {
+  return [
+    product.brand,
+    product.condition,
+    product.sizes?.[0] ? `Size ${product.sizes[0]}` : null,
+    `$${product.price.toFixed(2)}`,
+    "One-of-a-kind piece from 2nd Chance Resale.",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 export function findProductBySlug(slug: string): Product | undefined {

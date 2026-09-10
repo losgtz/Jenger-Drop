@@ -30,12 +30,13 @@ Copy `.env.example` to `.env.local`. **Do not invent keys.** The site builds wit
 
 | Variable | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadata, sitemap, and robots. Defaults to `https://jenger-drop.vercel.app`. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadataBase, sitemap, robots, OG. **Keep `https://jenger-drop.vercel.app` until DNS for jengerluxurious.com points at this Vercel app.** The Square/Weebly host is ignored unless `NEXT_PUBLIC_USE_CUSTOM_DOMAIN=true`. |
+| `NEXT_PUBLIC_USE_CUSTOM_DOMAIN` | Set `true` only after DNS is on Vercel, then set `NEXT_PUBLIC_SITE_URL=https://www.jengerluxurious.com`. |
 | `STRIPE_SECRET_KEY` | Server-only. Creates a Stripe Checkout Session. Never commit a real key. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Optional public key. |
 | `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` | Optional Payment Link fallback if the secret key is unset. |
 
-Set the same variables in **Vercel → Project → Settings → Environment Variables** for Production.
+Set the same variables in **Vercel → Project → Settings → Environment Variables** for Production. Do not invent Stripe keys.
 
 ## Payments (Stripe)
 

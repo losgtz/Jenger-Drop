@@ -14,6 +14,12 @@ export const metadata: Metadata = {
     url: "/returns",
     type: "website",
   },
+  twitter: {
+    card: "summary",
+    title: "Returns | 2nd Chance Resale",
+    description:
+      "Returns on 2nd Chance Resale: contact us if a piece arrives damaged or not as described.",
+  },
 };
 
 export default function ReturnsPage() {

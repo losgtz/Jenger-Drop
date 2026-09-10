@@ -3,7 +3,12 @@ import { notFound } from "next/navigation";
 
 import { resaleProducts } from "../../../../data/products";
 import { SHIPPING } from "../../../../data/shipping";
-import { findProductBySlug, productSlug } from "@/lib/catalog";
+import {
+  findProductBySlug,
+  productSeoDescription,
+  productSeoTitle,
+  productSlug,
+} from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
@@ -36,19 +41,8 @@ export async function generateMetadata({
     return { title: "Piece not found" };
   }
 
-  const brandFirst = product.brand
-    ? `${product.brand} | ${product.name}`
-    : product.name;
-  const title = `${brandFirst} | 2nd Chance Resale`;
-  const description = [
-    product.brand,
-    product.condition,
-    product.sizes?.[0] ? `Size ${product.sizes[0]}` : null,
-    `$${product.price.toFixed(2)}`,
-    "One-of-a-kind piece from 2nd Chance Resale.",
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  const title = productSeoTitle(product);
+  const description = productSeoDescription(product);
   const canonical = `/product/${productSlug(product)}`;
 
   return {
@@ -83,7 +77,7 @@ function ProductJsonLd({
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.description,
+    description: productSeoDescription(product),
     image: (product.images && product.images.length > 0
       ? product.images
       : [product.image]

@@ -14,6 +14,12 @@ export const metadata: Metadata = {
     url: "/about",
     type: "website",
   },
+  twitter: {
+    card: "summary",
+    title: "About | 2nd Chance Resale",
+    description:
+      "2nd Chance Resale is the online closet for Jengerluxurious — one-of-a-kind pre-loved clothing.",
+  },
 };
 
 export default function AboutPage() {

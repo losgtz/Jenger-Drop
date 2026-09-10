@@ -26,7 +26,8 @@ function publicDescription(
   raw: (typeof poshmarkImport.listings)[number]
 ): string {
   const text = raw.description ?? "";
-  if (/poshmark|jengerluxuri0us/i.test(text)) {
+  // Never surface marketplace credits in PDP / meta / JSON-LD.
+  if (/poshmark|jengerluxuri0us|closet\./i.test(text)) {
     const parts = [
       raw.brand,
       raw.condition,
