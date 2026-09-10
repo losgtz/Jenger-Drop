@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { notFound } from "next/navigation";
 
 import { resaleProducts } from "../../../../data/products";
@@ -14,6 +15,8 @@ import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { isListedSold } from "@/lib/sold";
+import { isSoldId } from "@/lib/sold-store";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -65,14 +68,18 @@ export async function generateMetadata({
   };
 }
 
+export const dynamic = "force-dynamic";
+
 function ProductJsonLd({
   product,
   slug,
+  sold,
 }: {
   product: NonNullable<ReturnType<typeof findProductBySlug>>;
   slug: string;
+  sold: boolean;
 }) {
-  const inStock = (product.stock ?? 1) > 0;
+  const inStock = !sold;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -122,6 +129,7 @@ function ProductJsonLd({
 }
 
 export default async function ProductPage({ params }: PageProps) {
+  await connection();
   const { slug } = await params;
   const product = findProductBySlug(slug);
   if (!product) notFound();
@@ -130,11 +138,18 @@ export default async function ProductPage({ params }: PageProps) {
     product.images && product.images.length > 0
       ? product.images
       : [product.image];
-  const soldOut = (product.stock ?? 1) <= 0;
+  const registrySold = await isSoldId(product.id, productSlug(product)).catch(
+    () => false
+  );
+  const soldOut = isListedSold(product, registrySold ? new Set([product.id]) : new Set());
 
   return (
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-16">
-      <ProductJsonLd product={product} slug={productSlug(product)} />
+      <ProductJsonLd
+        product={product}
+        slug={productSlug(product)}
+        sold={soldOut}
+      />
 
       <SiteHeader />
 
