@@ -22,7 +22,7 @@ npm start
 
 Capacitor/Android remains in the tree (`npm run build:mobile`, `capacitor.config.ts`) but is not required for the website.
 
-Product pages live at `/product/[slug]` (brand + name slug + id). Trust pages: `/about`, `/returns`. `robots.ts` and `sitemap.ts` cover the homepage, those pages, and every listing. `/shipping` permanently redirects to `/`.
+Product pages live at `/product/[slug]` (brand + name slug + id). The homepage closet grid is paginated (24 cards / images per page) so the first HTML payload is not the full 955-listing closet. `?page=2` and on are in the sitemap; each page still exposes product links. Filters and search keep working and reset to page 1. Trust pages: `/about`, `/returns`. `robots.ts` and `sitemap.ts` cover the homepage, closet pages, those pages, and every listing. `/shipping` permanently redirects to `/`. Legacy brand-duplicated slugs (e.g. `/product/pacsun-pacsun-nwt-…`) **301** to the canonical slug.
 
 ## Environment
 
@@ -30,8 +30,8 @@ Copy `.env.example` to `.env.local`. **Do not invent keys.** The site builds wit
 
 | Variable | Purpose |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadataBase, sitemap, robots, OG. **Keep `https://jenger-drop.vercel.app` until DNS for jengerluxurious.com points at this Vercel app.** The Square/Weebly host is ignored unless `NEXT_PUBLIC_USE_CUSTOM_DOMAIN=true`. |
-| `NEXT_PUBLIC_USE_CUSTOM_DOMAIN` | Set `true` only after DNS is on Vercel, then set `NEXT_PUBLIC_SITE_URL=https://www.jengerluxurious.com`. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for metadataBase, sitemap, robots, OG. **Keep `https://jenger-drop.vercel.app` until DNS for jengerluxurious.com points at this Vercel app.** The Square/Weebly host is ignored unless `NEXT_PUBLIC_USE_CUSTOM_DOMAIN=true`. Footer/trust “Shop” links are relative (`/`) so they stay on this Next app during cutover. |
+| `NEXT_PUBLIC_USE_CUSTOM_DOMAIN` | **Final custom-domain flip:** set `true` only after DNS for `www.jengerluxurious.com` points at this Vercel app, then set `NEXT_PUBLIC_SITE_URL=https://www.jengerluxurious.com`. Do not flip this while Square/Weebly still answers that host. |
 | `STRIPE_SECRET_KEY` | Server-only. Creates a Stripe Checkout Session. Never commit a real key. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Optional public key. |
 | `NEXT_PUBLIC_STRIPE_PAYMENT_LINK` | Optional Payment Link fallback if the secret key is unset. |

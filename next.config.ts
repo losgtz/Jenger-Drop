@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { legacyProductRedirects } from "./src/lib/catalog";
 
 // Only produce a static export (`out/`) for the Capacitor/Android build.
 // The default web build keeps the Node server so the API routes
@@ -15,6 +16,8 @@ const nextConfig: NextConfig = {
         async redirects() {
           return [
             { source: "/shipping", destination: "/", permanent: true },
+            // Explicit 301 (not Next's default 308) for OpenSEO legacy slugs.
+            ...legacyProductRedirects(),
           ];
         },
       }),

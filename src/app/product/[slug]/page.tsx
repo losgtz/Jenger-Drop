@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
 import { connection } from "next/server";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import { resaleProducts } from "../../../../data/products";
 import { SHIPPING } from "../../../../data/shipping";
 import {
   findProductBySlug,
+  productDisplayName,
   productSeoDescription,
   productSeoTitle,
   productSlug,
 } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
+import { ContactBar } from "@/components/contact-bar";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductPdpActions } from "@/components/product-pdp-actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { isListedSold } from "@/lib/sold";
+import { isListedSold, schemaAvailability } from "@/lib/sold";
 import { isSoldId } from "@/lib/sold-store";
 
 type PageProps = {
@@ -57,7 +59,7 @@ export async function generateMetadata({
       description,
       url: canonical,
       type: "website",
-      images: [{ url: absoluteImage(product.image), alt: product.name }],
+      images: [{ url: absoluteImage(product.image), alt: productDisplayName(product) }],
     },
     twitter: {
       card: "summary_large_image",
@@ -79,11 +81,11 @@ function ProductJsonLd({
   slug: string;
   sold: boolean;
 }) {
-  const inStock = !sold;
+  const displayName = productDisplayName(product);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.name,
+    name: displayName,
     description: productSeoDescription(product),
     image: (product.images && product.images.length > 0
       ? product.images
@@ -98,9 +100,7 @@ function ProductJsonLd({
       url: `${SITE_URL}/product/${slug}`,
       priceCurrency: "USD",
       price: product.price.toFixed(2),
-      availability: inStock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
+      availability: schemaAvailability(sold),
       itemCondition:
         product.condition === "NEW WITH TAGS"
           ? "https://schema.org/NewCondition"
@@ -134,6 +134,12 @@ export default async function ProductPage({ params }: PageProps) {
   const product = findProductBySlug(slug);
   if (!product) notFound();
 
+  const canonicalSlug = productSlug(product);
+  if (slug !== canonicalSlug) {
+    permanentRedirect(`/product/${canonicalSlug}`);
+  }
+
+  const displayName = productDisplayName(product);
   const gallery =
     product.images && product.images.length > 0
       ? product.images
@@ -147,14 +153,14 @@ export default async function ProductPage({ params }: PageProps) {
     <div className="relative mx-auto flex w-full max-w-md flex-1 flex-col bg-background pb-16">
       <ProductJsonLd
         product={product}
-        slug={productSlug(product)}
+        slug={canonicalSlug}
         sold={soldOut}
       />
 
       <SiteHeader />
 
       <main className="flex flex-col">
-        <ProductGallery images={gallery} alt={product.name} soldOut={soldOut} />
+        <ProductGallery images={gallery} alt={displayName} soldOut={soldOut} />
 
         <div className="flex flex-col gap-4 px-5 py-5">
           {product.condition && (
@@ -163,7 +169,7 @@ export default async function ProductPage({ params }: PageProps) {
             </span>
           )}
           <h1 className="font-serif text-3xl leading-tight tracking-tight">
-            {product.name}
+            {displayName}
           </h1>
           {product.brand && (
             <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground uppercase">
@@ -194,6 +200,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
           )}
           <ProductPdpActions productId={product.id} soldOut={soldOut} />
+          <ContactBar />
         </div>
       </main>
       <SiteFooter />

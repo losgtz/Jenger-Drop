@@ -35,6 +35,8 @@ export function resolveSiteUrl(): string {
 }
 
 export const SITE_URL = resolveSiteUrl();
+/** Internal shop path — always this Next app, never the Square/Weebly host. */
+export const SHOP_PATH = "/";
 export const SITE_NAME = "Jengerluxurious 2nd Chance Resale";
 export const SITE_TAGLINE =
   "One-of-a-kind pre-loved clothing from the 2nd Chance Resale closet.";

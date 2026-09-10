@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ContactBar } from "@/components/contact-bar";
 import { CONTACT, TRUST_PAGES } from "@/lib/contact";
 
 export function SiteFooter() {
@@ -23,16 +24,15 @@ export function SiteFooter() {
             {page.label}
           </Link>
         ))}
-      </nav>
-      <div className="mt-4 flex flex-col gap-1.5 text-sm">
-        <a
-          href={CONTACT.storeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-foreground underline-offset-4 hover:underline"
+        <Link
+          href={CONTACT.shopHref}
+          className="text-primary underline-offset-4 hover:underline"
         >
-          jengerluxurious.com
-        </a>
+          Shop
+        </Link>
+      </nav>
+      <ContactBar className="mt-4" />
+      <div className="mt-4 flex flex-col gap-1.5 text-sm">
         <a
           href={CONTACT.instagramUrl}
           target="_blank"

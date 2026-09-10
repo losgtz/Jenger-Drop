@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CONTACT } from "@/lib/contact";
+import { ContactBar } from "@/components/contact-bar";
 import { TrustPageShell } from "@/components/trust-page-shell";
 
 export const metadata: Metadata = {
@@ -38,25 +38,7 @@ export default function AboutPage() {
           contemporary resale. Pieces are one-of-a-kind. Condition and original
           price show when we have them.
         </p>
-        <p>
-          Questions about a listing? Text or call{" "}
-          <a
-            href={`tel:${CONTACT.phone}`}
-            className="text-foreground underline-offset-4 hover:underline"
-          >
-            {CONTACT.phoneDisplay}
-          </a>{" "}
-          or DM{" "}
-          <a
-            href={CONTACT.instagramUrl}
-            className="text-primary underline-offset-4 hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            @{CONTACT.instagram}
-          </a>
-          .
-        </p>
+        <ContactBar />
       </div>
     </TrustPageShell>
   );
